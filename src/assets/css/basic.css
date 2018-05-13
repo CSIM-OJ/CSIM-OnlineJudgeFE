@@ -1,0 +1,84 @@
+* {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+}
+
+html, body {
+  color: #303133;
+  margin: 0;
+  padding: 0;
+  background-color: #F2F3F4;
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background-color: #d4d4d4;
+  color: #d4d4d4;
+  /* IE6 */
+}
+
+.ellipsis {
+  width: 90%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.space {
+  padding: 50px;
+}
+
+.sm-space {
+  padding: 20px;
+}
+
+.res-space {
+  padding: 6%;
+}
+
+#title {
+  text-align: center;
+  font-size: 30px;
+  padding-bottom: 30px;
+}
+
+#sm-title {
+  text-align: center;
+  font-size: 18px;
+  padding-bottom: 20px;
+}
+
+.box {
+  padding: 30px;
+  margin-bottom: 15px;
+  border: solid 1px #DDDDDD;
+  border-radius: 5px;
+  background-color: #FFF;
+  box-shadow: 4px 4px 3px rgba(20%, 20%, 40%, 0.2);
+}
+
+.sm-box {
+  padding: 20px;
+  margin-bottom: 15px;
+  border: solid 1px #DDDDDD;
+  border-radius: 5px;
+  background-color: #FFF;
+  box-shadow: 4px 4px 3px rgba(20%, 20%, 40%, 0.2);
+}
+
+.danger-input .el-input__inner {
+  border-color: #F56C6C;
+}
+
+.success-textarea .el-textarea__inner {
+  border-color: #67C23A;
+}
+
+.bestcode::after {
+  content: '你是目前的最佳程式碼！！';
+  color: #67C23A;
+}

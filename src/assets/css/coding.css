@@ -1,0 +1,77 @@
+/* problem-section */
+
+#problem-section .box {
+  position: relative;
+}
+
+#problem-section .chart {
+  position: absolute;
+  top: 120px;
+  right: 30px;
+  width: 500px;
+  height: 500px;
+}
+
+#problem-section .problem-name {
+  display: block;
+  margin-bottom: 20px;
+  font-size: 30px;
+  font-weight: 700;
+  position: relative;
+}
+
+#problem-section .problem-name .type {
+  display: block;
+  color: #888888;
+  font-size: 17px;
+  font-weight: 400;
+  position: absolute;
+  bottom: 0px;
+  right: 5px;
+}
+
+#problem-section .el-rate {
+  display: inline-block;
+  font-size: 40px;
+}
+
+#problem-section .el-rate i {
+  font-size: 25px;
+}
+
+/* 詳述題目區塊 */
+
+#problem-section .problem-info {
+  margin: 20px;
+  margin-bottom: 25px;
+}
+
+#problem-section .problem-info .title {
+  font-size: 20px;
+  color: #277ee2;
+}
+
+#problem-section .problem-info .content {
+  font-size: 18px;
+  color: #666;
+  margin-left: 20px;
+  margin-bottom: 15px;
+  margin-top: 10px;
+}
+
+/* judged sction */
+
+#judged-section {
+  position: relative;
+}
+
+#judged-section .judgedtime {
+  color: #909399;
+  position: absolute;
+  top: 15px;
+  right: 40px;
+}
+
+#judged-section .el-form .el-form-item label {
+  padding-bottom: 0px;
+}

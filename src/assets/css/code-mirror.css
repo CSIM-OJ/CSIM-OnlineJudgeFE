@@ -1,0 +1,22 @@
+/* codemirror-section */
+
+#codemirror-section button {
+    margin: 5px;
+    float: right;
+}
+
+#codemirror-section .setting {
+    margin-bottom: 10px;
+}
+
+#codemirror-section .judging-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+}
+
+/* loading mask */
+.el-loading-mask {
+  z-index: 999 !important;
+}

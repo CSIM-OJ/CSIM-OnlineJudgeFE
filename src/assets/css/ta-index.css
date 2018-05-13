@@ -1,0 +1,35 @@
+/* manageClassGroup */
+.manageClassGroup {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+/* table */
+.table-expand {
+    font-size: 0;
+}
+
+.table-expand label {
+    width: 90px;
+    color: #99a9bf;
+}
+
+.table-expand .el-form-item {
+    margin-right: 0 !important;
+    margin-bottom: 0;
+    width: 50%;
+}
+
+.table-expand .el-form-item .el-rate {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#detectCopyFormItem .el-form-item__content {
+  width: 80%;
+}

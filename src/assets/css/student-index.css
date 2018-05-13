@@ -1,0 +1,92 @@
+/* mainProblems-section */
+
+#mainProblems-section .undo {
+  margin-bottom: 100px;
+}
+
+#mainProblems-section .el-col {
+  padding-bottom: 30px;
+}
+
+#mainProblems-section .count-label {
+  color: #909399;
+  height: 52px;
+  padding-left: 20px !important;
+  padding-bottom: 0px;
+  line-height: 52px;
+}
+
+/* panel */
+
+#panel .title {
+  font-size: 17px;
+  text-align: center;
+  margin-bottom: 15px;
+  ;
+}
+
+#panel .info .item {
+  color: #777;
+}
+
+#panel .info .item span {
+  margin-right: 10%;
+}
+
+/* problem cards */
+
+.el-card {
+  /* height: 130px; */
+  height: 11vw;
+  position: relative;
+  transition: all ease 0.3s;
+}
+
+.el-card:hover {
+  box-shadow: 4px 4px 3px rgba(20%, 20%, 40%, 0.2);
+}
+
+.el-card i.time {
+  position: absolute;
+  top: 21px;
+  right: 15px;
+}
+
+.el-card i.time:hover {
+  color: #be9b09;
+}
+
+.el-card .title {
+  height: 22px;
+  line-height: 22px;
+  display: block;
+  margin-bottom: 15px;
+}
+
+.el-card .time {
+  font-size: 13px;
+  color: #999;
+}
+
+.el-card .el-rate {
+
+}
+
+.el-card button {
+  position: absolute;
+  bottom: 5px;
+  right: 15px;
+}
+
+.el-card .type {
+  position: absolute;
+  bottom: 19px;
+  left: 20px;
+  color: #888888;
+  font-size: 10px;
+}
+
+.el-card .button a {
+  text-decoration: none;
+  color: #409EFF;
+}
