@@ -110,14 +110,18 @@ export default {
   },
   computed: {
     problemsData() {
-      let data = [];
-      this.tableData.forEach((element) => {
-        data.push({
-          '分數': element.score,
-          '題目': element.problemName
-        });
-      })
-      return data
+      if(this.user.correctNum!='0'&&this.user.errorNum!='0') {
+        let data = [];
+        this.tableData.forEach((element) => {
+          data.push({
+            '分數': element.score,
+            '題目': element.problemName
+          });
+        })
+        return data
+      } else {
+        return null
+      }
     },
     // pie and line
     // TODO
