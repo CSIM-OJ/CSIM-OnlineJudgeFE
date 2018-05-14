@@ -27,7 +27,7 @@
             <el-input v-model="loginForm.account"></el-input>
           </el-form-item>
           <el-form-item label="密碼" prop="password">
-            <el-input type="password" v-model="loginForm.password" auto-complete="off" ></el-input>
+            <el-input type="password" v-model="loginForm.password" auto-complete="off"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -113,7 +113,15 @@ export default {
             this.loading = false;
             this.$message.error('帳號或密碼錯誤！');
           }
-        });
+        }).catch(function(error) {
+          this.loading = false;
+          this.dialogFormVisible = false;
+          this.loginForm = {
+            account: '',
+            password: ''
+          }
+          this.$message.error('登入失敗');
+        });;
       }
     },
     loginCancel() {

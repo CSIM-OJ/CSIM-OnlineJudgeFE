@@ -15,7 +15,7 @@
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-col>
-            <el-col :span="22" :offset="1">
+            <el-col class="undoCol" :span="22" :offset="1" v-loading="undoLoading">
               <transition-group name="slide-fade">
                 <el-col v-for="problem in undoProblems" :span="6" :key="problem.problemID">
                   <el-card :body-style="{ padding: '5px' }">
@@ -46,7 +46,7 @@
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-col>
-            <el-col :span="22" :offset="1">
+            <el-col class="doneCol" :span="22" :offset="1" v-loading="doneLoading" v-if="this.doneProblems.length!=0">
               <transition-group name="slide-fade">
                 <el-col v-for="problem in doneProblems" :span="6" :key="problem.problemID">
                   <el-card :body-style="{ padding: '5px' }">
@@ -104,7 +104,10 @@ export default {
       }],
       // main
       undoProblems: [],
-      doneProblems: []
+      doneProblems: [],
+      // loading
+      undoLoading: false,
+      doneLoading: false
     }
   },
   computed: {
@@ -133,17 +136,21 @@ export default {
       });
     },
     initUndoProblems() {
+      this.undoLoading = true;
       axios.get('/api/student/undoAllList').then((response) => {
         let res = response.data;
         if (res.status == '200') {
+          this.undoLoading = false;
           this.undoProblems = res.result;
         }
       });
     },
     initDoneProblems() {
+      this.doneLoading = true;
       axios.get('/api/student/doneAllList').then((response) => {
         let res = response.data;
         if (res.status == '200') {
+          this.doneLoading = false;
           this.doneProblems = res.result;
         }
       });
@@ -153,16 +160,20 @@ export default {
       if (val == 'all') {
         this.initUndoProblems();
       } else if (val == 'homework') {
+        this.undoLoading = true;
         axios.get('/api/student/undoHwList').then((response) => {
           let res = response.data;
           if (res.status == '200') {
+            this.undoLoading = false;
             this.undoProblems = res.result;
           }
         });
       } else if (val == 'practice') {
+        this.undoLoading = true;
         axios.get('/api/student/undoPraList').then((response) => {
           let res = response.data;
           if (res.status == '200') {
+            this.undoLoading = false;
             this.undoProblems = res.result;
           }
         });
@@ -172,16 +183,20 @@ export default {
       if (val == 'all') {
         this.initDoneProblems();
       } else if (val == 'homework') {
+        this.doneLoading = true;
         axios.get('/api/student/doneHwList').then((response) => {
           let res = response.data;
           if (res.status == '200') {
+            this.doneLoading = false;
             this.doneProblems = res.result;
           }
         });
       } else if (val == 'practice') {
+        this.doneLoading = true;
         axios.get('/api/student/donePraList').then((response) => {
           let res = response.data;
           if (res.status == '200') {
+            this.doneLoading = false;
             this.doneProblems = res.result;
           }
         });

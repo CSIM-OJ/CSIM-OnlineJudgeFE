@@ -16,6 +16,16 @@
   line-height: 52px;
 }
 
+/* undo col */
+#mainProblems-section .undoCol {
+  min-height: 200px;
+}
+
+/* done col */
+#mainProblems-section .doneCol {
+  min-height: 200px;
+}
+
 /* panel */
 
 #panel .title {
