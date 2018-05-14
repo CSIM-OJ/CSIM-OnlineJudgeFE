@@ -8,13 +8,13 @@
           <el-col :span="12">
             <div id="title">正確率</div>
             <ve-pie :data="pieData" :colors="pieColors" :settings="pieSettings">
-              <div class="data-empty" v-if="user.correctNum=='0' && user.errorNum=='0'">沒有數據 &#x1F61D;</div>
+              <div class="data-empty" v-if="hasRecordFlag">沒有數據 &#x1F61D;</div>
             </ve-pie>
           </el-col>
           <el-col :span="12">
             <div id="title">成績圖表</div>
             <ve-line :data="lineData" :settings="lineSettings">
-              <div class="data-empty" v-if="user.correctNum=='0' && user.errorNum=='0'">沒有數據 &#x1F61D;</div>
+              <div class="data-empty" v-if="hasRecordFlag">沒有數據 &#x1F61D;</div>
             </ve-line>
           </el-col>
         </el-row>
@@ -58,14 +58,6 @@
       </div>
     </el-col>
   </el-row>
-  <!-- TODO -->
-  <!--
-  <el-row v-else>
-    <el-col :span="20" :offset="2" class="box">
-      <div style="color: #909399; height: 60vh; text-align: center; line-height: 60vh;">還沒有紀錄呦～ 趕快去做題吧！！</div>
-    </el-col>
-  </el-row>
--->
   <nav-footer></nav-footer>
 </div>
 </template>
@@ -105,31 +97,12 @@ export default {
         'errorNum': ''
       },
       // table
-      tableData: []
+      tableData: [],
+      // line's data
+      transformedLineData: []
     }
   },
   computed: {
-    problemsData() {
-      if(this.user.correctNum!='0'&&this.user.errorNum!='0') {
-        let data = [];
-        this.tableData.forEach((element) => {
-          data.push({
-            '分數': element.score,
-            '題目': element.problemName
-          });
-        })
-        return data
-      } else {
-        return null
-      }
-    },
-    // pie and line
-    // TODO
-    // transDataCorrectNum() {
-    //   if(this.user.correctNum=='0') {
-    //     return null
-    //   }
-    // },
     pieData() {
       let pieData = {
         columns: ['狀態', '數量'],
@@ -148,11 +121,17 @@ export default {
     lineData() {
       let lineData = {
         columns: ['題目', '分數'],
-        rows: this.problemsData
+        rows: this.transformedLineData
       }
       return lineData
+    },
+    hasRecordFlag() {
+      if(this.user.correctNum=='0' && this.user.errorNum=='0') {
+        return true
+      } else {
+        return false
+      }
     }
-
   },
   mounted() {
     this.checkLogin();
@@ -192,6 +171,16 @@ export default {
         console.log(res.result);
         if (res.status == '200') {
           this.tableData = res.result;
+
+          // transform to line data
+          let data = [];
+          this.tableData.forEach((element) => {
+            data.push({
+              '分數': element.score,
+              '題目': element.problemName
+            });
+          })
+          this.transformedLineData = data;
         }
       });
     }

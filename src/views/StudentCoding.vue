@@ -67,7 +67,7 @@
               </el-option>
             </el-select>
           </div>
-          <codemirror :value="code" :options="options" ref="myEditor"></codemirror>
+          <codemirror v-model="code" :options="options" ref="myEditor"></codemirror>
           <el-button type="primary" @click="submitCode">submit</el-button>
         </div>
       </el-col>
@@ -141,11 +141,7 @@ import "codemirror/theme/material.css"
 import "@/assets/animated/animate.css"
 
 var codes = {
-  'text/x-java': `public class Main {
-    public static void main(String[] args) {
-        System.out.println("Hello! World!");
-    }
-}`,
+  'text/x-java': ``,
   'text/x-python': 'int'
 }
 
@@ -183,6 +179,12 @@ export default {
       theme: 'default',
       nowTheme: 'Default',
       themes: ['Default', 'Solarized', 'Monokai', 'Material'],
+      // CodeMirror
+      code: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello! World!");
+    }
+}`,
       // judging
       judging: false,
       // judged result form
@@ -205,9 +207,10 @@ export default {
     }
   },
   computed: {
-    code() {
-      return codes[this.mode]
-    },
+    // TODO
+    // code() {
+    //  return codes[this.mode]
+    // },
     options() {
       return {
         mode: this.mode,
@@ -360,10 +363,16 @@ export default {
       if (lang == 'Java') {
         this.nowLang = 'Java';
         this.mode = 'text/x-java';
+        this.code = `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello! World!");
+    }
+}`;
         console.log('Change lang to' + lang);
       } else if (lang == 'Python') {
         this.nowLang = 'Python';
         this.mode = 'text/x-python';
+        this.code = "print('Hello! World!')";
         console.log('Change lang to' + lang);
       }
     },
@@ -430,7 +439,10 @@ export default {
     notify2() {
       this.$notify({
         title: '注意',
-        message: 'public class name 記得改成 Main 呦',
+        dangerouslyUseHTMLString: true,
+        message: `public class name 記得改成 Main 呦 </br>
+        不要有 package! </br>
+        記得 import library~`,
         type: 'warning'
       });
     }
