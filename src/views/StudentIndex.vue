@@ -18,18 +18,21 @@
             <el-col class="undoCol" :span="22" :offset="1" v-loading="undoLoading">
               <transition-group name="slide-fade">
                 <el-col v-for="problem in undoProblems" :span="6" :key="problem.problemID">
-                  <el-card :body-style="{ padding: '5px' }">
-                    <div style="padding: 14px;">
-                      <span class="title ellipsis">{{ problem.name }}
-                      <el-tooltip class="item" effect="dark" :content="'繳交期限: '+problem.deadline" placement="top"><i class="el-icon-time time"></i></el-tooltip>
-                    </span>
-                      <div class="bottom clearfix">
-                        <el-rate disabled v-model="problem.rate"></el-rate>
-                        <el-button type="text" class="button"><a href="javascript:void(0);" @click="doProblem(problem.problemID)">來去做題</a></el-button>
+                  <a href="javascript:void(0);" @click="doProblem(problem.problemID)">
+                    <el-card :body-style="{ padding: '5px' }">
+                      <div style="padding: 14px;">
+                        <span class="title ellipsis">{{ problem.name }}
+                          <el-tooltip class="item" effect="dark" :content="'繳交期限: '+problem.deadline" placement="top"><i class="el-icon-time time"></i></el-tooltip>
+                        </span>
+                        <div class="bottom clearfix">
+                          <el-rate disabled v-model="problem.rate"></el-rate>
+                          <el-button type="text" class="button"><a href="javascript:void(0);" @click="doProblem(problem.problemID)">來去做題</a></el-button>
+                        </div>
+                        <div class="type">{{ problem.type }}</div>
                       </div>
-                      <div class="type">{{ problem.type }}</div>
-                    </div>
-                  </el-card>
+                    </el-card>
+                  </a>
+
                 </el-col>
               </transition-group>
             </el-col>
@@ -49,18 +52,20 @@
             <el-col class="doneCol" :span="22" :offset="1" v-loading="doneLoading" v-if="this.doneProblems.length!=0">
               <transition-group name="slide-fade">
                 <el-col v-for="problem in doneProblems" :span="6" :key="problem.problemID">
-                  <el-card :body-style="{ padding: '5px' }">
-                    <div style="padding: 14px;">
-                      <span class="title ellipsis">{{ problem.name }}
-                            <el-tooltip class="item" effect="dark" :content="'繳交日期: '+problem.handDate" placement="top"><i class="el-icon-time time"></i></el-tooltip>
-                          </span>
-                      <div class="bottom clearfix">
-                        <el-rate disabled v-model="problem.rate"></el-rate>
-                        <el-button type="text" class="button" @click="doProblem(problem.problemID)">回顧題目</el-button>
+                  <a href="javascript:void(0);" @click="doProblem(problem.problemID)">
+                    <el-card :body-style="{ padding: '5px' }">
+                      <div style="padding: 14px;">
+                        <span class="title ellipsis">{{ problem.name }}
+                          <el-tooltip class="item" effect="dark" :content="'繳交日期: '+problem.handDate" placement="top"><i class="el-icon-time time"></i></el-tooltip>
+                        </span>
+                        <div class="bottom clearfix">
+                          <el-rate disabled v-model="problem.rate"></el-rate>
+                          <el-button type="text" class="button" @click="doProblem(problem.problemID)">回顧題目</el-button>
+                        </div>
+                        <div class="type">{{ problem.type }}</div>
                       </div>
-                      <div class="type">{{ problem.type }}</div>
-                    </div>
-                  </el-card>
+                    </el-card>
+                  </a>
                 </el-col>
               </transition-group>
             </el-col>

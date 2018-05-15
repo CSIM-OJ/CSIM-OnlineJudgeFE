@@ -146,26 +146,26 @@ export default {
         this.$message.error('請輸入原密碼！');
       } else if (this.changePasswordForm.newPassword == '') {
         this.$message.error('請輸入新密碼！');
+      } else {
+        axios.post('/api/student/changePassword', {
+          account: this.changePasswordForm.account,
+          oriPassword: this.changePasswordForm.oriPassword,
+          newPassword: this.changePasswordForm.newPassword
+        }).then((response) => {
+          let res = response.data;
+          if(res.status=='200') {
+            this.$message({
+              message: '更改密碼完成！',
+              type: 'success'
+            });
+            this.changePasswordForm.account = '';
+            this.changePasswordForm.oriPassword = '';
+            this.changePasswordForm.newPassword = '';
+          } else {
+            this.$message.error('帳號或密碼錯誤！');
+          }
+        });
       }
-
-      axios.post('/api/student/changePassword', {
-        account: this.changePasswordForm.account,
-        oriPassword: this.changePasswordForm.oriPassword,
-        newPassword: this.changePasswordForm.newPassword
-      }).then((response) => {
-        let res = response.data;
-        if(res.status=='200') {
-          this.$message({
-            message: '更改密碼完成！',
-            type: 'success'
-          });
-          this.changePasswordForm.account = '';
-          this.changePasswordForm.oriPassword = '';
-          this.changePasswordForm.newPassword = '';
-        } else {
-          this.$message.error('帳號或密碼錯誤！');
-        }
-      });
     }
   }
 }

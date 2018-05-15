@@ -433,6 +433,7 @@ export default {
       this.$notify({
         title: '小技巧',
         message: '若點擊題目旁的星星，可以對題目難易度進行評分。題目的平均難易度分數可以從首頁或是成績面板查看！',
+        duration: 8000,
         type: 'success'
       });
     },
@@ -443,6 +444,7 @@ export default {
         message: `public class name 記得改成 Main 呦 </br>
         不要有 package! </br>
         記得 import library~`,
+        duration: 8000,
         type: 'warning'
       });
     }

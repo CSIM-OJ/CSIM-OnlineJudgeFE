@@ -21,9 +21,19 @@
   min-height: 200px;
 }
 
+#mainProblems-section .undoCol a{
+  min-height: 200px;
+  text-decoration: none;
+}
+
 /* done col */
 #mainProblems-section .doneCol {
   min-height: 200px;
+}
+
+#mainProblems-section .doneCol a{
+  min-height: 200px;
+  text-decoration: none;
 }
 
 /* panel */
@@ -32,7 +42,6 @@
   font-size: 17px;
   text-align: center;
   margin-bottom: 15px;
-  ;
 }
 
 #panel .info .item {
@@ -71,15 +80,13 @@
   line-height: 22px;
   display: block;
   margin-bottom: 15px;
+  text-decoration: none;
+  outline: none;
 }
 
 .el-card .time {
   font-size: 13px;
   color: #999;
-}
-
-.el-card .el-rate {
-
 }
 
 .el-card button {
