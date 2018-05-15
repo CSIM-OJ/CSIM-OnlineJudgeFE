@@ -74,6 +74,11 @@
       </section>
     </el-col>
   </el-row>
+  <!-- feedback block start -->
+  <div class="feedback" @click="sendFeedback">
+    <i class="el-icon-edit-outline"></i>
+  </div>
+  <!-- feedback block end -->
   <nav-footer></nav-footer>
 </div>
 </template>
@@ -86,6 +91,7 @@ import NavFooter from '@/components/NavFooter.vue'
 
 import '@/assets/css/student-index.css'
 import '@/assets/css/transition.css'
+import '@/assets/css/feedback-block.css'
 
 export default {
   components: {
@@ -209,6 +215,37 @@ export default {
     },
     doProblem(problemID) {
       this.$router.push('/student/coding?problemID=' + problemID);
+    },
+    sendFeedback() {
+      this.$prompt('請輸入對系統的建議', '系統回饋', {
+        confirmButtonText: '確定',
+        cancelButtonText: '取消',
+        inputType: 'textarea'
+      }).then(({
+        value
+      }) => {
+        axios.post('/api/student/sendFeedback', {
+          value
+        }).then((response) => {
+          let res = response.data;
+          if (res.status == '200') {
+            this.$message({
+              type: 'success',
+              message: '已經收到您的回饋！'
+            });
+          } else {
+            this.$message({
+              type: 'error',
+              message: '傳送回饋失敗 :('
+            });
+          }
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消輸入'
+        });
+      });
     }
   }
 }

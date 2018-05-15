@@ -18,6 +18,9 @@
       </div>
     </div>
   </div>
+  <div class="programmer">
+    <i class="fas fa-code"></i>&nbsp; 陳冠億、蘇靖軒
+  </div>
   <el-dialog :visible.sync="dialogFormVisible" @close="loginCancel">
     <el-form :model="loginForm" status-icon label-width="50px" class="loginForm" v-loading="loading" element-loading-text="登入中">
       <div id="title">登入</div>

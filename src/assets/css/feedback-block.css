@@ -1,0 +1,19 @@
+.feedback {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  height: 50px;
+  width: 50px;
+  background-color: white;
+  text-align: center;
+  line-height: 50px;
+  border-radius: 25px;
+  font-size: 25px;
+  cursor: pointer;
+  transition: all .3s ease;
+  /* box-shadow: 4px 4px 3px rgba(20%, 20%, 40%, 0.2); */
+}
+
+.feedback:hover {
+  color: #409EFF;
+}
