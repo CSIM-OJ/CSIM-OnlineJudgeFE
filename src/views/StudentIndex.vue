@@ -225,7 +225,7 @@ export default {
         value
       }) => {
         axios.post('/api/student/sendFeedback', {
-          value
+          feedback: value
         }).then((response) => {
           let res = response.data;
           if (res.status == '200') {
