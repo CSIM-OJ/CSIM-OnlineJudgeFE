@@ -4,9 +4,9 @@
   <section id="problem-section">
     <el-row>
       <el-col :span="20" :offset="2" class="box">
-        <div class="chart" v-if="problem.judged">
+        <!-- <div class="chart" v-if="problem.judged">
           <ve-pie :data="chartData" :colors="chartColors" :settings="chartSettings"></ve-pie>
-        </div>
+        </div> -->
         <div class="problem-name">
           <span v-text="problem.name"></span>
           <el-rate allow-half v-model="problem.rate" @change="changeRate"></el-rate>
@@ -76,6 +76,9 @@
   <section id="judged-section" v-else class="animated fadeInUp">
     <el-row>
       <el-col :span="20" :offset="2" class="box">
+        <div class="chart" v-if="problem.judged">
+          <ve-pie :data="chartData" :colors="chartColors" :settings="chartSettings"></ve-pie>
+        </div>
         <el-row>
           <el-col :span="20" :offset="2">
             <div class="handDate">
@@ -202,8 +205,8 @@ export default {
     // pie
     this.chartColors = ['#67C23A', '#F56C6C'];
     this.chartSettings = {
-      radius: 80,
-      offsetY: 150
+      radius: 70,
+      offsetY: 120
     }
   },
   computed: {
@@ -257,7 +260,6 @@ export default {
     this.checkLogin();
     this.getProblemData();
     this.checkJudged();
-    this.notify1();
   },
   methods: {
     checkLogin() {
@@ -295,7 +297,11 @@ export default {
             this.problem.judged = true;
             this.getJudgedInfo();
           } else {
-            this.notify2();
+            this.notify1();
+            let self = this;
+            setTimeout(function() {
+              self.notify2();
+            }, 300);
           }
         }
       });
@@ -310,7 +316,7 @@ export default {
         if (res.status == '200') {
           this.judgedResultForm.handDate = res.result.handDate;
           this.judgedResultForm.score = res.result.score;
-          this.judgedResultForm.runtime = res.result.runTime;
+          this.judgedResultForm.runtime = res.result.runTime + ' ms';
           this.judgedResultForm.code = res.result.code;
           this.judgedResultForm.errorInfo = res.result.errorInfo;
           this.judgedResultForm.bestCode = res.result.best;
@@ -415,7 +421,7 @@ export default {
             this.problem.judged = true;
             this.getJudgedInfo();
           } else {
-            console.log('judgedErrorMsg:'+res.msg);
+            console.log('judgedErrorMsg:' + res.msg);
           }
         }).catch((error) => {
           console.log(error);

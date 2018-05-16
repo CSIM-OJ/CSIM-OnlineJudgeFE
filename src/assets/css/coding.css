@@ -4,13 +4,13 @@
   position: relative;
 }
 
-#problem-section .chart {
+/* #problem-section .chart {
   position: absolute;
   top: 120px;
   right: 30px;
   width: 500px;
   height: 500px;
-}
+} */
 
 #problem-section .problem-name {
   display: block;
@@ -61,8 +61,21 @@
 
 /* judged sction */
 
-#judged-section {
+#judged-section .box{
   position: relative;
+}
+
+#judged-section .chart {
+  z-index: 1500;
+  position: absolute;
+  top: 15px;
+  right: 0px;
+  width: 500px;
+  height: 500px;
+}
+
+#judged-section .handDate {
+  margin-bottom: 10px;
 }
 
 #judged-section .judgedtime {
