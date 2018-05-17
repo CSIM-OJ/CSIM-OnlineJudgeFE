@@ -455,6 +455,11 @@ export default {
             if (res.status == '200') {
               this.problem.judged = true;
               this.getJudgedInfo();
+              // 練習題無限送出更改judging狀態及清空code
+              if (this.problem.type == '練習題') {
+                this.judging = false;
+                this.code = '';
+              }
             } else {
               console.log('judgedErrorMsg:' + res.msg);
             }
