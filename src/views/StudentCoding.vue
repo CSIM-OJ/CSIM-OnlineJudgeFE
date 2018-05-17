@@ -194,7 +194,7 @@ export default {
     }
 }`,
       // judging
-      judging: true,
+      judging: false,
       // judged result form
       judgedResultForm: {
         'handDate': '',
