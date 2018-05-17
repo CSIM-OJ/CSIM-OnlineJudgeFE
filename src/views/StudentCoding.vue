@@ -51,28 +51,6 @@
       </el-col>
     </el-row>
   </section>
-  <section id="codemirror-section" v-if="problem.judged==false || problem.type=='練習題'">
-    <el-row>
-      <el-col :span="20" :offset="2" class="box" v-loading="judging" element-loading-text="批改中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
-        <div class="coding-block">
-          <div class="setting">
-            <span>Language:</span>
-            <el-select v-model="nowLang" @change="changeNowLang" size="8px">
-              <el-option v-for="(item, index) in languages" :key="index" :label="item" :value="item">
-              </el-option>
-            </el-select>
-            <span style="margin-left: 10px;">Theme:</span>
-            <el-select v-model="nowTheme" @change="changeNowTheme" size="8px">
-              <el-option v-for="item in themes" :key="item" :label="item" :value="item">
-              </el-option>
-            </el-select>
-          </div>
-          <codemirror v-model="code" :options="options" ref="myEditor"></codemirror>
-          <el-button type="primary" @click="submitCode">submit</el-button>
-        </div>
-      </el-col>
-    </el-row>
-  </section>
   <section id="judged-section" v-if="problem.judged==true" class="animated fadeInUp">
     <el-row>
       <el-col :span="20" :offset="2" class="box">
@@ -107,6 +85,28 @@
             </el-form>
           </el-col>
         </el-row>
+      </el-col>
+    </el-row>
+  </section>
+  <section id="codemirror-section" v-if="problem.judged==false || problem.type=='練習題'">
+    <el-row>
+      <el-col :span="20" :offset="2" class="box" v-loading="judging" element-loading-text="批改中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
+        <div class="coding-block">
+          <div class="setting">
+            <span>Language:</span>
+            <el-select v-model="nowLang" @change="changeNowLang" size="8px">
+              <el-option v-for="(item, index) in languages" :key="index" :label="item" :value="item">
+              </el-option>
+            </el-select>
+            <span style="margin-left: 10px;">Theme:</span>
+            <el-select v-model="nowTheme" @change="changeNowTheme" size="8px">
+              <el-option v-for="item in themes" :key="item" :label="item" :value="item">
+              </el-option>
+            </el-select>
+          </div>
+          <codemirror v-model="code" :options="options" ref="myEditor"></codemirror>
+          <el-button type="primary" @click="submitCode">submit</el-button>
+        </div>
       </el-col>
     </el-row>
   </section>
