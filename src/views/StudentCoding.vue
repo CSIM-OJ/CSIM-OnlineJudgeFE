@@ -51,7 +51,7 @@
       </el-col>
     </el-row>
   </section>
-  <section id="codemirror-section" v-if="problem.judged==false">
+  <section id="codemirror-section" v-if="problem.judged==false || problem.type=='練習題'">
     <el-row>
       <el-col :span="20" :offset="2" class="box" v-loading="judging" element-loading-text="批改中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
         <div class="coding-block">
@@ -73,7 +73,7 @@
       </el-col>
     </el-row>
   </section>
-  <section id="judged-section" v-else class="animated fadeInUp">
+  <section id="judged-section" v-if="problem.judged==true" class="animated fadeInUp">
     <el-row>
       <el-col :span="20" :offset="2" class="box">
         <div class="chart" v-if="problem.judged">
@@ -412,18 +412,25 @@ export default {
     // },
     // submit code
     submitCode() {
-      let subCode = this.code.split(' ');
       let flag = true;
+      let subNewLineCode = this.code.split('\n');
 
-      if (subCode[2] != 'Main') {
-        flag = false;
-        this.$message.error('請將 public class 名稱改成 Main');
-      }
-      subCode.forEach((el) => {
-        if (el == 'package') {
-          flag = false;
-          this.$message.error('不能有 package 出現');
-        }
+      // 檢測 package 及 public class name
+      subNewLineCode.forEach((line) => {
+        let subSpaceLine = line.split(' ');
+        subSpaceLine.forEach((el, index) => {
+          if (el == 'package') {
+            flag = false;
+            this.$message.error('不能有 package 出現');
+          } else if (el == 'public') {
+            if (subSpaceLine[index + 1] == 'class') {
+              if (subSpaceLine[index + 2] != 'Main') {
+                flag = false;
+                this.$message.error('請將 public class 名稱改成 Main');
+              }
+            }
+          }
+        });
       });
 
       if (flag == true) {
