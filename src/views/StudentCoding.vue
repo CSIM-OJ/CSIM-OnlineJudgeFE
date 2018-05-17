@@ -130,6 +130,7 @@ import "codemirror/mode/clike/clike.js"
 import "codemirror/mode/python/python.js"
 import "codemirror/addon/mode/overlay.js"
 import "codemirror/addon/edit/matchbrackets.js"
+import "codemirror/addon/edit/closebrackets.js"
 // fold gutter
 import "codemirror/addon/fold/foldcode.js"
 import "codemirror/addon/fold/foldgutter.js"
@@ -137,9 +138,12 @@ import "codemirror/addon/fold/brace-fold.js"
 import "codemirror/addon/fold/indent-fold.js"
 import "codemirror/addon/fold/foldgutter.css"
 // theme
-import "codemirror/theme/solarized.css"
-import "codemirror/theme/monokai.css"
-import "codemirror/theme/material.css"
+// import "codemirror/theme/solarized.css"
+// import "codemirror/theme/monokai.css"
+// import "codemirror/theme/material.css"
+import "codemirror/theme/darcula.css"
+import "codemirror/theme/blackboard.css"
+import "codemirror/theme/eclipse.css"
 // animated
 import "@/assets/animated/animate.css"
 
@@ -181,7 +185,8 @@ export default {
       languages: ['Java', 'Python'],
       theme: 'default',
       nowTheme: 'Default',
-      themes: ['Default', 'Solarized', 'Monokai', 'Material'],
+      // themes: ['Default', 'Solarized', 'Monokai', 'Material'],
+      themes: ['Default', 'Eclipse', 'Darcula', 'Blackboard'],
       // CodeMirror
       code: `public class Main {
     public static void main(String[] args) {
@@ -189,7 +194,7 @@ export default {
     }
 }`,
       // judging
-      judging: false,
+      judging: true,
       // judged result form
       judgedResultForm: {
         'handDate': '',
@@ -223,6 +228,7 @@ export default {
         lineNumbers: true,
         matchBrackets: true, // 括號匹配
         smartIndent: true, // 自動縮排
+        autoCloseBrackets: true, // 括號補全
         viewportMargin: Infinity,
         extraKeys: {
           'Ctrl-Space': 'autocomplete'
@@ -388,28 +394,17 @@ export default {
       if (theme == 'Default') {
         this.nowTheme = theme;
         this.theme = 'default';
-      } else if (theme == 'Solarized') {
+      } else if (theme == 'Eclipse') {
         this.nowTheme = theme;
-        this.theme = 'solarized';
-      } else if (theme == 'Monokai') {
+        this.theme = 'eclipse';
+      } else if (theme == 'Darcula') {
         this.nowTheme = theme;
-        this.theme = 'monokai';
-      } else if (theme == 'Material') {
+        this.theme = 'darcula';
+      } else if (theme == 'Blackboard') {
         this.nowTheme = theme;
-        this.theme = 'material';
+        this.theme = 'blackboard';
       }
     },
-    // test() {
-    //   let subCode = this.code.split(' ');
-    //   if (subCode[2] != 'Main') {
-    //     this.$message.error('請將 public class 名稱改成 Main');
-    //   }
-    //   subCode.forEach((el) => {
-    //     if (el == 'package') {
-    //       this.$message.error('不能有 package 出現');
-    //     }
-    //   });
-    // },
     // submit code
     submitCode() {
       let flag = true;

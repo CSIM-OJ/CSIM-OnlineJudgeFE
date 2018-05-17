@@ -11,7 +11,7 @@
               可做題目：{{ undoNum }}
             </el-col>
             <el-col :span="6" :offset="11">
-              <el-select v-model="undoSelectValue" placeholder="選擇類型" @change="undoChange">
+              <el-select v-model="undoSelectValue" placeholder="選擇類型" @change="undoChange" style="width: 77%;">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-col>
@@ -45,7 +45,7 @@
               已做題目：{{ doneNum }}
             </el-col>
             <el-col :span="6" :offset="11">
-              <el-select v-model="doneSelectValue" placeholder="選擇類型" @change="doneChange">
+              <el-select v-model="doneSelectValue" placeholder="選擇類型" @change="doneChange" style="width: 77%;">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-col>
