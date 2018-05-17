@@ -218,6 +218,7 @@ export default {
       return {
         mode: this.mode,
         theme: this.theme,
+        indentUnit: 4, // 縮進單位
         tabSize: 4,
         lineNumbers: true,
         matchBrackets: true, // 括號匹配
@@ -226,6 +227,7 @@ export default {
         extraKeys: {
           'Ctrl-Space': 'autocomplete'
         },
+        showCursorWhenSelecting: true, // 反白時顯示鼠標位置
         // 代碼折疊
         foldGutter: true,
         gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
@@ -397,43 +399,71 @@ export default {
         this.theme = 'material';
       }
     },
+    // test() {
+    //   let subCode = this.code.split(' ');
+    //   if (subCode[2] != 'Main') {
+    //     this.$message.error('請將 public class 名稱改成 Main');
+    //   }
+    //   subCode.forEach((el) => {
+    //     if (el == 'package') {
+    //       this.$message.error('不能有 package 出現');
+    //     }
+    //   });
+    // },
     // submit code
     submitCode() {
-      this.$confirm('確認是否要提交代碼？', '提示', {
-        confirmButtonText: '確定',
-        cancelButtonText: '取消',
-        type: 'info',
-        center: true
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '提交成功!'
-        });
-        console.log(this.code);
-        this.judging = true;
-        axios.post('/api/judge/judgeCode', {
-          problemID: this.problem.id,
-          code: this.code,
-          language: this.nowLang.toUpperCase()
-        }).then((response) => {
-          let res = response.data;
-          if (res.status == '200') {
-            this.problem.judged = true;
-            this.getJudgedInfo();
-          } else {
-            console.log('judgedErrorMsg:' + res.msg);
-          }
-        }).catch((error) => {
-          console.log(error);
-        });;
-      }).catch((err) => {
-        this.$message({
-          type: 'info',
-          message: '已取消提交'
-        });
-        this.judging = false;
-        console.log(err);
+      let subCode = this.code.split(' ');
+      let flag = true;
+
+      if (subCode[2] != 'Main') {
+        flag = false;
+        this.$message.error('請將 public class 名稱改成 Main');
+      }
+      subCode.forEach((el) => {
+        if (el == 'package') {
+          flag = false;
+          this.$message.error('不能有 package 出現');
+        }
       });
+
+      if (flag == true) {
+        this.$confirm('確認是否要提交代碼？', '提示', {
+          confirmButtonText: '確定',
+          cancelButtonText: '取消',
+          type: 'info',
+          center: true
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '提交成功!'
+          });
+          console.log(this.code);
+          this.judging = true;
+          axios.post('/api/judge/judgeCode', {
+            problemID: this.problem.id,
+            code: this.code,
+            language: this.nowLang.toUpperCase()
+          }).then((response) => {
+            let res = response.data;
+            if (res.status == '200') {
+              this.problem.judged = true;
+              this.getJudgedInfo();
+            } else {
+              console.log('judgedErrorMsg:' + res.msg);
+            }
+          }).catch((error) => {
+            console.log(error);
+          });;
+        }).catch((err) => {
+          this.$message({
+            type: 'info',
+            message: '已取消提交'
+          });
+          this.judging = false;
+          console.log(err);
+        });
+      }
+
     },
     notify1() {
       this.$notify({
