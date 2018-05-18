@@ -22,7 +22,7 @@
     <i class="fas fa-code"></i>&nbsp; 陳冠億、蘇靖軒
   </div>
   <el-dialog :visible.sync="dialogFormVisible" @close="loginCancel">
-    <el-form :model="loginForm" status-icon label-width="50px" class="loginForm" v-loading="loading" element-loading-text="登入中">
+    <el-form :model="loginForm" status-icon label-width="40px" class="loginForm" v-loading="loading" element-loading-text="登入中">
       <div id="title">登入</div>
       <el-row>
         <el-col :span="14" :offset="5">
@@ -35,11 +35,11 @@
         </el-col>
       </el-row>
       <el-row style="padding-bottom: 30px;">
-        <el-col :span="2" :offset="13">
+        <!-- <el-col :xs="5" :md="2" :offset="13">
           <el-button @click="loginCancel">取 消</el-button>
-        </el-col>
-        <el-col :span="2" :offset="1">
-          <el-button type="primary" @click="login">ＧＯ！</el-button>
+        </el-col> -->
+        <el-col :xs="5" :md="2" :offset="16">
+          <el-button type="primary" @click="login">ＧＯ</el-button>
         </el-col>
       </el-row>
     </el-form>
@@ -54,6 +54,7 @@ import NavFooter from '@/components/NavFooter.vue'
 
 import '@/assets/css/login.css'
 import '@/assets/css/login-navbar.css'
+import '@/assets/css/rwd.css'
 
 export default {
   components: {

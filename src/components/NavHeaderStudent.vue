@@ -7,7 +7,8 @@
     <el-menu :default-active="$route.path" class="oj-menu" mode="horizontal" @select="handleSelect" :style="{'background-color': navbarBGC}" router>
       <el-menu-item index="/student/scorePanel">成績面板</el-menu-item>
       <el-menu-item index="/student/mypage">個人中心</el-menu-item>
-      <el-button @click="logout" type="primary" round size="small">Logout</el-button>
+      <el-button @click="logout" type="primary" round size="small" class="hidden-xs-only">Logout</el-button>
+      <el-button @click="logout" type="primary" round size="small" class="hidden-md-only"><i class="fas fa-sign-out-alt"></i></el-button>
     </el-menu>
   </header>
   <div class="space"></div>

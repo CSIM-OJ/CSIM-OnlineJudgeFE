@@ -1,0 +1,79 @@
+/* xs */
+@media screen and (max-width: 768px) {
+  .hidden-xs-only {
+    display: none !important;
+  }
+
+  /* login */
+  .el-dialog {
+    width: 90% !important;
+  }
+
+  #navbar .el-menu .right-item {
+    padding-right: 10px;
+  }
+
+  /* student index */
+  .count-label {
+    display: none;
+  }
+
+  .el-card {
+    height: 130px !important;
+  }
+
+  .feedback {
+    border: solid 1px #333;
+  }
+
+  .el-message-box {
+    width: 90% !important;
+  }
+
+  #student-navbar .oj-menu {
+    width: 50% !important;
+    margin-right: 0px !important;
+  }
+
+  #student-navbar .oj-menu .el-menu-item {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  #student-navbar .oj-menu .el-button {
+    margin-left: 5px !important;
+    width: 23%;
+  }
+
+  /* score panel */
+  .table-expand .el-form-item {
+    width: 100% !important;
+  }
+
+  /* student mypage */
+  #info-section .el-form-item {
+    margin-bottom: 0px;
+  }
+
+  #info-section .el-button {
+    width: 100% !important;
+  }
+
+  /* coding page */
+  .coding-block .setting .el-select {
+    margin-bottom: 10px;
+  }
+
+  /* footer */
+  #footer {
+    padding: 0px;
+  }
+
+}
+
+/* over md */
+@media screen and (min-width: 769px) {
+  .hidden-md-only {
+    display: none !important;
+  }
+}

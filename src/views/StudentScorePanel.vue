@@ -5,13 +5,13 @@
     <el-col :span="20" :offset="2">
       <div class="box">
         <el-row>
-          <el-col :span="12">
+          <el-col :xs="24" :md="12">
             <div id="title">正確率</div>
             <ve-pie :data="pieData" :colors="pieColors" :settings="pieSettings">
               <div class="data-empty" v-if="hasRecordFlag">沒有數據 &#x1F61D;</div>
             </ve-pie>
           </el-col>
-          <el-col :span="12">
+          <el-col :xs="24" :md="12">
             <div id="title">成績圖表</div>
             <ve-line :data="lineData" :settings="lineSettings">
               <div class="data-empty" v-if="hasRecordFlag">沒有數據 &#x1F61D;</div>

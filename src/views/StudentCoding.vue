@@ -26,7 +26,7 @@
           <div class="content" v-text="problem.output"></div>
         </div>
         <el-row v-for="(sample, index) in problem.samples" :key="index">
-          <el-col :span="12">
+          <el-col :xs="24" :md="12">
             <div class="problem-info">
               <div class="title">
                 Sample Input {{index+1}}
@@ -38,7 +38,7 @@
               </div>
             </div>
           </el-col>
-          <el-col :span="12">
+          <el-col :xs="24" :md="12">
             <div class="problem-info">
               <div class="title">Sample Output {{index+1}}</div>
               <div class="content">
@@ -54,7 +54,7 @@
   <section id="judged-section" v-if="problem.judged==true" class="animated fadeInUp">
     <el-row>
       <el-col :span="20" :offset="2" class="box">
-        <div class="chart" v-if="problem.judged">
+        <div class="chart hidden-xs-only" v-if="problem.judged">
           <ve-pie :data="chartData" :colors="chartColors" :settings="chartSettings"></ve-pie>
         </div>
         <el-row>
@@ -65,12 +65,12 @@
             </div>
             <el-form :model="judgedResultForm" label-width="100px" label-position="top">
               <el-row>
-                <el-col :span="6">
+                <el-col :xs="10" :md="6">
                   <el-form-item label="分數">
                     <el-input readonly v-model="judgedResultForm.score" style="width: 100%;"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6" :offset="2">
+                <el-col :xs="10" :md="6" :offset="2">
                   <el-form-item label="運行時間">
                     <el-input readonly v-model="judgedResultForm.runtime" style="width: 100%;"></el-input>
                   </el-form-item>

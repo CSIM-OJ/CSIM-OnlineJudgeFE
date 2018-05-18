@@ -10,14 +10,14 @@
             <el-col :span="6" :offset="1" class="count-label">
               可做題目：{{ undoNum }}
             </el-col>
-            <el-col :span="6" :offset="11">
+            <el-col :xs="13" :md="6" :offset="11">
               <el-select v-model="undoSelectValue" placeholder="選擇類型" @change="undoChange" style="width: 77%;">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-col>
             <el-col class="undoCol" :span="22" :offset="1" v-loading="undoLoading">
               <transition-group name="slide-fade">
-                <el-col v-for="problem in undoProblems" :span="6" :key="problem.problemID">
+                <el-col v-for="problem in undoProblems" :xs="24" :md="6" :key="problem.problemID">
                   <a href="javascript:void(0);" @click="doProblem(problem.problemID)">
                     <el-card :body-style="{ padding: '5px' }">
                       <div style="padding: 14px;">
@@ -44,14 +44,14 @@
             <el-col :span="6" :offset="1" class="count-label">
               已做題目：{{ doneNum }}
             </el-col>
-            <el-col :span="6" :offset="11">
+            <el-col :xs="13" :md="6" :offset="11">
               <el-select v-model="doneSelectValue" placeholder="選擇類型" @change="doneChange" style="width: 77%;">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-col>
             <el-col class="doneCol" :span="22" :offset="1" v-loading="doneLoading" v-if="this.doneProblems.length!=0">
               <transition-group name="slide-fade">
-                <el-col v-for="problem in doneProblems" :span="6" :key="problem.problemID">
+                <el-col v-for="problem in doneProblems" :xs="24" :md="6" :key="problem.problemID">
                   <a href="javascript:void(0);" @click="doProblem(problem.problemID)">
                     <el-card :body-style="{ padding: '5px' }">
                       <div style="padding: 14px;">
