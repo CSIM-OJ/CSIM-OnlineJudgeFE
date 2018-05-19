@@ -4,9 +4,6 @@
   <section id="problem-section">
     <el-row>
       <el-col :span="20" :offset="2" class="box">
-        <!-- <div class="chart" v-if="problem.judged">
-          <ve-pie :data="chartData" :colors="chartColors" :settings="chartSettings"></ve-pie>
-        </div> -->
         <div class="problem-name">
           <span v-text="problem.name"></span>
           <el-rate allow-half v-model="problem.rate" @change="changeRate"></el-rate>

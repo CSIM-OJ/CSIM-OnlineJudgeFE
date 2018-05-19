@@ -8,7 +8,7 @@
           <div id="title">可作答題目</div>
           <el-row :gutter="20">
             <el-col :span="6" :offset="1" class="count-label">
-              可做題目：{{ undoNum }}
+              <i class="fas fa-pencil-alt"></i> {{ undoNum }}
             </el-col>
             <el-col :xs="13" :md="6" :offset="11">
               <el-select v-model="undoSelectValue" placeholder="選擇類型" @change="undoChange" style="width: 77%;">
@@ -42,7 +42,7 @@
           <div id="title">已作答題目</div>
           <el-row :gutter="20">
             <el-col :span="6" :offset="1" class="count-label">
-              已做題目：{{ doneNum }}
+              <i class="fas fa-paperclip"></i> {{ doneNum }}
             </el-col>
             <el-col :xs="13" :md="6" :offset="11">
               <el-select v-model="doneSelectValue" placeholder="選擇類型" @change="doneChange" style="width: 77%;">

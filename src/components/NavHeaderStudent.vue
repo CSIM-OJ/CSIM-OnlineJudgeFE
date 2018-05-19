@@ -2,7 +2,8 @@
 <div>
   <header id="student-navbar" :style="{'box-shadow': navbarBoxShadow, 'background-color': navbarBGC}" >
     <div class="logo">
-      <router-link to="/student/index">CSIM OJ Beta</router-link>
+      <router-link to="/student/index"><img src="/static/logo.png" alt=""></router-link>
+      <!-- <router-link to="/student/index">CSIM OJ Beta</router-link> -->
     </div>
     <el-menu :default-active="$route.path" class="oj-menu" mode="horizontal" @select="handleSelect" :style="{'background-color': navbarBGC}" router>
       <el-menu-item index="/student/scorePanel">成績面板</el-menu-item>

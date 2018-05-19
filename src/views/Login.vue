@@ -3,7 +3,8 @@
   <header id="navbar" :style="{'box-shadow': navbarBoxShadow}">
     <el-menu class="oj-menu" mode="horizontal" :style="{'background-color': navbarBGC}">
       <div class="logo">
-        <span>CSIM OJ</span>
+        <img src="/static/logo.png" alt="">
+        <!-- <span>CSIM OJ</span> -->
       </div>
       <div class="right-item">
         <el-button type="primary" size="small" @click="dialogFormVisible=true">登入</el-button>
