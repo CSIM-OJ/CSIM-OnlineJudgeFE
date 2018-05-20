@@ -1,6 +1,6 @@
 @font-face {
-  font-family: "文泉驛微米黑";
-  src: url(/static/wqy-microhei.ttc);
+  font-family: "PingFang SC";
+  src: url(/static/fonts/PingFang-SC.ttf);
 }
 
 * {
@@ -18,7 +18,7 @@ html, body {
 }
 
 html, body, h1, h2, h3, h4, h5, h6, button, input {
-  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "文泉驛微米黑", "Hiragino Sans GB", "Microsoft YaHei", "微軟雅黑", Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微軟雅黑", Arial, sans-serif;
 }
 
 hr {
