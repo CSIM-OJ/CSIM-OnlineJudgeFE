@@ -7,7 +7,7 @@
         <div class="undo box" style="margin-bottom: 30px;">
           <div id="title">可作答題目</div>
           <el-row :gutter="20">
-            <el-col :span="6" :offset="1" class="count-label">
+            <el-col :span="6" :offset="1" class="count-label hidden-xs-only">
               <i class="fas fa-pencil-alt"></i> {{ undoNum }}
             </el-col>
             <el-col :xs="13" :md="6" :offset="11">
@@ -32,7 +32,6 @@
                       </div>
                     </el-card>
                   </a>
-
                 </el-col>
               </transition-group>
             </el-col>
@@ -41,7 +40,7 @@
         <div class="done box">
           <div id="title">已作答題目</div>
           <el-row :gutter="20">
-            <el-col :span="6" :offset="1" class="count-label">
+            <el-col :span="6" :offset="1" class="count-label hidden-xs-only">
               <i class="fas fa-paperclip"></i> {{ doneNum }}
             </el-col>
             <el-col :xs="13" :md="6" :offset="11">

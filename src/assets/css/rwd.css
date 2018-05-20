@@ -20,9 +20,6 @@
   }
 
   /* student index */
-  .count-label {
-    display: none;
-  }
 
   .el-card {
     height: 130px !important;

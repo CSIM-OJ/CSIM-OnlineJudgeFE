@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css?family=Kavivanar');
+@font-face {
+  font-family: "文泉驛微米黑";
+  src: url(/static/wqy-microhei.ttc);
+}
 
 * {
   box-sizing: border-box;
@@ -12,7 +15,10 @@ html, body {
   margin: 0;
   padding: 0;
   background-color: #F2F3F4;
-  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+}
+
+html, body, h1, h2, h3, h4, h5, h6, button, input {
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "文泉驛微米黑", "Hiragino Sans GB", "Microsoft YaHei", "微軟雅黑", Arial, sans-serif;
 }
 
 hr {
