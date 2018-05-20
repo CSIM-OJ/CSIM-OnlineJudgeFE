@@ -63,8 +63,13 @@
   }
 
   /* coding page */
+  .coding-block .setting span {
+    margin-left: 0px !important;
+  }
+
   .coding-block .setting .el-select {
     margin-bottom: 10px;
+    width: 100% !important;
   }
 
   /* footer */

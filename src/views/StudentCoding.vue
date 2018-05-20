@@ -91,17 +91,22 @@
         <div class="coding-block">
           <div class="setting">
             <span>Language:</span>
-            <el-select v-model="nowLang" @change="changeNowLang" size="8px">
+            <el-select v-model="nowLang" @change="changeNowLang" style="width: 100px;">
               <el-option v-for="(item, index) in languages" :key="index" :label="item" :value="item">
               </el-option>
             </el-select>
             <span style="margin-left: 10px;">Theme:</span>
-            <el-select v-model="nowTheme" @change="changeNowTheme" size="8px">
+            <el-select v-model="nowTheme" @change="changeNowTheme" style="width: 130px;">
               <el-option v-for="item in themes" :key="item" :label="item" :value="item">
               </el-option>
             </el-select>
+            <span style="margin-left: 10px;">FontSize:</span>
+            <el-select v-model="fontSize" style="width: 80px;">
+              <el-option v-for="item in fontSizeList" :key="item" :label="item" :value="item">
+              </el-option>
+            </el-select>
           </div>
-          <codemirror v-model="code" :options="options" ref="myEditor"></codemirror>
+          <codemirror v-model="code" :options="options" ref="myEditor" :style="{'font-size': fontSize+'px'}"></codemirror>
           <el-button type="primary" @click="submitCode">submit</el-button>
         </div>
       </el-col>
@@ -180,9 +185,10 @@ export default {
       mode: "text/x-java",
       nowLang: 'Java',
       languages: ['Java', 'Python'],
+      fontSize: '16',
+      fontSizeList: ['16', '17', '18', '19', '20'],
       theme: 'default',
       nowTheme: 'Default',
-      // themes: ['Default', 'Solarized', 'Monokai', 'Material'],
       themes: ['Default', 'Eclipse', 'Darcula', 'Blackboard'],
       // CodeMirror
       code: `public class Main {
@@ -227,6 +233,8 @@ export default {
         smartIndent: true, // 自動縮排
         autoCloseBrackets: true, // 括號補全
         viewportMargin: Infinity,
+        gutter: true,
+        fixedGutter: true,
         extraKeys: {
           'Ctrl-Space': 'autocomplete'
         },
