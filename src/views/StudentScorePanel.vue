@@ -152,7 +152,7 @@ export default {
     getStudentInfo() {
       axios.get('/api/student/info').then((response) => {
         let res = response.data;
-        console.log(res.result);
+        // console.log(res.result);
         if (res.status == '200') {
           this.user.name = res.result.name;
           this.user.studentID = res.result.studentID;
@@ -168,7 +168,7 @@ export default {
     getHistoryScore() {
       axios.get('/api/student/historyScore').then((response) => {
         let res = response.data;
-        console.log(res.result);
+        // console.log(res.result);
         if (res.status == '200') {
           this.tableData = res.result;
 

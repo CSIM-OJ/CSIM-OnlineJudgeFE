@@ -4,6 +4,7 @@
 
 .CodeMirror {
   border: solid #CCC 1px;
+  transition: all .3s ease;
   /* font-family: 'Roboto', sans-serif !important; */
 }
 

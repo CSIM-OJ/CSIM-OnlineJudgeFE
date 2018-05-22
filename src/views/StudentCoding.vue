@@ -105,6 +105,7 @@
               <el-option v-for="item in fontSizeList" :key="item" :label="item" :value="item">
               </el-option>
             </el-select>
+            <button type="button" @click="changeCodemirrorHeight" class="chbtn hidden-xs-only"><i class="fas fa-arrows-alt"></i></button>
           </div>
           <codemirror v-model="code" :options="options" ref="myEditor" :style="{'font-size': fontSize+'px'}"></codemirror>
           <el-button type="primary" @click="submitCode">submit</el-button>
@@ -140,9 +141,6 @@ import "codemirror/addon/fold/brace-fold.js"
 import "codemirror/addon/fold/indent-fold.js"
 import "codemirror/addon/fold/foldgutter.css"
 // theme
-// import "codemirror/theme/solarized.css"
-// import "codemirror/theme/monokai.css"
-// import "codemirror/theme/material.css"
 import "codemirror/theme/darcula.css"
 import "codemirror/theme/blackboard.css"
 import "codemirror/theme/eclipse.css"
@@ -186,6 +184,7 @@ export default {
       nowLang: 'Java',
       languages: ['Java', 'Python'],
       fontSize: '16',
+      codemirrorFlag: 1,
       fontSizeList: ['16', '17', '18', '19', '20'],
       theme: 'default',
       nowTheme: 'Default',
@@ -206,7 +205,7 @@ export default {
         'code': ``,
         'errorInfo': '',
         'bestCode': null
-      },
+      }
     }
   },
   created() {
@@ -241,9 +240,7 @@ export default {
         showCursorWhenSelecting: true, // 反白時顯示鼠標位置
         // 代碼折疊
         foldGutter: true,
-        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
-        // judging
-        judging: false,
+        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter']
       }
     },
     // judged form
@@ -292,7 +289,7 @@ export default {
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
-          console.log(rateScore);
+          // console.log(rateScore);
         }
       });
     },
@@ -304,7 +301,7 @@ export default {
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
-          console.log('judged:' + res.result.judged);
+          // console.log('judged:' + res.result.judged);
           this.problem.judged = res.result.judged;
           if (res.result.judged == true) {
             this.problem.judged = true;
@@ -344,7 +341,7 @@ export default {
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
-          console.log(res);
+          // console.log(res);
           this.problem.name = res.result.name;
           this.problem.rate = parseInt(res.result.rate);
           this.problem.type = res.result.type;
@@ -387,12 +384,12 @@ export default {
         System.out.println("Hello! World!");
     }
 }`;
-        console.log('Change lang to' + lang);
+        // console.log('Change lang to' + lang);
       } else if (lang == 'Python') {
         this.nowLang = 'Python';
         this.mode = 'text/x-python';
         this.code = "print('Hello! World!')";
-        console.log('Change lang to' + lang);
+        // console.log('Change lang to' + lang);
       }
     },
     changeNowTheme(theme) {
@@ -444,7 +441,7 @@ export default {
             type: 'success',
             message: '提交成功!'
           });
-          console.log(this.code);
+          // console.log(this.code);
           this.judging = true;
           axios.post('/api/judge/judgeCode', {
             problemID: this.problem.id,
@@ -475,7 +472,6 @@ export default {
           console.log(err);
         });
       }
-
     },
     notify1() {
       this.$notify({
@@ -495,6 +491,19 @@ export default {
         duration: 7000,
         type: 'warning'
       });
+    },
+    changeCodemirrorHeight() {
+      this.codemirrorFlag++;
+      var codemirror = document.getElementsByClassName("CodeMirror")[0];
+      var chbtn = document.getElementsByClassName("chbtn")[0];
+
+      if (this.codemirrorFlag % 2 == 0) {
+        codemirror.style.height = '450px';
+        chbtn.style.color = '#409EFF';
+      } else {
+        codemirror.style.height = '300px';
+        chbtn.style.color = '#303133';
+      }
     }
   }
 }
