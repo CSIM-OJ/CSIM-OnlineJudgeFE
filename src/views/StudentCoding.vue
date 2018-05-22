@@ -105,7 +105,7 @@
               <el-option v-for="item in fontSizeList" :key="item" :label="item" :value="item">
               </el-option>
             </el-select>
-            <button type="button" @click="changeCodemirrorHeight" class="chbtn hidden-xs-only"><i class="fas fa-arrows-alt"></i></button>
+            <el-button plain size="mini" @click="changeCodemirrorHeight" class="chbtn hidden-xs-only"><i class="fas fa-arrows-alt"></i></el-button>
           </div>
           <codemirror v-model="code" :options="options" ref="myEditor" :style="{'font-size': fontSize+'px'}"></codemirror>
           <el-button type="primary" @click="submitCode">submit</el-button>
