@@ -48,7 +48,7 @@
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-col>
-            <el-col class="doneCol" :span="22" :offset="1" v-loading="doneLoading" v-if="this.doneProblems.length!=0">
+            <el-col class="doneCol" :span="22" :offset="1" v-loading="doneLoading">
               <transition-group name="slide-fade">
                 <el-col v-for="problem in doneProblems" :xs="24" :md="6" :key="problem.problemID">
                   <a href="javascript:void(0);" @click="doProblem(problem.problemID)">
