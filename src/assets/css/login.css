@@ -45,6 +45,11 @@
   padding-bottom: 0px !important;
 }
 
+/* loading */
+.el-loading-mask {
+  height: 100%;
+}
+
 /* icon */
 .icon span {
   font-weight: bold;

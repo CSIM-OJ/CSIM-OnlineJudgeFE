@@ -88,3 +88,8 @@
 #judged-section .el-form .el-form-item label {
   padding-bottom: 0px;
 }
+
+/* loading */
+.el-loading-mask {
+  height: 100%;
+}

@@ -1,6 +1,7 @@
 /* @import url('https://fonts.googleapis.com/css?family=Roboto'); */
 
 /* CodeMirror */
+
 .CodeMirror {
   border: solid #CCC 1px;
   /* font-family: 'Roboto', sans-serif !important; */
@@ -23,8 +24,6 @@
   justify-content: center;
   height: 300px;
 }
-
-
 
 /* loading mask */
 
