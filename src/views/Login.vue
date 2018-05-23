@@ -1,6 +1,6 @@
 <template>
 <div @keyup.enter="login">
-  <header id="navbar" :style="{'box-shadow': navbarBoxShadow}">
+  <header id="login-navbar" :style="{'box-shadow': navbarBoxShadow}">
     <el-menu class="oj-menu" mode="horizontal" :style="{'background-color': navbarBGC}">
       <div class="logo">
         <img src="/static/logo.png" alt="">
@@ -113,7 +113,12 @@ export default {
         }).then((response) => {
           let res = response.data;
           if (res.status == "200") {
-            this.$router.push("/student/index");
+            console.log(res.result);
+            if (res.result == 'student') {
+              this.$router.push("/student/index");
+            } else if (res.result == 'admin') {
+              this.$router.push("/admin/index");
+            }
           } else {
             this.loading = false;
             this.$message.error('帳號或密碼錯誤！');

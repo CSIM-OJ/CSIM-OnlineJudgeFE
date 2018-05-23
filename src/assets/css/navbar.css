@@ -1,4 +1,4 @@
-#student-navbar {
+#navbar {
     position: fixed;
     overflow: hidden;
     top: 0;
@@ -9,47 +9,47 @@
     width: 100%;
 }
 
-#student-navbar .logo img {
+#navbar .logo img {
   margin-top: 8px;
   width: 135px;
 }
 
-#student-navbar a {
+#navbar a {
     text-decoration: none;
 }
 
-#student-navbar .logo {
+#navbar .logo {
     margin-left: 2%;
     font-size: 20px;
     float: left;
     line-height: 60px;
 }
 
-#student-navbar .logo a {
+#navbar .logo a {
     text-decoration: none;
     color: black;
 }
 
-#student-navbar button {
+#navbar button {
     margin-top: 15px;
     margin-left: 17px;
 }
 
 /*
-#student-navbar .el-menu .el-menu-item:nth-child(2) {
+#navbar .el-menu .el-menu-item:nth-child(2) {
     margin-left: 62%;
 }
 
-#student-navbar .el-menu .el-menu-item:last-child {
+#navbar .el-menu .el-menu-item:last-child {
     margin-right: 3%;
 }
 */
 
-#student-navbar {
+#navbar {
     float: right;
 }
 
-#student-navbar .el-menu {
+#navbar .el-menu {
     float:right;
     margin-right: 30px;
 }

@@ -1,4 +1,4 @@
-#navbar {
+#login-navbar {
     position: fixed;
     overflow: hidden;
     top: 0;
@@ -9,11 +9,16 @@
     width: 100%;
 }
 
-#navbar a {
+#login-navbar .logo img {
+  margin-top: 8px;
+  width: 135px;
+}
+
+#login-navbar a {
     text-decoration: none;
 }
 
-#navbar .logo {
+#login-navbar .logo {
     margin-left: 2%;
     /*    margin-right: 55%;*/
     font-size: 20px;
@@ -21,26 +26,26 @@
     line-height: 60px;
 }
 
-#navbar button {
+#login-navbar button {
     margin-top: 15px;
     margin-left: 17px;
 }
 
-#navbar .logo a {
+#login-navbar .logo a {
     text-decoration: none;
     color: black;
 }
 
 
-#navbar .el-menu .el-menu-item:nth-child(2) {
+#login-navbar .el-menu .el-menu-item:nth-child(2) {
     margin-left: 65%;
 }
 
-#navbar .el-menu .el-menu-item:last-child {
+#login-navbar .el-menu .el-menu-item:last-child {
     margin-right: 3%;
 }
 
-#navbar .el-menu .right-item {
+#login-navbar .el-menu .right-item {
   float: right;
   padding-right: 50px;
 }

@@ -2,12 +2,11 @@
 <div>
   <header id="navbar" :style="{'box-shadow': navbarBoxShadow, 'background-color': navbarBGC}" >
     <div class="logo">
-      <router-link to="/student/index"><img src="/static/logo.png" alt=""></router-link>
-      <!-- <router-link to="/student/index">CSIM OJ Beta</router-link> -->
+      <router-link to="/admin/index"><img src="/static/logo.png" alt=""></router-link>
     </div>
     <el-menu :default-active="$route.path" class="oj-menu" mode="horizontal" @select="handleSelect" :style="{'background-color': navbarBGC}" router>
-      <el-menu-item index="/student/scorePanel">成績面板</el-menu-item>
-      <el-menu-item index="/student/mypage">個人中心</el-menu-item>
+      <el-menu-item index="/admin/newProblem">新增題目</el-menu-item>
+      <el-menu-item index="/admin/studentsData">學生資訊</el-menu-item>
       <el-button @click="logout" type="primary" round size="small" class="hidden-xs-only">Logout</el-button>
       <el-button @click="logout" type="primary" round size="small" class="hidden-md-only"><i class="fas fa-sign-out-alt"></i></el-button>
     </el-menu>

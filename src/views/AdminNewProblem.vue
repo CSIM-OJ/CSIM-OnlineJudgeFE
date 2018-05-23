@@ -1,5 +1,6 @@
 <template>
 <div>
+  <nav-header-admin></nav-header-admin>
   <el-row>
     <el-col :span="20" :offset="2" class="box" style="margin-top: 20px;">
       <el-row>
@@ -142,17 +143,24 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible=false">取 消</el-button>
-      <el-button type="primary" @click="newProblem" >確 定</el-button>
+      <el-button type="primary" @click="newProblem">確 定</el-button>
     </div>
   </el-dialog>
+  <nav-footer></nav-footer>
 </div>
 </template>
 
 <script>
 import axios from 'axios'
 
+import NavHeaderAdmin from '@/components/NavHeaderAdmin'
+import NavFooter from '@/components/NavFooter'
+
 export default {
-  components: {},
+  components: {
+    NavHeaderAdmin,
+    NavFooter
+  },
   data() {
     return {
       dialogFormVisible: false,
@@ -250,7 +258,7 @@ export default {
 </script>
 
 <style>
- .el-loading-mask {
-   height: 150%;
- }
+.el-loading-mask {
+  height: 150%;
+}
 </style>

@@ -5,7 +5,9 @@ import StudentIndex from '@/views/StudentIndex'
 import StudentScorePanel from '@/views/StudentScorePanel'
 import StudentMypage from '@/views/StudentMypage'
 import StudentCoding from '@/views/StudentCoding'
-import NewProblem from '@/views/NewProblem'
+import AdminIndex from '@/views/AdminIndex'
+import AdminNewProblem from '@/views/AdminNewProblem'
+import AdminStudentsData from '@/views/AdminStudentsData'
 
 Vue.use(Router)
 
@@ -38,9 +40,19 @@ export default new Router({
       component: StudentCoding
     },
     {
+      path: '/admin/index',
+      name: 'AdminIndex',
+      component: AdminIndex
+    },
+    {
       path: '/admin/newProblem',
-      name: 'NewProblem',
-      component: NewProblem
+      name: 'AdminNewProblem',
+      component: AdminNewProblem
+    },
+    {
+      path: '/admin/studentsData',
+      name: 'AdminStudentsData',
+      component: AdminStudentsData
     }
   ]
 })
