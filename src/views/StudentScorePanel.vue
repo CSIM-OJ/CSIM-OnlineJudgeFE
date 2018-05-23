@@ -46,14 +46,19 @@
               </el-form>
             </template>
           </el-table-column>
-          <el-table-column label="題目 ID" prop="problemID"></el-table-column>
-          <el-table-column label="題目名稱" prop="problemName"></el-table-column>
+          <el-table-column label="題目ID" prop="problemID"></el-table-column>
+          <el-table-column label="題目名稱">
+            <template slot-scope="scope">
+              <a class="id-hyperlink" href="javascript:void(0)" @click="doProblem(scope.row)">{{ scope.row.problemName }}</a>
+            </template>
+          </el-table-column>
           <el-table-column label="類型">
             <template slot-scope="scope">
               <el-tag :type="scope.row.type === '作業' ? 'danger' : 'success'" close-transition>{{scope.row.type}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="分數" prop="score"></el-table-column>
+
         </el-table>
       </div>
     </el-col>
@@ -126,7 +131,7 @@ export default {
       return lineData
     },
     hasRecordFlag() {
-      if(this.user.correctNum=='0' && this.user.errorNum=='0') {
+      if (this.user.correctNum == '0' && this.user.errorNum == '0') {
         return true
       } else {
         return false
@@ -183,23 +188,36 @@ export default {
           this.transformedLineData = data;
         }
       });
+    },
+    doProblem(data) {
+      this.$router.push('/student/coding?problemID=' + data.problemID);
     }
   }
 }
 </script>
 
 <style>
-  .data-empty {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(255, 255, 255, .7);
-    color: #888;
-    font-size: 14px;
-  }
+.data-empty {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, .7);
+  color: #888;
+  font-size: 14px;
+}
+
+.id-hyperlink {
+  text-decoration: none;
+  color: black;
+  transition: all .3s ease;
+}
+
+.id-hyperlink:hover {
+  color: #409EFF;
+}
 </style>
