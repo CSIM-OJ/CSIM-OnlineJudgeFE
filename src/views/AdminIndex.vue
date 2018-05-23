@@ -158,16 +158,18 @@ export default {
     // this.getProblemsData();
   },
   methods: {
-    // checkLogin() {
-    //   axios.get('/api/student/checkLogin').then((response) => {
-    //     let res = response.data;
-    //     if (res.status == "200") {
-    //       // pass
-    //     } else {
-    //       this.$router.push('/login');
-    //     }
-    //   });
-    // },
+    checkLogin() {
+      axios.get('/api/checkLogin').then((response) => {
+        let res = response.data;
+        if (res.status == "200") {
+          if (res.result.authority != 'admin') {
+            this.$router.push('/login');
+          }
+        } else {
+          this.$router.push('/login');
+        }
+      });
+    },
     // TODO
     // table
     // handleEdit(index, data) {
@@ -197,7 +199,7 @@ export default {
           problemID: data.id
         }).then((resposne) => {
           let res = response.data;
-          if(res.status=='200') {
+          if (res.status == '200') {
             this.$message({
               type: 'success',
               message: '刪除成功!'

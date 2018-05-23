@@ -184,8 +184,22 @@ export default {
       return this.formatDate(this.problemData.deadline)
     }
   },
-  mounted() {},
+  mounted() {
+    // this.checkLogin();
+  },
   methods: {
+    checkLogin() {
+      axios.get('/api/checkLogin').then((response) => {
+        let res = response.data;
+        if (res.status == "200") {
+          if(res.result.authority!='admin') {
+            this.$router.push('/login');
+          }
+        } else {
+          this.$router.push('/login');
+        }
+      });
+    },
     newProblem() {
       if (this.problemData.name == '') {
         this.$message.error('請填寫題目名稱！');

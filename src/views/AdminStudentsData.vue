@@ -96,16 +96,18 @@ export default {
     }
   },
   methods: {
-    // checkLogin() {
-    //   axios.get('/api/student/checkLogin').then((response) => {
-    //     let res = response.data;
-    //     if (res.status == "200") {
-    //       // pass
-    //     } else {
-    //       this.$router.push('/login');
-    //     }
-    //   });
-    // },
+    checkLogin() {
+      axios.get('/api/checkLogin').then((response) => {
+        let res = response.data;
+        if (res.status == "200") {
+          if(res.result.authority!='admin') {
+            this.$router.push('/login');
+          }
+        } else {
+          this.$router.push('/login');
+        }
+      });
+    },
     // TODO
     getManageClassGroup() {
       // this.manageClassGroup =
