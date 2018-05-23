@@ -213,7 +213,7 @@ export default {
 
 .id-hyperlink {
   text-decoration: none;
-  color: black;
+  color: #606266;
   transition: all .3s ease;
 }
 
