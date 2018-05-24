@@ -58,7 +58,6 @@
             </template>
           </el-table-column>
           <el-table-column label="分數" prop="score"></el-table-column>
-
         </el-table>
       </div>
     </el-col>

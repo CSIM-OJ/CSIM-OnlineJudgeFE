@@ -355,7 +355,7 @@ export default {
           this.problem.correctNum = parseInt(res.result.correctNum);
           this.problem.incorrectNum = parseInt(res.result.incorrectNum);
         }
-      })
+      });
     },
     copy(s) {
       // 複製功能
@@ -452,6 +452,18 @@ export default {
             if (res.status == '200') {
               this.problem.judged = true;
               this.getJudgedInfo();
+              // 刷新圓餅圖
+              axios.get('/api/problem/getInfo', {
+                params: {
+                  problemID: this.problem.id
+                }
+              }).then((response) => {
+                let res = response.data;
+                if (res.status == '200') {
+                  this.problem.correctNum = parseInt(res.result.correctNum);
+                  this.problem.incorrectNum = parseInt(res.result.incorrectNum);
+                }
+              });
               // 練習題無限送出更改judging狀態及清空code
               if (this.problem.type == '練習題') {
                 this.judging = false;
