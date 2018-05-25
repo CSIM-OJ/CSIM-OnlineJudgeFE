@@ -1,0 +1,149 @@
+.post {
+  position: relative;
+}
+
+.post .problem {
+  font-size: 32px;
+  color: #4F545C;
+}
+
+.post .problem-id {
+  font-size: 15px;
+  color: #909399;
+}
+
+.post .info {
+  position: absolute;
+  top: 38px;
+  right: 30px;
+  font-size: 15px;
+  color: #4F545C;
+}
+
+.post .info .name {
+  float: right;
+}
+
+.post .content {
+  color: #687271;
+  font-size: 20px;
+  margin-top: 30px;
+}
+
+.post .bottom {
+  margin-top: 10px;
+  height: 35px;
+  line-height: 50px;
+}
+
+.post .bottom .bottom-thumb {
+  float: right;
+  text-decoration: none;
+  font-size: 20px;
+  transition: all .1s ease;
+  color: #4F545C;
+}
+/*
+.post .bottom .bottom-thumb:hover {
+  font-size: 22px;
+  color: #409EFF;
+} */
+
+.post .bottom .thumbActive {
+  font-size: 22px;
+  color: #409EFF;
+}
+
+/* animation */
+
+@keyframes bounce {
+  from,
+  20%,
+  53%,
+  80%,
+  to {
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  40%,
+  43% {
+    -webkit-animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    -webkit-transform: translate3d(0, -30px, 0);
+    transform: translate3d(0, -30px, 0);
+  }
+
+  70% {
+    -webkit-animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    -webkit-transform: translate3d(0, -15px, 0);
+    transform: translate3d(0, -15px, 0);
+  }
+
+  90% {
+    -webkit-transform: translate3d(0, -4px, 0);
+    transform: translate3d(0, -4px, 0);
+  }
+}
+
+.bounce:hover {
+  -webkit-animation: bounce;
+  animation: bounce;
+  -webkit-transform-origin: center bottom;
+  transform-origin: center bottom;
+}
+
+@keyframes pulse {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  50% {
+    -webkit-transform: scale3d(1.05, 1.05, 1.05);
+    transform: scale3d(1.05, 1.05, 1.05);
+  }
+
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+.pulse:hover {
+  -webkit-animation: pulse 1s infinite alternate;
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes shake {
+  from,
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    -webkit-transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-10px, 0, 0);
+  }
+
+  20%,
+  40%,
+  60%,
+  80% {
+    -webkit-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+  }
+}
+
+.shake:active {
+  -webkit-animation: shake 1s infinite alternate;
+  animation: shake 1s infinite alternate;
+}

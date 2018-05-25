@@ -78,6 +78,14 @@ hr {
   box-shadow: 4px 4px 3px rgba(20%, 20%, 40%, 0.2);
 }
 
+.box-square {
+  padding: 30px;
+  margin-bottom: 15px;
+  border: solid 1px #DDDDDD;
+  background-color: #FFF;
+  /* box-shadow: 4px 4px 3px rgba(20%, 20%, 40%, 0.2); */
+}
+
 .danger-input .el-input__inner {
   border-color: #F56C6C;
 }
