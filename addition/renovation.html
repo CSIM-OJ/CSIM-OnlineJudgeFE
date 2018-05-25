@@ -30,20 +30,51 @@
       },
       computed: {
         imgSrc() {
-          return 'renovation_img/' + Math.floor(Math.random() * Math.floor(3)) + '.png'
+          let list = [
+            'https://i.imgur.com/IXhYXlI.png',
+            'https://i.imgur.com/Fm2k4CA.png',
+            'https://i.imgur.com/aq8ORWP.png'
+          ]
+          return list[Math.floor(Math.random() * Math.floor(3))]
         }
       }
     });
   </script>
 
   <style>
-    html, body {
+    @font-face {
+      font-family: "PingFang SC";
+      /* 要改成絕對路徑 */
+      src: url(fonts/PingFang-SC.ttf);
+    }
+
+    * {
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+    }
+
+    html,
+    body {
       color: #303133;
       margin: 0;
       padding: 0;
       background-color: #F2F3F4;
     }
-      
+
+    html,
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    button,
+    input {
+      font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微軟雅黑", Arial, sans-serif;
+    }
+
     .renovation {
       height: 100vh;
       position: relative;
