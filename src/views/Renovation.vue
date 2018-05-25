@@ -2,7 +2,7 @@
 <div>
   <div class="renovation">
     <div class="main">
-      <img src="/static/renovation_img/1.png" alt="">
+      <img :src="imgSrc" alt="">
       <div class="text">維修中</div>
     </div>
   </div>
@@ -14,7 +14,14 @@
 export default {
   components: {},
   data() {
-    return {}
+    return {
+
+    }
+  },
+  computed: {
+    imgSrc() {
+      return '/static/renovation_img/' + Math.floor(Math.random() * Math.floor(3)) + '.png'
+    }
   }
 }
 </script>
