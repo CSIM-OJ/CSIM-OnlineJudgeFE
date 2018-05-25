@@ -162,8 +162,10 @@ export default {
       axios.get('/api/checkLogin').then((response) => {
         let res = response.data;
         if (res.status == "200") {
-          if (res.result.authority != 'admin') {
-            this.$router.push('/login');
+          if (res.result.authority == 'student') {
+            this.$router.push('/student/index');
+          } else if (res.result.authority == 'admin') {
+            // pass
           }
         } else {
           this.$router.push('/login');

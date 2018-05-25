@@ -115,10 +115,14 @@ export default {
   },
   methods: {
     checkLogin() {
-      axios.get('/api/student/checkLogin').then((response) => {
+      axios.get('/api/checkLogin').then((response) => {
         let res = response.data;
         if (res.status == "200") {
-          // pass
+          if (res.result.authority == 'student') {
+            // pass
+          } else if (res.result.authority == 'admin') {
+            this.$router.push('/admin/index');
+          }
         } else {
           this.$router.push('/login');
         }

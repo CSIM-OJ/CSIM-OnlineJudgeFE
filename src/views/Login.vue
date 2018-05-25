@@ -107,7 +107,7 @@ export default {
         this.$message.error('請填寫密碼！');
       } else {
         this.loading = true;
-        axios.post('/api/student/login', {
+        axios.post('/api/login', {
           account: this.loginForm.account,
           password: this.loginForm.password
         }).then((response) => {

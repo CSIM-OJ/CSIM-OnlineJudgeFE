@@ -50,7 +50,7 @@ export default {
       }
     },
     logout() {
-      axios.post('/api/student/logout').then((response) => {
+      axios.post('/api/logout').then((response) => {
         let res = response.data;
         if(res.status=='200') {
           this.$router.push('/login');
