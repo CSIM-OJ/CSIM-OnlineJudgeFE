@@ -20,7 +20,7 @@
                       <span>{{ props.row.doneStudentNum }}</span>
                   </el-form-item>
                   <el-form-item label="題目 ID">
-                      <span>{{ props.row.id }}</span>
+                      <span>{{ props.row.problemID }}</span>
                   </el-form-item>
                   <el-form-item label="未作題人數">
                       <span>{{ props.row.undoStudentNum }}</span>
@@ -49,7 +49,7 @@
               </el-form>
             </template>
           </el-table-column>
-          <el-table-column label="題目 ID" prop="id"></el-table-column>
+          <el-table-column label="題目 ID" prop="problemID"></el-table-column>
           <el-table-column label="題目名稱" prop="name"></el-table-column>
           <el-table-column label="類型" prop="type"></el-table-column>
           <el-table-column label="狀態" prop="status">
@@ -89,73 +89,12 @@ export default {
       // manageClassGroup
       manageClassGroup: '106資一A',
       // table
-      tableData: [{
-        id: '12987122',
-        name: 'A+B Problem',
-        type: '作業',
-        status: '可作答',
-        undoStudentNum: 2,
-        doneStudentNum: 50,
-        rate: 3.5,
-        correctRate: '90.7',
-        deadline: '2018-03-28',
-        detectCopyResult: [{
-          studentOneID: '04156147',
-          studentOneName: '王大明',
-          studentTwoID: '04156111',
-          studentTwoName: '小美',
-          similarity: 87
-        }]
-      }, {
-        id: '12987123',
-        name: '猜拳',
-        type: '練習題',
-        status: '可作答',
-        undoStudentNum: 0,
-        doneStudentNum: 52,
-        rate: 3,
-        correctRate: '87.3',
-        deadline: '2018-03-28',
-        detectCopyResult: []
-      }, {
-        id: '12987125',
-        name: '聖誕樹',
-        type: '練習題',
-        status: '可作答',
-        undoStudentNum: 1,
-        doneStudentNum: 51,
-        rate: 2,
-        correctRate: '41.4',
-        deadline: '2018-03-28',
-        detectCopyResult: []
-      }, {
-        id: '12987126',
-        name: '猜數字',
-        type: '作業',
-        status: '可作答',
-        undoStudentNum: 2,
-        doneStudentNum: 50,
-        rate: 4.5,
-        correctRate: '30.6',
-        deadline: '2018-03-28',
-        detectCopyResult: []
-      }, {
-        id: '12987126',
-        name: '印hello world',
-        type: '作業',
-        status: '已關閉',
-        undoStudentNum: 3,
-        doneStudentNum: 49,
-        rate: 2.5,
-        correctRate: '67.4',
-        deadline: '2018-03-28',
-        detectCopyResult: []
-      }],
+      tableData: [],
     }
   },
   mounted() {
-    // this.checkLogin();
-    // this.getProblemsData();
+    this.checkLogin();
+    this.getProblemsData();
   },
   methods: {
     checkLogin() {
@@ -175,10 +114,10 @@ export default {
     // TODO
     // table
     // handleEdit(index, data) {
-    //   this.$router.push('/ta/editproblem?problem_id=' + data.id);
+    //   this.$router.push('/api/ta/editproblem?problem_id=' + data.id);
     // },
     getProblemsData() {
-      axios.get('/ta/getProblems').then((response) => {
+      axios.get('/api/ta/getProblems').then((response) => {
         let res = response.data;
         if (res.status == '200') {
           this.tableData = res.result;
@@ -197,18 +136,19 @@ export default {
         type: 'info',
         center: true
       }).then(() => {
-        axios.post('/ta/deleteProblem', {
-          problemID: data.id
-        }).then((resposne) => {
+        axios.post('/api/ta/deleteProblem', {
+          problemID: data.problemID
+        }).then((response) => {
           let res = response.data;
           if (res.status == '200') {
             this.$message({
               type: 'success',
               message: '刪除成功!'
             });
+            this.getProblemsData();
           }
         });
-      }).catch(() => {
+      }).catch((err) => {
         this.$message({
           type: 'info',
           message: '已取消'

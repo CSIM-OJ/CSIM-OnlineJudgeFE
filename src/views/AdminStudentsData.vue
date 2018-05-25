@@ -52,40 +52,12 @@ export default {
       // manageClassGroup
       manageClassGroup: '106資一A',
       // table
-      tableData: [{
-        studentID: '04156101',
-        name: '王小明',
-        class: '資三A',
-        problems: [{
-          'name': 'A+B Problem',
-          'score': '90'
-        }, {
-          'name': '猜拳',
-          'score': '100'
-        }, {
-          'name': '聖誕樹',
-          'score': '80'
-        }]
-      }, {
-        studentID: '04156102',
-        name: '林小美',
-        class: '資三A',
-        problems: [{
-          'name': 'A+B Problem',
-          'score': '100'
-        }, {
-          'name': '猜拳',
-          'score': '100'
-        }, {
-          'name': '聖誕樹',
-          'score': '100'
-        }]
-      }]
+      tableData: []
     }
   },
   mounted() {
-    // this.checkLogin();
-    // this.getStudentsData();
+    this.checkLogin();
+    this.getStudentsData();
   },
   computed: {
     //form
@@ -115,7 +87,7 @@ export default {
       // this.manageClassGroup =
     },
     getStudentsData() {
-      axios.get('/ta/getStudentsData').then((response) => {
+      axios.get('/api/ta/getStudentsData').then((response) => {
         let res = response.data;
         if (res.status == '200') {
           this.tableData = res.result;

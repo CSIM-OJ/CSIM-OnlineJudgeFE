@@ -9,7 +9,6 @@ import AdminIndex from '@/views/AdminIndex'
 import AdminNewProblem from '@/views/AdminNewProblem'
 import AdminStudentsData from '@/views/AdminStudentsData'
 import Forum from '@/views/Forum'
-import Renovation from '@/views/Renovation'
 
 Vue.use(Router)
 
@@ -60,11 +59,6 @@ export default new Router({
       path: '/forum',
       name: 'Forum',
       component: Forum
-    },
-    {
-      path: '/renovation',
-      name: 'Renovation',
-      component: Renovation
     }
   ]
 })

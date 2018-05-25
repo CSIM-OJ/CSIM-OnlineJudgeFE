@@ -185,7 +185,7 @@ export default {
     }
   },
   mounted() {
-    // this.checkLogin();
+    this.checkLogin();
   },
   methods: {
     checkLogin() {

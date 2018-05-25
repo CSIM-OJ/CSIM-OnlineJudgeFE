@@ -113,7 +113,7 @@ export default {
         }).then((response) => {
           let res = response.data;
           if (res.status == "200") {
-            console.log(res.result);
+            // console.log(res.result);
             if (res.result == 'student') {
               this.$router.push("/student/index");
             } else if (res.result == 'admin') {
@@ -142,13 +142,13 @@ export default {
       }
     },
     checkLogin() {
-      axios.get('/api/student/checkLogin').then((response) => {
+      axios.get('/api/checkLogin').then((response) => {
         let res = response.data;
         if (res.status == "200") {
-          if (res.result == true) {
-            this.$router.push('/student/index');
-          } else {
-            // pass
+          if (res.result.authority == 'student') {
+            this.$router.push("/student/index");
+          } else if (res.result.authority == 'admin') {
+            this.$router.push("/admin/index");
           }
         }
       });
