@@ -8,7 +8,7 @@
         <div class="manageClassGroup">
           <el-tag>{{ manageClassGroup }}</el-tag>
         </div>
-        <el-table :data="tableData" border style="width: 100%" ref="studentsTable">
+        <el-table :data="tableData" border style="width: 100%" ref="studentsTable" v-loading="loading">
           <el-table-column fixed prop="studentID" label="學號" width="120"></el-table-column>
           <el-table-column fixed prop="name" label="姓名" width="120"></el-table-column>
           <el-table-column fixed prop="class" label="系級" width="120"></el-table-column>
@@ -52,6 +52,7 @@ export default {
       // manageClassGroup
       manageClassGroup: '106資一A',
       // table
+      loading: false,
       tableData: []
     }
   },
@@ -87,10 +88,12 @@ export default {
       // this.manageClassGroup =
     },
     getStudentsData() {
+      this.loading = true;
       axios.get('/api/ta/getStudentsData').then((response) => {
         let res = response.data;
         if (res.status == '200') {
           this.tableData = res.result;
+          this.loading = false;
         }
       });
     },

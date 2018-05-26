@@ -92,7 +92,7 @@
           <div class="setting">
             <span>Language:</span>
             <el-select v-model="nowLang" @change="changeNowLang" style="width: 100px;">
-              <el-option v-for="(item, index) in languages" :key="index" :label="item" :value="item">
+              <el-option v-for="item in languages" :key="item.value" :label="item.label" :value="item.value" :disabled="item.disabled">
               </el-option>
             </el-select>
             <span style="margin-left: 10px;">Theme:</span>
@@ -182,7 +182,14 @@ export default {
       },
       mode: "text/x-java",
       nowLang: 'Java',
-      languages: ['Java', 'Python'],
+      languages: [{
+        value: 'Java',
+        label: 'Java'
+      }, {
+        value: 'Python',
+        label: 'Python',
+        disabled: true
+      }],
       fontSize: '16',
       codemirrorFlag: 1,
       fontSizeList: ['16', '17', '18', '19', '20'],
@@ -217,10 +224,6 @@ export default {
     }
   },
   computed: {
-    // TODO
-    // code() {
-    //  return codes[this.mode]
-    // },
     options() {
       return {
         mode: this.mode,

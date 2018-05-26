@@ -9,7 +9,7 @@
         <div class="manageClassGroup">
           <el-tag>{{ manageClassGroup }}</el-tag>
         </div>
-        <el-table :data="tableData" style="width: 100%">
+        <el-table :data="tableData" style="width: 100%" v-loading="loading">
           <el-table-column type="expand">
             <template slot-scope="props">
               <el-form label-position="left" inline class="table-expand">
@@ -34,8 +34,8 @@
                   <el-form-item label="繳交期限">
                       <span>{{ props.row.deadline }}</span>
                   </el-form-item>
-                  <!-- <el-form-item label="抄襲偵測" style="width: 100%;" id="detectCopyFormItem">
-                      <span><el-button type="primary" size="small" @click="detectCopy">偵測</el-button></span>
+                  <!-- <el-form-item label="抄襲偵測" style="width: 100%;" id="detectCopyFormItem" v-loading="detectCopyLoading">
+                      <span><el-button type="primary" size="small" @click="detectCopy(props.row.problemID)">偵測</el-button></span>
                       <div class="detectCopyTable">
                         <el-table v-if="props.row.detectCopyResult.length!=0" :data="props.row.detectCopyResult" style="width: 80%" height="250">
                           <el-table-column prop="studentOneID" label="學生1學號"></el-table-column>
@@ -89,7 +89,9 @@ export default {
       // manageClassGroup
       manageClassGroup: '106資一A',
       // table
+      detectCopyLoading: false,
       tableData: [],
+      loading: false
     }
   },
   mounted() {
@@ -117,25 +119,23 @@ export default {
     //   this.$router.push('/api/ta/editproblem?problem_id=' + data.id);
     // },
     getProblemsData() {
+      this.loading = true;
       axios.get('/api/ta/getProblems').then((response) => {
         let res = response.data;
         if (res.status == '200') {
           this.tableData = res.result;
+          this.loading = false;
         }
       });
     },
     handleDelete(index, data) {
-      console.log(index);
-      console.log("id: " + data.id);
-      console.log("name: " + data.name);
-
-      // 刪除 api
       this.$confirm('確認是否要刪除此題目？', '提示', {
         confirmButtonText: '確定',
         cancelButtonText: '取消',
         type: 'info',
         center: true
       }).then(() => {
+        this.loading = true;
         axios.post('/api/ta/deleteProblem', {
           problemID: data.problemID
         }).then((response) => {
@@ -146,6 +146,7 @@ export default {
               message: '刪除成功!'
             });
             this.getProblemsData();
+            this.loading = false;
           }
         });
       }).catch((err) => {
@@ -155,9 +156,25 @@ export default {
         });
       });
     },
-    // TODO
-    detectCopy() {},
-
+    detectCopy(problemID) {
+      axios.post('/api/ta/judgeCopy', {
+        problemID: problemID
+      }).then((response) => {
+        let res = response.data;
+        this.detectCopyLoading = true;
+        if(res.status == '200') {
+          this.$message({
+            type: 'success',
+            message: problemID + ' 抄襲判別完成!'
+          });
+          this.getProblemsData();
+          this.detectCopyLoading = false;
+        } else {
+          this.detectCopyLoading = false;
+          this.$message.error('判別抄襲失敗');
+        }
+      })
+    }
   }
 }
 </script>
