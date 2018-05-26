@@ -34,7 +34,7 @@
                   <el-form-item label="繳交期限">
                       <span>{{ props.row.deadline }}</span>
                   </el-form-item>
-                  <!-- <el-form-item label="抄襲偵測" style="width: 100%;" id="detectCopyFormItem" v-loading="detectCopyLoading">
+                  <el-form-item label="抄襲偵測" style="width: 100%;" id="detectCopyFormItem" v-loading="detectCopyLoading">
                       <span><el-button type="primary" size="small" @click="detectCopy(props.row.problemID)">偵測</el-button></span>
                       <div class="detectCopyTable">
                         <el-table v-if="props.row.detectCopyResult.length!=0" :data="props.row.detectCopyResult" style="width: 80%" height="250">
@@ -45,7 +45,7 @@
                           <el-table-column prop="similarity" label="相似度"></el-table-column>
                         </el-table>
                       </div>
-                  </el-form-item> -->
+                  </el-form-item>
               </el-form>
             </template>
           </el-table-column>
@@ -157,11 +157,11 @@ export default {
       });
     },
     detectCopy(problemID) {
+      this.detectCopyLoading = true;
       axios.post('/api/ta/judgeCopy', {
         problemID: problemID
       }).then((response) => {
         let res = response.data;
-        this.detectCopyLoading = true;
         if(res.status == '200') {
           this.$message({
             type: 'success',
