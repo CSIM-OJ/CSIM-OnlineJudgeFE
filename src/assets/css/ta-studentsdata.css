@@ -1,3 +1,7 @@
+.box {
+  position: relative;
+  transition: all .5s ease;
+}
 
 /* manageClassGroup */
 .manageClassGroup {
@@ -6,6 +10,19 @@
   flex-direction: row;
   justify-content: center;
   margin-bottom: 30px;
+}
+
+/* filter input */
+.box .filterInput {
+  width: 25%;
+  margin-bottom: 20px;
+}
+
+/* change table width btn */
+.ctbtn {
+  position: absolute;
+  top: 110px;
+  right: 30px;
 }
 
 /* classgroup options */
