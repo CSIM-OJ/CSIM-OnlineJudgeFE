@@ -159,17 +159,7 @@ export default {
         box.style.width = '83%';
         ctbtn.style.color = '#303133';
       }
-    },
-    // tableFiltered() {
-    //   let filterQuery = '0415';
-    //   let oriTable = this.tableData;
-    //   for(let i=0 ; i<oriTable.length ; i++) {
-    //     if( oriTable[i].studentID.includes(filterQuery) ) {
-    //       console.log(oriTable[i]);
-    //       console.log('有喔');
-    //     }
-    //   }
-    // }
+    }
   }
 }
 </script>
