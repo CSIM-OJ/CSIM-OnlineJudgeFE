@@ -4,7 +4,83 @@
   <div id="info-section">
     <el-row>
       <el-col :span="20" :offset="2" class="box" style="min-height: 80vh;">
-        <div id="title">個人中心</div>
+        <!-- new design start -->
+        <el-row :gutter="20">
+          <el-col :span="20" :offset="2">
+            <div class="items-nav">
+              <div class="item">個人中心</div>
+            </div>
+            <el-row>
+              <el-col :span="7">
+                <div class="block">
+                  <div class="desc">姓 名</div>
+                  <div class="main" style="color: #2E86C1;" v-text="user.name"></div>
+                </div>
+              </el-col>
+              <el-col :span="7" :offset="1">
+                <div class="block">
+                  <div class="desc">學 號</div>
+                  <div class="main" style="color: #239B56;" v-text="user.studentID"></div>
+                </div>
+              </el-col>
+              <el-col :span="7" :offset="1">
+                <div class="block">
+                  <div class="desc">系 級</div>
+                  <div class="main" style="color: #D4AC0D;" v-text="user.class"></div>
+                </div>
+              </el-col>
+              <el-col :span="7">
+                <div class="block">
+                  <div class="desc">可做題目</div>
+                  <div class="main" style="color: #C0392B;" v-text="user.undoNum"></div>
+                </div>
+              </el-col>
+              <el-col :span="7" :offset="1">
+                <div class="block">
+                  <div class="desc">已做題目</div>
+                  <div class="main" style="color: #9B59B6;" v-text="user.doneNum"></div>
+                </div>
+              </el-col>
+              <el-col :span="7" :offset="1">
+                <div class="block">
+                  <div class="desc">最佳解答</div>
+                  <div class="main" style="color: #CA6F1E;" v-text="user.bestNum"></div>
+                </div>
+              </el-col>
+            </el-row>
+            <el-row style="margin-top: 70px;">
+              <el-col :gutter="20">
+                <div class="items-nav">
+                  <div class="item">更改密碼</div>
+                </div>
+                <el-form :model="changePasswordForm" label-position="top">
+                  <el-row style="margin-bottom: 30px;">
+                    <el-col :xs="24" :md="6">
+                      <el-form-item label="帳號">
+                        <el-input v-model="changePasswordForm.account" style="width: 100%;"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :xs="23" :md="6" :offset="1">
+                      <el-form-item label="原密碼">
+                        <el-input v-model="changePasswordForm.oriPassword" style="width: 100%;"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :xs="23" :md="6" :offset="1">
+                      <el-form-item label="新密碼">
+                        <el-input v-model="changePasswordForm.newPassword" style="width: 100%;"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :xs="23" :md="2" :offset="1" style="margin-top: 48px;">
+                      <el-button type="primary" @click="onChangePassword">更改密碼</el-button>
+                    </el-col>
+                  </el-row>
+                </el-form>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
+        <!-- new design end -->
+        <!-- <div id="title">個人中心</div>
         <el-row>
           <el-col :span="20" :offset="2">
             <el-form :model="user" label-position="top">
@@ -71,7 +147,7 @@
               </el-row>
             </el-form>
           </el-col>
-        </el-row>
+        </el-row> -->
       </el-col>
     </el-row>
   </div>
@@ -174,3 +250,31 @@ export default {
   }
 }
 </script>
+
+<style>
+/* new design */
+#info-section .block {
+  height: 150px;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* border-radius: 5px; */
+  /* border: 1px solid #DCDFE6;
+  box-shadow: 4px 4px 3px rgba(20%, 20%, 40%, 0.2); */
+}
+
+#info-section .block .main {
+  width: 100%;
+  font-size: 30px;
+  text-align: center;
+  margin-top: 15px;
+  color: #303133;
+}
+
+#info-section .block .desc {
+  width: 100%;
+  text-align: center;
+  color: #909399;
+}
+</style>

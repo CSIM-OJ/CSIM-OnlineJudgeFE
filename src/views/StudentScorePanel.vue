@@ -6,13 +6,17 @@
       <div class="box">
         <el-row>
           <el-col :xs="24" :md="12">
-            <div id="title">正確率</div>
+            <div class="items-nav" style="width: 95%;">
+              <div class="item">正確率</div>
+            </div>
             <ve-pie :data="pieData" :colors="pieColors" :settings="pieSettings">
               <div class="data-empty" v-if="hasRecordFlag">沒有數據 &#x1F61D;</div>
             </ve-pie>
           </el-col>
           <el-col :xs="24" :md="12">
-            <div id="title">成績圖表</div>
+            <div class="items-nav" style="width: 95%;">
+              <div class="item">成績圖表</div>
+            </div>
             <ve-line :data="lineData" :settings="lineSettings">
               <div class="data-empty" v-if="hasRecordFlag">沒有數據 &#x1F61D;</div>
             </ve-line>
@@ -20,7 +24,9 @@
         </el-row>
       </div>
       <div class="box">
-        <div id="title">歷史成績</div>
+        <div class="items-nav">
+          <div class="item">歷史成績</div>
+        </div>
         <el-table :data="tableData" style="width: 100%">
           <el-table-column type="expand">
             <template slot-scope="props">

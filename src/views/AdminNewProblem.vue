@@ -68,12 +68,8 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-row>
-              <el-col :span="2" :offset="21">
-                <el-button type="primary" @click="dialogFormVisible=true">確定</el-button>
-              </el-col>
-            </el-row>
-          </el-form>
+            <el-button type="primary" @click="dialogFormVisible=true" style="float: right;">確定</el-button>
+            </el-form>
         </el-col>
       </el-row>
     </el-col>
@@ -272,9 +268,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.el-loading-mask {
-  height: 150%;
-}
-</style>

@@ -2,9 +2,74 @@
 <div>
   <nav-header-student></nav-header-student>
   <el-row>
-    <el-col :span="20" :offset="2">
+    <el-col :span="20" :offset="2" class="box">
       <section id="mainProblems-section">
-        <div class="undo box" style="margin-bottom: 30px;">
+        <!-- new design start -->
+        <div class="undo-problems">
+          <div class="items-nav">
+            <div class="item">可作答</div>
+            <i class="fas fa-pencil-alt"></i> {{ undoNum }}
+            <el-select v-model="undoSelectValue" placeholder="選擇類型" @change="undoChange">
+              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+          </div>
+          <el-row>
+            <el-col class="undoCol" :span="24" v-loading="undoLoading">
+              <transition-group name="slide-fade">
+                <el-col v-for="problem in undoProblems" :xs="24" :md="6" :key="problem.problemID" style="padding-right: 20px;">
+                  <a href="javascript:void(0);" @click="doProblem(problem.problemID)">
+                    <el-card :body-style="{ padding: '5px' }">
+                      <div style="padding: 14px;">
+                        <span class="title ellipsis">{{ problem.name }}
+                          <el-tooltip class="item" effect="dark" :content="'繳交期限: '+problem.deadline" placement="top"><i class="el-icon-time time"></i></el-tooltip>
+                        </span>
+                        <div class="bottom clearfix">
+                          <el-rate disabled v-model="problem.rate"></el-rate>
+                          <el-button type="text" class="button"><a href="javascript:void(0);" @click="doProblem(problem.problemID)">來去做題</a></el-button>
+                        </div>
+                        <div class="type">{{ problem.type }}</div>
+                      </div>
+                    </el-card>
+                  </a>
+                </el-col>
+              </transition-group>
+            </el-col>
+          </el-row>
+        </div>
+        <div class="done-problems">
+          <div class="items-nav">
+            <div class="item">已作答</div>
+            <i class="fas fa-paperclip"></i> {{ doneNum }}
+            <el-select v-model="doneSelectValue" placeholder="選擇類型" @change="doneChange">
+              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+          </div>
+          <el-row>
+            <el-col class="doneCol" :span="24" v-loading="doneLoading">
+              <transition-group name="slide-fade">
+                <el-col v-for="problem in doneProblems" :xs="24" :md="6" :key="problem.problemID" style="padding-right: 20px;">
+                  <a href="javascript:void(0);" @click="doProblem(problem.problemID)">
+                    <el-card :body-style="{ padding: '5px' }">
+                      <div style="padding: 14px;">
+                        <span class="title ellipsis">{{ problem.name }}
+                          <el-tooltip class="item" effect="dark" :content="'繳交日期: '+problem.handDate" placement="top"><i class="el-icon-time time"></i></el-tooltip>
+                        </span>
+                        <div class="bottom clearfix">
+                          <el-rate disabled v-model="problem.rate"></el-rate>
+                          <el-button type="text" class="button" @click="doProblem(problem.problemID)">回顧題目</el-button>
+                        </div>
+                        <div class="type">{{ problem.type }}</div>
+                      </div>
+                    </el-card>
+                  </a>
+                </el-col>
+              </transition-group>
+            </el-col>
+          </el-row>
+        </div>
+        <!-- new design end -->
+
+        <!-- <div class="undo box" style="margin-bottom: 30px;">
           <div id="title">可作答題目</div>
           <el-row :gutter="20">
             <el-col :span="6" :offset="1" class="count-label hidden-xs-only">
@@ -69,7 +134,7 @@
               </transition-group>
             </el-col>
           </el-row>
-        </div>
+        </div> -->
       </section>
     </el-col>
   </el-row>
@@ -91,6 +156,7 @@ import NavFooter from '@/components/NavFooter.vue'
 import '@/assets/css/student-index.css'
 import '@/assets/css/transition.css'
 import '@/assets/css/feedback-block.css'
+import '@/assets/css/newStudentIndex.css'
 
 export default {
   components: {
@@ -117,7 +183,10 @@ export default {
       doneProblems: [],
       // loading
       undoLoading: false,
-      doneLoading: false
+      doneLoading: false,
+      // new
+      undoFlag: false,
+      doneFlag: false
     }
   },
   computed: {
@@ -249,6 +318,15 @@ export default {
           message: '取消輸入'
         });
       });
+    },
+    // new
+    undoShow() {
+      this.undoFlag = true;
+      this.doneFlag = false;
+    },
+    doneShow() {
+      this.undoFlag = false;
+      this.doneFlag = true;
     }
   }
 }
