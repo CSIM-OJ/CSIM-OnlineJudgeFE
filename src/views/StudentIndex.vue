@@ -16,7 +16,7 @@
           <el-row>
             <el-col class="undoCol" :span="24" v-loading="undoLoading">
               <transition-group name="slide-fade">
-                <el-col v-for="problem in undoProblems" :xs="24" :md="6" :key="problem.problemID" style="padding-right: 20px;">
+                <el-col v-for="problem in undoProblems" :xs="24" :md="6" :key="problem.problemID" style="padding-right: 23px;">
                   <a href="javascript:void(0);" @click="doProblem(problem.problemID)">
                     <el-card :body-style="{ padding: '5px' }">
                       <div style="padding: 14px;">
@@ -47,7 +47,7 @@
           <el-row>
             <el-col class="doneCol" :span="24" v-loading="doneLoading">
               <transition-group name="slide-fade">
-                <el-col v-for="problem in doneProblems" :xs="24" :md="6" :key="problem.problemID" style="padding-right: 20px;">
+                <el-col v-for="problem in doneProblems" :xs="24" :md="6" :key="problem.problemID" style="padding-right: 23px;">
                   <a href="javascript:void(0);" @click="doProblem(problem.problemID)">
                     <el-card :body-style="{ padding: '5px' }">
                       <div style="padding: 14px;">

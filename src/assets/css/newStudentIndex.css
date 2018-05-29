@@ -76,7 +76,7 @@
 
 .el-card {
   /* height: 130px; */
-  height: 12vw;
+  height: 11vw;
   position: relative;
   transition: all ease 0.3s;
 }

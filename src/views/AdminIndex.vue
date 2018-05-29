@@ -50,7 +50,11 @@
             </template>
           </el-table-column>
           <el-table-column label="題目 ID" prop="problemID"></el-table-column>
-          <el-table-column label="題目名稱" prop="name"></el-table-column>
+          <el-table-column label="題目名稱">
+            <template slot-scope="scope">
+              <a class="id-hyperlink" href="javascript:void(0)" @click="getProblemInfo(scope.row)">{{ scope.row.name }}</a>
+            </template>
+          </el-table-column>
           <el-table-column label="類型" prop="type"></el-table-column>
           <el-table-column label="狀態" prop="status">
             <template slot-scope="scope">
@@ -67,6 +71,56 @@
       </div>
     </el-col>
   </el-row>
+  <el-dialog :visible.sync="dialogFormVisible" v-loading="loading">
+    <section id="problem-section">
+      <el-row>
+        <el-col :span="20" :offset="2">
+          <div class="problem-name">
+            <span v-text="problemData.name"></span>
+            <span class="type" v-text="problemData.type"></span>
+          </div>
+          <hr>
+          <div class="problem-info">
+            <div class="title">Description</div>
+            <div class="content" v-text="problemData.description"></div>
+          </div>
+          <div class="problem-info">
+            <div class="title">Input</div>
+            <div class="content" v-text="problemData.input"></div>
+          </div>
+          <div class="problem-info">
+            <div class="title">Output</div>
+            <div class="content" v-text="problemData.output"></div>
+          </div>
+          <el-row v-for="(sample, index) in problemData.samples" :key="index">
+            <el-col :xs="24" :md="12">
+              <div class="problem-info">
+                <div class="title">
+                  Sample Input {{index+1}}
+                </div>
+                <div class="content">
+                  <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="sample.input" resize="none">
+                  </el-input>
+                </div>
+              </div>
+            </el-col>
+            <el-col :xs="24" :md="12">
+              <div class="problem-info">
+                <div class="title">Sample Output {{index+1}}</div>
+                <div class="content">
+                  <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="sample.output" resize="none">
+                  </el-input>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
+        </el-col>
+      </el-row>
+    </section>
+    <div slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="dialogFormVisible=false">確 定</el-button>
+    </div>
+  </el-dialog>
   <nav-footer></nav-footer>
 </div>
 </template>
@@ -91,7 +145,28 @@ export default {
       // table
       detectCopyLoading: false,
       tableData: [],
-      loading: false
+      loading: false,
+      // dialogForm
+      dialogFormVisible: false,
+      problemData: {
+        'id': this.$route.query.problemID,
+        'judged': null,
+        'name': '',
+        'rate': null,
+        'type': '',
+        'description': '',
+        'input': '',
+        'output': '',
+        'samples': [{
+          'input': '',
+          'output': ''
+        }, {
+          'input': '',
+          'output': ''
+        }],
+        'correctNum': null,
+        'incorrectNum': null
+      },
     }
   },
   mounted() {
@@ -162,7 +237,7 @@ export default {
         problemID: problemID
       }).then((response) => {
         let res = response.data;
-        if(res.status == '200') {
+        if (res.status == '200') {
           this.$message({
             type: 'success',
             message: problemID + ' 抄襲判別完成!'
@@ -174,6 +249,30 @@ export default {
           this.$message.error('判別抄襲失敗');
         }
       })
+    },
+    getProblemInfo(data) {
+      axios.get('/api/problem/getInfo', {
+        params: {
+          problemID: data.problemID
+        }
+      }).then((response) => {
+        let res = response.data;
+        if (res.status == '200') {
+          console.log(res.result);
+          this.problemData.name = res.result.name;
+          this.problemData.type = res.result.type;
+          this.problemData.description = res.result.desc;
+          this.problemData.input = res.result.inputDesc;
+          this.problemData.output = res.result.outputDesc;
+          this.problemData.samples[0].input = res.result.inputSample1.replace(new RegExp("/n ", "g"), '\n');
+          this.problemData.samples[0].output = res.result.outputSample1.replace(new RegExp("/n ", "g"), '\n');
+          this.problemData.samples[1].input = res.result.inputSample2.replace(new RegExp("/n ", "g"), '\n');;
+          this.problemData.samples[1].output = res.result.outputSample2.replace(new RegExp("/n ", "g"), '\n');
+          this.problemData.correctNum = parseInt(res.result.correctNum);
+          this.problemData.incorrectNum = parseInt(res.result.incorrectNum);
+        }
+      });
+      this.dialogFormVisible = true;
     }
   }
 }

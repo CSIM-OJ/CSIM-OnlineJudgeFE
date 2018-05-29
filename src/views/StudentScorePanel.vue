@@ -219,14 +219,4 @@ export default {
   color: #888;
   font-size: 14px;
 }
-
-.id-hyperlink {
-  text-decoration: none;
-  color: #606266;
-  transition: all .3s ease;
-}
-
-.id-hyperlink:hover {
-  color: #409EFF;
-}
 </style>
