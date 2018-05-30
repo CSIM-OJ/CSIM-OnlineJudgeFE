@@ -79,9 +79,17 @@
 
 }
 
-/* over md */
+/* sm */
 @media screen and (min-width: 769px) {
-  .hidden-md-only {
+  .hidden-sm-only {
     display: none !important;
+  }
+}
+
+/* md */
+@media screen amd (min-width: 992px) {
+  /* studnet index */
+  .mainProblems-section .el-card {
+    
   }
 }

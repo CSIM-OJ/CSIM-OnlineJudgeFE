@@ -23,7 +23,7 @@
           <div class="content" v-text="problem.output"></div>
         </div>
         <el-row v-for="(sample, index) in problem.samples" :key="index">
-          <el-col :xs="24" :md="12">
+          <el-col :xs="24" :sm="12">
             <div class="problem-info">
               <div class="title">
                 Sample Input {{index+1}}
@@ -35,7 +35,7 @@
               </div>
             </div>
           </el-col>
-          <el-col :xs="24" :md="12">
+          <el-col :xs="24" :sm="12">
             <div class="problem-info">
               <div class="title">Sample Output {{index+1}}</div>
               <div class="content">
@@ -62,12 +62,12 @@
             </div>
             <el-form :model="judgedResultForm" label-width="100px" label-position="top">
               <el-row>
-                <el-col :xs="10" :md="6">
+                <el-col :xs="10" :sm="6">
                   <el-form-item label="分數">
                     <el-input readonly v-model="judgedResultForm.score" style="width: 100%;"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :xs="10" :md="6" :offset="2">
+                <el-col :xs="10" :sm="6" :offset="2">
                   <el-form-item label="運行時間">
                     <el-input readonly v-model="judgedResultForm.runtime" style="width: 100%;"></el-input>
                   </el-form-item>

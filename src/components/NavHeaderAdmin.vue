@@ -8,7 +8,7 @@
       <el-menu-item index="/admin/newProblem">新增題目</el-menu-item>
       <el-menu-item index="/admin/studentsData">學生資訊</el-menu-item>
       <el-button @click="logout" type="primary" round size="small" class="hidden-xs-only">Logout</el-button>
-      <el-button @click="logout" type="primary" round size="small" class="hidden-md-only"><i class="fas fa-sign-out-alt"></i></el-button>
+      <el-button @click="logout" type="primary" round size="small" class="hidden-sm-only"><i class="fas fa-sign-out-alt"></i></el-button>
     </el-menu>
   </header>
   <div class="space"></div>

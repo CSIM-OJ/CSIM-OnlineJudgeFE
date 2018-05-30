@@ -16,7 +16,7 @@
           <el-row>
             <el-col class="undoCol" :span="24" v-loading="undoLoading">
               <transition-group name="slide-fade">
-                <el-col v-for="problem in undoProblems" :xs="24" :md="6" :key="problem.problemID" style="padding-right: 23px;">
+                <el-col v-for="problem in undoProblems" :xs="24" :sm="6" :key="problem.problemID" style="padding-right: 23px;">
                   <a href="javascript:void(0);" @click="doProblem(problem.problemID)">
                     <el-card :body-style="{ padding: '5px' }">
                       <div style="padding: 14px;">
@@ -47,7 +47,7 @@
           <el-row>
             <el-col class="doneCol" :span="24" v-loading="doneLoading">
               <transition-group name="slide-fade">
-                <el-col v-for="problem in doneProblems" :xs="24" :md="6" :key="problem.problemID" style="padding-right: 23px;">
+                <el-col v-for="problem in doneProblems" :xs="24" :sm="6" :key="problem.problemID" style="padding-right: 23px;">
                   <a href="javascript:void(0);" @click="doProblem(problem.problemID)">
                     <el-card :body-style="{ padding: '5px' }">
                       <div style="padding: 14px;">
@@ -75,14 +75,14 @@
             <el-col :span="6" :offset="1" class="count-label hidden-xs-only">
               <i class="fas fa-pencil-alt"></i> {{ undoNum }}
             </el-col>
-            <el-col :xs="13" :md="6" :offset="11">
+            <el-col :xs="13" :sm="6" :offset="11">
               <el-select v-model="undoSelectValue" placeholder="選擇類型" @change="undoChange" style="width: 77%;">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-col>
             <el-col class="undoCol" :span="22" :offset="1" v-loading="undoLoading">
               <transition-group name="slide-fade">
-                <el-col v-for="problem in undoProblems" :xs="24" :md="6" :key="problem.problemID">
+                <el-col v-for="problem in undoProblems" :xs="24" :sm="6" :key="problem.problemID">
                   <a href="javascript:void(0);" @click="doProblem(problem.problemID)">
                     <el-card :body-style="{ padding: '5px' }">
                       <div style="padding: 14px;">
@@ -108,14 +108,14 @@
             <el-col :span="6" :offset="1" class="count-label hidden-xs-only">
               <i class="fas fa-paperclip"></i> {{ doneNum }}
             </el-col>
-            <el-col :xs="13" :md="6" :offset="11">
+            <el-col :xs="13" :sm="6" :offset="11">
               <el-select v-model="doneSelectValue" placeholder="選擇類型" @change="doneChange" style="width: 77%;">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-col>
             <el-col class="doneCol" :span="22" :offset="1" v-loading="doneLoading">
               <transition-group name="slide-fade">
-                <el-col v-for="problem in doneProblems" :xs="24" :md="6" :key="problem.problemID">
+                <el-col v-for="problem in doneProblems" :xs="24" :sm="6" :key="problem.problemID">
                   <a href="javascript:void(0);" @click="doProblem(problem.problemID)">
                     <el-card :body-style="{ padding: '5px' }">
                       <div style="padding: 14px;">

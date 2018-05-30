@@ -93,7 +93,7 @@
             <div class="content" v-text="problemData.output"></div>
           </div>
           <el-row v-for="(sample, index) in problemData.samples" :key="index">
-            <el-col :xs="24" :md="12">
+            <el-col :xs="24" :sm="12">
               <div class="problem-info">
                 <div class="title">
                   Sample Input {{index+1}}
@@ -104,7 +104,7 @@
                 </div>
               </div>
             </el-col>
-            <el-col :xs="24" :md="12">
+            <el-col :xs="24" :sm="12">
               <div class="problem-info">
                 <div class="title">Sample Output {{index+1}}</div>
                 <div class="content">
@@ -258,7 +258,6 @@ export default {
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
-          console.log(res.result);
           this.problemData.name = res.result.name;
           this.problemData.type = res.result.type;
           this.problemData.description = res.result.desc;

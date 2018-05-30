@@ -5,7 +5,7 @@
     <el-col :span="20" :offset="2">
       <div class="box">
         <el-row>
-          <el-col :xs="24" :md="12">
+          <el-col :xs="24" :sm="12">
             <div class="items-nav" style="width: 95%;">
               <div class="item">正確率</div>
             </div>
@@ -13,7 +13,7 @@
               <div class="data-empty" v-if="hasRecordFlag">沒有數據 &#x1F61D;</div>
             </ve-pie>
           </el-col>
-          <el-col :xs="24" :md="12">
+          <el-col :xs="24" :sm="12">
             <div class="items-nav" style="width: 95%;">
               <div class="item">成績圖表</div>
             </div>

@@ -55,22 +55,22 @@
                 </div>
                 <el-form :model="changePasswordForm" label-position="top">
                   <el-row style="margin-bottom: 30px;">
-                    <el-col :xs="24" :md="6">
+                    <el-col :xs="24" :sm="6">
                       <el-form-item label="帳號">
                         <el-input v-model="changePasswordForm.account" style="width: 100%;"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :xs="23" :md="6" :offset="1">
+                    <el-col :xs="23" :sm="6" :offset="1">
                       <el-form-item label="原密碼">
                         <el-input v-model="changePasswordForm.oriPassword" style="width: 100%;"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :xs="23" :md="6" :offset="1">
+                    <el-col :xs="23" :sm="6" :offset="1">
                       <el-form-item label="新密碼">
                         <el-input v-model="changePasswordForm.newPassword" style="width: 100%;"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :xs="23" :md="2" :offset="1" style="margin-top: 48px;">
+                    <el-col :xs="23" :sm="2" :offset="1" style="margin-top: 48px;">
                       <el-button type="primary" @click="onChangePassword">更改密碼</el-button>
                     </el-col>
                   </el-row>
@@ -85,34 +85,34 @@
           <el-col :span="20" :offset="2">
             <el-form :model="user" label-position="top">
               <el-row style="margin-bottom: 30px;">
-                <el-col :xs="23" :md="7" :offset="1">
+                <el-col :xs="23" :sm="7" :offset="1">
                   <el-form-item label="姓名">
                     <el-input readonly v-model="user.name" style="width: 100%;"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :xs="23" :md="7" :offset="1">
+                <el-col :xs="23" :sm="7" :offset="1">
                   <el-form-item label="學號">
                     <el-input readonly v-model="user.studentID" style="width: 100%;"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :xs="23" :md="7" :offset="1">
+                <el-col :xs="23" :sm="7" :offset="1">
                   <el-form-item label="系級">
                     <el-input readonly v-model="user.class" style="width: 100%;"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row style="margin-bottom: 30px;">
-                <el-col :xs="23" :md="7" :offset="1">
+                <el-col :xs="23" :sm="7" :offset="1">
                   <el-form-item label="可做題目">
                     <el-input readonly v-model="user.undoNum" style="width: 100%;"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :xs="23" :md="7" :offset="1">
+                <el-col :xs="23" :sm="7" :offset="1">
                   <el-form-item label="已做題目">
                     <el-input readonly v-model="user.doneNum" style="width: 100%;"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :xs="23" :md="7" :offset="1">
+                <el-col :xs="23" :sm="7" :offset="1">
                   <el-form-item label="最佳解答">
                     <el-input readonly v-model="user.bestNum" style="width: 100%;"></el-input>
                   </el-form-item>
@@ -126,22 +126,22 @@
             <div id="title">更改密碼</div>
             <el-form :model="changePasswordForm" label-position="top">
               <el-row style="margin-bottom: 30px;">
-                <el-col :xs="23" :md="6" :offset="1">
+                <el-col :xs="23" :sm="6" :offset="1">
                   <el-form-item label="帳號">
                     <el-input v-model="changePasswordForm.account" style="width: 100%;"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :xs="23" :md="6" :offset="1">
+                <el-col :xs="23" :sm="6" :offset="1">
                   <el-form-item label="原密碼">
                     <el-input v-model="changePasswordForm.oriPassword" style="width: 100%;"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :xs="23" :md="6" :offset="1">
+                <el-col :xs="23" :sm="6" :offset="1">
                   <el-form-item label="新密碼">
                     <el-input v-model="changePasswordForm.newPassword" style="width: 100%;"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :xs="23" :md="2" :offset="1" style="margin-top: 48px;">
+                <el-col :xs="23" :sm="2" :offset="1" style="margin-top: 48px;">
                   <el-button type="primary" @click="onChangePassword">更改密碼</el-button>
                 </el-col>
               </el-row>
