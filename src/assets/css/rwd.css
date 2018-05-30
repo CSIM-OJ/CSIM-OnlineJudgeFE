@@ -76,7 +76,6 @@
   #footer {
     padding: 0px;
   }
-
 }
 
 /* sm */
@@ -87,9 +86,28 @@
 }
 
 /* md */
-@media screen amd (min-width: 992px) {
+@media screen and (min-width: 992px) {
   /* studnet index */
-  .mainProblems-section .el-card {
-    
+  /* .el-card {
+    height: 10vw !important;
+    zoom: 125%;
+  } */
+}
+
+/* lg */
+@media screen and (min-width: 1200px) {
+  /* studnet index */
+  /* .el-card {
+    height: 10vw !important;
+    zoom: 125%;
+  } */
+}
+
+/* xl */
+@media screen and (min-width: 1920px) {
+  /* studnet index */
+  .el-card {
+    height: 10vw !important;
+    zoom: 125%;
   }
 }
