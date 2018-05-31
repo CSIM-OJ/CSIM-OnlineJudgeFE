@@ -112,6 +112,14 @@ export default {
       transformedLineData: []
     }
   },
+  created() {
+    // pie
+    this.chartColors = ['#67C23A', '#F56C6C'];
+    this.chartSettings = {
+      radius: 70,
+      offsetY: 120
+    }
+  },
   computed: {
     pieData() {
       let pieData = {

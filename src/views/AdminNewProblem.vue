@@ -255,7 +255,7 @@ export default {
             this.dialogFormVisible = false;
             this.loading = false;
           } else {
-            console.log(res.msg);
+            this.$message.error(res.msg);
           }
         });
       }

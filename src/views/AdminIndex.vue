@@ -18,12 +18,14 @@
                   </el-form-item>
                   <el-form-item label="已作題人數">
                       <span>{{ props.row.doneStudentNum }}</span>
+                      <span class="overview" @click="viewDoStatus(props.row.name, 'done')">&nbsp;<i class="fas fa-file-alt"></i></span>
                   </el-form-item>
                   <el-form-item label="題目 ID">
                       <span>{{ props.row.problemID }}</span>
                   </el-form-item>
                   <el-form-item label="未作題人數">
                       <span>{{ props.row.undoStudentNum }}</span>
+                      <span class="overview" @click="viewDoStatus(props.row.name, 'undo')">&nbsp;<i class="fas fa-file-alt"></i></span>
                   </el-form-item>
                   <el-form-item label="難易度">
                       <span><el-rate v-model="props.row.rate" disabled show-score text-color="#ff9900" score-template="{value}"></el-rate></span>
@@ -71,7 +73,8 @@
       </div>
     </el-col>
   </el-row>
-  <el-dialog :visible.sync="dialogFormVisible" v-loading="loading">
+  <!-- problem dialog start -->
+  <el-dialog :visible.sync="problemDialogVisible" v-loading="loading">
     <section id="problem-section">
       <el-row>
         <el-col :span="20" :offset="2">
@@ -118,9 +121,27 @@
       </el-row>
     </section>
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="dialogFormVisible=false">確 定</el-button>
+      <el-button type="primary" @click="problemDialogVisible=false">確 定</el-button>
     </div>
   </el-dialog>
+  <!-- problem dialog end -->
+  <!-- done problem dialog start -->
+  <el-dialog :visible.sync="doInfoDialogVisible">
+    <el-row>
+      <el-col :span="20" :offset="2">
+        <div class="items-nav">
+          <div class="item">{{ doInfoDialogPName }}</div>
+        </div>
+        <el-table max-height="350" :data="doStatusData" style="width: 100%; margin-bottom: 40px;">
+          <el-table-column prop="studentID" label="學生學號" width="180">
+          </el-table-column>
+          <el-table-column prop="studentName" label="學生姓名" width="180"></el-table-column>
+          <el-table-column prop="score" label="成績" width="180"></el-table-column>
+        </el-table>
+      </el-col>
+    </el-row>
+  </el-dialog>
+  <!-- done problem dialog end -->
   <nav-footer></nav-footer>
 </div>
 </template>
@@ -146,8 +167,8 @@ export default {
       detectCopyLoading: false,
       tableData: [],
       loading: false,
-      // dialogForm
-      dialogFormVisible: false,
+      // problem dialog
+      problemDialogVisible: false,
       problemData: {
         'id': this.$route.query.problemID,
         'judged': null,
@@ -167,11 +188,56 @@ export default {
         'correctNum': null,
         'incorrectNum': null
       },
+      // student dialog
+      studentData: [], // getStudentsData
+      doInfoDialogVisible: false,
+      doInfoDialogPName: '',
+      doInfoDialogStatus: ''
+
+    }
+  },
+  computed: {
+    doStatusData() {
+      // TODO 使用PID判別
+      let data = this.studentData;
+      let flag = this.doInfoDialogStatus;
+      let tableData = [];
+      for (let i = 0; i < data.length; i++) {
+        let id = data[i].studentID;
+        let name = data[i].name;
+        let problems = data[i].problems;
+        // 已作答的狀況
+        if (flag == 'done') {
+          for (let j = 0; j < problems.length; j++) {
+            if (problems[j].name == this.doInfoDialogPName && problems[j].score != '未作答') {
+              let obj = {
+                studentID: id,
+                studentName: name,
+                score: problems[j].score
+              };
+              tableData.push(obj)
+            }
+          }
+        } else if (flag == 'undo') { // 未作答的狀況
+          for (let j = 0; j < problems.length; j++) {
+            if (problems[j].name == this.doInfoDialogPName && problems[j].score == '未作答') {
+              let obj = {
+                studentID: id,
+                studentName: name,
+                score: problems[j].score
+              };
+              tableData.push(obj)
+            }
+          }
+        }
+      }
+      return tableData
     }
   },
   mounted() {
     this.checkLogin();
     this.getProblemsData();
+    this.getStudentsData();
   },
   methods: {
     checkLogin() {
@@ -200,6 +266,15 @@ export default {
         if (res.status == '200') {
           this.tableData = res.result;
           this.loading = false;
+        }
+      });
+    },
+    getStudentsData() {
+      axios.get('/api/ta/getStudentsData').then((response) => {
+        let res = response.data;
+        if (res.status == '200') {
+          console.log(res.result);
+          this.studentData = res.result;
         }
       });
     },
@@ -271,8 +346,25 @@ export default {
           this.problemData.incorrectNum = parseInt(res.result.incorrectNum);
         }
       });
-      this.dialogFormVisible = true;
+      this.problemDialogVisible = true;
+    },
+    viewDoStatus(problemName, status) {
+      this.doInfoDialogPName = problemName;
+      this.doInfoDialogStatus = status;
+      this.doInfoDialogVisible = true;
     }
   }
 }
 </script>
+
+<style>
+.overview {
+  transition: all .3s ease;
+}
+
+.overview:hover {
+  color: #409EFF;
+  cursor: pointer;
+
+}
+</style>
