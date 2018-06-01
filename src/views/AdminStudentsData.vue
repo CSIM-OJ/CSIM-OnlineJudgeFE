@@ -48,11 +48,11 @@
           </el-col>
         </el-row>
         <el-table max-height="250" :data="dialogStudentData" @filter-change="handleFilterChange" ref="table" style="width: 100%; margin-top: 20px; margin-bottom: 20px;">
-          <el-table-column prop="name" label="題目名稱" width="180">
+          <el-table-column prop="name" label="題目名稱">
           </el-table-column>
-          <el-table-column prop="type" label="題目類型" width="180" :filters="[{text: '作業', value: '作業'}, {text: '練習題', value: '練習題'}]" :filter-method="typeFilterHandler">
+          <el-table-column prop="type" label="題目類型" :filters="[{text: '作業', value: '作業'}, {text: '練習題', value: '練習題'}]" :filter-method="typeFilterHandler">
           </el-table-column>
-          <el-table-column prop="score" label="成績" width="180" :filters="[{text: '100', value: '100.0'}, {text: '0', value: '0.0'}, {text: '未作答', value: '未作答'}]" :filter-method="scoreFilterHandler">
+          <el-table-column prop="score" label="成績" :filters="[{text: '100', value: '100.0'}, {text: '0', value: '0.0'}, {text: '未作答', value: '未作答'}]" :filter-method="scoreFilterHandler">
           </el-table-column>
         </el-table>
       </el-col>

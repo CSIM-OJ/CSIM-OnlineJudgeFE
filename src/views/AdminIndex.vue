@@ -132,11 +132,11 @@
         <div class="items-nav">
           <div class="item">{{ doInfoDialogPName }}</div>
         </div>
-        <el-table max-height="350" :data="doStatusData" style="width: 100%; margin-bottom: 40px;">
-          <el-table-column prop="studentID" label="學生學號" width="180">
+        <el-table max-height="350" :data="doStatusData" style="width: 100%; margin-bottom: 60px;">
+          <el-table-column prop="studentID" label="學生學號">
           </el-table-column>
-          <el-table-column prop="studentName" label="學生姓名" width="180"></el-table-column>
-          <el-table-column prop="score" label="成績" width="180"></el-table-column>
+          <el-table-column prop="studentName" label="學生姓名"></el-table-column>
+          <el-table-column prop="score" label="成績"></el-table-column>
         </el-table>
       </el-col>
     </el-row>

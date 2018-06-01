@@ -5,7 +5,7 @@
     <el-col :span="20" :offset="2">
       <!-- <div id="title">圖表總覽</div> -->
       <el-row>
-        <el-col :span="6" v-for="(item, index) in allData" style="padding-right: 20px; padding-bottom: 20px;">
+        <el-col :span="6" v-for="(item, index) in allData" style="padding-right: 20px; padding-bottom: 20px;" key="index">
           <div class="pie-box">
             <div class="problem-name">{{ item.name }}</div>
             <div class="problem-id">{{ item.problemID }}</div>
