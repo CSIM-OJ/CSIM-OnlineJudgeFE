@@ -110,4 +110,8 @@
     height: 10vw !important;
     zoom: 125%;
   }
+
+  .el-card .el-tooltip {
+    zoom: 100% !important;
+  }
 }

@@ -259,9 +259,6 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* border-radius: 5px; */
-  /* border: 1px solid #DCDFE6;
-  box-shadow: 4px 4px 3px rgba(20%, 20%, 40%, 0.2); */
 }
 
 #info-section .block .main {

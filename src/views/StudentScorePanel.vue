@@ -56,6 +56,9 @@
           <el-table-column label="題目名稱">
             <template slot-scope="scope">
               <a class="id-hyperlink" href="javascript:void(0)" @click="doProblem(scope.row)">{{ scope.row.problemName }}</a>
+              <el-tooltip class="item" effect="dark" content="最佳代碼！" placement="top">
+                <span v-if="scope.row.isBestCode" class="bestCode">&nbsp;<i class="fas fa-crown"></i></span>
+              </el-tooltip>
             </template>
           </el-table-column>
           <el-table-column label="類型">
@@ -110,14 +113,6 @@ export default {
       tableData: [],
       // line's data
       transformedLineData: []
-    }
-  },
-  created() {
-    // pie
-    this.chartColors = ['#67C23A', '#F56C6C'];
-    this.chartSettings = {
-      radius: 70,
-      offsetY: 120
     }
   },
   computed: {
@@ -226,5 +221,9 @@ export default {
   background-color: rgba(255, 255, 255, .7);
   color: #888;
   font-size: 14px;
+}
+
+.bestCode {
+  color: #E6A23C;
 }
 </style>

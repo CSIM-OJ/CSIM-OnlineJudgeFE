@@ -126,7 +126,7 @@ import {
 import NavHeaderStudent from '@/components/NavHeaderStudent'
 import NavFooter from '@/components/NavFooter'
 
-import '@/assets/css/coding.css'
+import '@/assets/css/student-coding.css'
 import '@/assets/css/code-mirror.css'
 
 import "codemirror/mode/clike/clike.js"

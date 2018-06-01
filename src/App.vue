@@ -6,7 +6,7 @@
 
 <script>
 import '@/assets/css/basic.css'
-import '@/assets/fontawesome-free-5.0.9/web-fonts-with-css/css/fontawesome-all.min.css'
+import '@/assets/fontawesome-free-5.0.13/web-fonts-with-css/css/fontawesome-all.min.css'
 
 export default {
   name: 'App'
