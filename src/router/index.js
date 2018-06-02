@@ -8,7 +8,7 @@ import StudentCoding from '@/views/StudentCoding'
 import AdminIndex from '@/views/AdminIndex'
 import AdminNewProblem from '@/views/AdminNewProblem'
 import AdminStudentsData from '@/views/AdminStudentsData'
-import AdminOverview from '@/views/AdminOverview'
+import AdminFeedback from '@/views/AdminFeedback'
 import Forum from '@/views/Forum'
 
 Vue.use(Router)
@@ -56,9 +56,9 @@ export default new Router({
       component: AdminStudentsData
     },
     {
-      path: '/admin/overview',
-      name: 'AdminOverview',
-      component: AdminOverview
+      path: '/admin/feedback',
+      name: 'AdminFeedback',
+      component: AdminFeedback
     },
     {
       path: '/forum',

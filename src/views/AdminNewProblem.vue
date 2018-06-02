@@ -1,6 +1,104 @@
 <template>
 <div>
-  <nav-header-admin></nav-header-admin>
+  <!-- new design start -->
+  <el-container>
+    <el-header>
+      <nav-header-admin></nav-header-admin>
+    </el-header>
+    <el-container>
+      <el-aside width="15vw">
+        <side-nav-admin></side-nav-admin>
+      </el-aside>
+      <el-container>
+        <el-main>
+          <el-row class="box-square">
+            <el-col :span="20" :offset="2">
+              <div id="title">新增題目</div>
+              <el-form :model="problemData" label-width="100px" label-position="top">
+                <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="題目名稱">
+                      <el-input v-model="problemData.name" maxlength="15" placeholder="最長15個字" style="width: 70%;"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="讀寫檔">
+                      <el-checkbox-group v-model="problemData.readWriteList" @change="changeBox">
+                        <el-checkbox label="讀檔" border></el-checkbox>
+                        <el-checkbox label="寫檔" border></el-checkbox>
+                      </el-checkbox-group>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="題目類型">
+                      <el-select v-model="problemData.type" placeholder="請選擇類型" style="width: 70%;">
+                        <el-option label="作業" value="作業"></el-option>
+                        <el-option label="練習題" value="練習題"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="繳交期限">
+                      <el-date-picker type="date" placeholder="選擇繳交期限" v-model="problemData.deadline" style="width: 70%;"></el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-form-item label="題目描述 (Description)">
+                  <el-input type="textarea" rows="5" resize="none" placeholder="請輸入題目的描述內容" v-model="problemData.description" style="width: 100%;"></el-input>
+                </el-form-item>
+                <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="輸入描述 (Input)">
+                      <el-input type="textarea" rows="3" resize="none" placeholder="請輸入題目的輸入內容" v-model="problemData.input" style="width: 90%;"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="11" :offset="1">
+                    <el-form-item label="輸出描述 (Output)">
+                      <el-input type="textarea" rows="3" resize="none" placeholder="請輸入題目的輸出內容" v-model="problemData.output" style="width: 100%;"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="輸入範例1 (Input Sample1)">
+                      <el-input type="textarea" rows="3" resize="none" placeholder="請輸入題目的輸入範例" v-model="problemData.inputSample1" style="width: 90%;"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="11" :offset="1">
+                    <el-form-item label="輸出範例1 (Output Sample1)">
+                      <el-input type="textarea" rows="3" resize="none" placeholder="請輸入題目的輸出範例" v-model="problemData.outputSample1" style="width: 100%;"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="輸入範例2 (Input Sample2)">
+                      <el-input type="textarea" rows="3" resize="none" placeholder="請輸入題目的輸入範例" v-model="problemData.inputSample2" style="width: 90%;"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="11" :offset="1">
+                    <el-form-item label="輸出範例2 (Output Sample2)">
+                      <el-input type="textarea" rows="3" resize="none" placeholder="請輸入題目的輸出範例" v-model="problemData.outputSample2" style="width: 100%;"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-button type="primary" @click="dialogFormVisible=true" style="float: right;">確定</el-button>
+                </el-row>
+              </el-form>
+            </el-col>
+          </el-row>
+        </el-main>
+        <el-footer>
+          <nav-footer-admin></nav-footer-admin>
+        </el-footer>
+      </el-container>
+    </el-container>
+  </el-container>
+  <!-- new design end -->
+  <!-- <nav-header-admin></nav-header-admin>
   <el-row>
     <el-col :span="20" :offset="2" class="box" style="margin-top: 20px;">
       <el-row>
@@ -69,13 +167,23 @@
               </el-col>
             </el-row>
             <el-button type="primary" @click="dialogFormVisible=true" style="float: right;">確定</el-button>
-            </el-form>
+          </el-form>
         </el-col>
       </el-row>
     </el-col>
-  </el-row>
+  </el-row> -->
   <el-dialog title="確認題目" :visible.sync="dialogFormVisible" v-loading="loading">
     <el-form :model="form">
+      <el-row>
+        <el-col :span="24" :offset="2">
+          <el-form-item label="讀寫檔">
+            <el-checkbox-group v-model="problemData.readWriteList" @change="changeBox">
+              <el-checkbox label="讀檔" border disabled></el-checkbox>
+              <el-checkbox label="寫檔" border disabled></el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+        </el-col>
+      </el-row>
       <el-row>
         <el-col :span="6" :offset="2">
           <el-form-item label="題目名稱">
@@ -142,7 +250,7 @@
       <el-button type="primary" @click="newProblem">確 定</el-button>
     </div>
   </el-dialog>
-  <nav-footer></nav-footer>
+  <!-- <nav-footer></nav-footer> -->
 </div>
 </template>
 
@@ -150,17 +258,21 @@
 import axios from 'axios'
 
 import NavHeaderAdmin from '@/components/NavHeaderAdmin'
-import NavFooter from '@/components/NavFooter'
+import SideNavAdmin from '@/components/SideNavAdmin'
+import NavFooterAdmin from '@/components/NavFooterAdmin'
 
 export default {
   components: {
     NavHeaderAdmin,
-    NavFooter
+    SideNavAdmin,
+    NavFooterAdmin
   },
   data() {
     return {
       dialogFormVisible: false,
+      // 讀寫檔checkbox
       problemData: {
+        'readWriteList': [],
         'name': '',
         'type': '',
         'deadline': '',
@@ -223,6 +335,7 @@ export default {
         console.log('type' + this.problemData.type);
         this.loading = true;
         axios.post('/api/ta/newProblem', {
+          readWriteList: this.problemData.readWriteList,
           name: this.problemData.name,
           type: this.problemData.type,
           deadline: this.formatDate(this.problemData.deadline),
@@ -241,6 +354,7 @@ export default {
               message: '新增題目成功!'
             });
             this.problemData = {
+              'readWriteList': [],
               'name': '',
               'type': '',
               'deadline': '',
@@ -264,6 +378,9 @@ export default {
       let d = new Date(oriDate);
       let date = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
       return date
+    },
+    changeBox() {
+      console.log(this.problemData.readWriteList);
     }
   }
 }

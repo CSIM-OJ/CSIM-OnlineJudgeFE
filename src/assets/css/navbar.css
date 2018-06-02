@@ -35,16 +35,6 @@
     margin-left: 17px;
 }
 
-/*
-#navbar .el-menu .el-menu-item:nth-child(2) {
-    margin-left: 62%;
-}
-
-#navbar .el-menu .el-menu-item:last-child {
-    margin-right: 3%;
-}
-*/
-
 #navbar {
     float: right;
 }

@@ -1,13 +1,57 @@
 <template>
 <div>
-  <nav-header-admin></nav-header-admin>
+  <!-- new design start -->
+  <el-container>
+    <el-header>
+      <nav-header-admin></nav-header-admin>
+    </el-header>
+    <el-container>
+      <el-aside width="15vw">
+        <side-nav-admin></side-nav-admin>
+      </el-aside>
+      <el-container>
+        <el-main>
+          <div class="box-square">
+            <div id="title">學生資訊</div>
+            搜尋:
+            <el-input class='filterInput' v-model='filterQuery' placeholder='請輸入想查找的學號'></el-input>
+            <!-- <el-button plain size="mini" @click="changeTableWidth" class="ctbtn hidden-xs-only"><i class="fas fa-arrows-alt"></i></el-button> -->
+            <el-table :data="tableFiltered" border style="width: 100%" ref="studentsTable" v-loading="loading" height="80vh">
+              <el-table-column fixed prop="studentID" label="學號" width="120"></el-table-column>
+              <el-table-column fixed label="姓名" width="120">
+                <template slot-scope="scope">
+                  <a class="id-hyperlink" href="javascript:void(0)" @click="studentInfo(scope.row.studentID, scope.row.name)">{{ scope.row.name }}</a>
+                </template>
+              </el-table-column>
+              <el-table-column fixed prop="class" label="系級" width="120"></el-table-column>
+              <el-table-column :key="problem" v-for="(problem, index) in formThead " :label="problem" width="120">
+                <template slot-scope="scope">
+                    <span>{{ scope.row.problems[index].score }}</span>
+                  </template>
+              </el-table-column>
+            </el-table>
+            <el-row>
+              <el-col :span="4" :offset="20">
+                <el-button id="tocsv-btn" type="success" @click="exportCsv">匯出成績 <i class="fas fa-file-excel"></i></el-button>
+              </el-col>
+            </el-row>
+          </div>
+        </el-main>
+        <el-footer>
+          <nav-footer-admin></nav-footer-admin>
+        </el-footer>
+      </el-container>
+    </el-container>
+  </el-container>
+  <!-- new design end -->
+  <!-- <nav-header-admin></nav-header-admin>
   <el-row>
     <el-col :span="20" :offset="2" class="box">
-      <div id="title">學生資訊</div>
+      <div id="title">學生資訊</div> -->
       <!-- <div class="manageClassGroup">
           <el-tag>{{ manageClassGroup }}</el-tag>
         </div> -->
-      搜尋:
+      <!-- 搜尋:
       <el-input class='filterInput' v-model='filterQuery' placeholder='請輸入想查找的學號'></el-input>
       <el-button plain size="mini" @click="changeTableWidth" class="ctbtn hidden-xs-only"><i class="fas fa-arrows-alt"></i></el-button>
       <el-table :data="tableFiltered" border style="width: 100%" ref="studentsTable" v-loading="loading" height="70vh">
@@ -30,7 +74,7 @@
         </el-col>
       </el-row>
     </el-col>
-  </el-row>
+  </el-row> -->
   <el-dialog :visible.sync="dialogFormVisible" @close="clearFilter">
     <el-row id="student-dialog">
       <el-col :span="20" :offset="2">
@@ -61,7 +105,7 @@
       <el-button type="primary" @click="dialogFormVisible=false">確 定</el-button>
     </div>
   </el-dialog>
-  <nav-footer></nav-footer>
+  <!-- <nav-footer></nav-footer> -->
 </div>
 </template>
 
@@ -69,7 +113,8 @@
 import axios from 'axios'
 
 import NavHeaderAdmin from '@/components/NavHeaderAdmin'
-import NavFooter from '@/components/NavFooter'
+import SideNavAdmin from '@/components/SideNavAdmin'
+import NavFooterAdmin from '@/components/NavFooterAdmin'
 
 import '@/assets/css/ta-studentsdata.css'
 
@@ -80,7 +125,8 @@ import {
 export default {
   components: {
     NavHeaderAdmin,
-    NavFooter
+    SideNavAdmin,
+    NavFooterAdmin
   },
   data() {
     return {
@@ -225,7 +271,7 @@ export default {
     },
     changeTableWidth() {
       this.tableFlag++;
-      var box = document.getElementsByClassName("box")[0];
+      var box = document.getElementsByClassName("box-square")[0];
       var ctbtn = document.getElementsByClassName("ctbtn")[0];
 
       if (this.tableFlag % 2 == 0) {

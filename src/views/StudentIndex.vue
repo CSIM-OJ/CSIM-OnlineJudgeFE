@@ -69,7 +69,6 @@
       </section>
     </el-col>
   </el-row>
-
   <nav-footer></nav-footer>
 </div>
 </template>
@@ -110,11 +109,7 @@ export default {
       doneProblems: [],
       // loading
       undoLoading: false,
-      doneLoading: false,
-      // new
-      undoFlag: false,
-      doneFlag: false,
-
+      doneLoading: false
     }
   },
   computed: {
@@ -215,29 +210,7 @@ export default {
     },
     doProblem(problemID) {
       this.$router.push('/student/coding?problemID=' + problemID);
-    },
-    
-    // new
-    undoShow() {
-      this.undoFlag = true;
-      this.doneFlag = false;
-    },
-    doneShow() {
-      this.undoFlag = false;
-      this.doneFlag = true;
-    },
-
+    }
   }
 }
 </script>
-
-<style>
-#bottom-right-wrapper {
-  right: 30px !important;
-}
-
-.fab-main.pointer {
-  padding: 23px !important;
-  box-shadow: 3px 3px 3px rgba(30%, 30%, 40%, 0.2) !important;
-}
-</style>

@@ -124,3 +124,13 @@ hr {
 .id-hyperlink:hover {
   color: #409EFF;
 }
+
+/* fab */
+#bottom-right-wrapper {
+  right: 30px !important;
+}
+
+.fab-main.pointer {
+  padding: 23px !important;
+  box-shadow: 3px 3px 3px rgba(30%, 30%, 40%, 0.2) !important;
+}

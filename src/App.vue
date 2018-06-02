@@ -4,16 +4,18 @@
   <!-- set progressbar -->
   <vue-progress-bar></vue-progress-bar>
   <!-- fab start -->
-  <fab :position="position" :bg-color="bgColor" :actions="fabActions" :icon-size="size" @rank="rank" @feedback="feedback"></fab>
+  <fab v-if="this.$route.path!='/login'" :position="position" :bg-color="bgColor" :actions="fabActions" :icon-size="size" @rank="rank" @feedback="feedback"></fab>
   <!-- fab end -->
   <!-- rank dialog start -->
   <el-dialog :visible.sync="rankDialogVisible">
     <el-row>
       <el-col :span="20" :offset="2">
-        <el-radio-group v-model="radio" style="margin-bottom: 20px" @change="radioChangeHandler">
-          <el-radio-button label="正確題數"></el-radio-button>
-          <el-radio-button label="最佳解答"></el-radio-button>
-        </el-radio-group>
+        <div class="radio-button-container" style="width: 100%; text-align: center;">
+          <el-radio-group v-model="radio" style="margin-bottom: 20px" @change="radioChangeHandler">
+            <el-radio-button label="正確題數"></el-radio-button>
+            <el-radio-button label="最佳解答"></el-radio-button>
+          </el-radio-group>
+        </div>
         <div class="correctRank-block" v-if="correctRankFlag">
           <div class="items-nav">
             <div class="item">正確題數排行</div>
