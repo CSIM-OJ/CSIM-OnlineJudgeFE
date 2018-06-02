@@ -2,7 +2,7 @@
 <div>
   <!-- new design start -->
   <header id="navbar" style="background-color: white; box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);">
-    <div class="logo" style="background-color: #545c64; width: 14.9%; margin-left:0px;">
+    <div class="logo" style="background-color: #545c64; width: 15vw; margin-left:0px;">
       <!-- <router-link to="/admin/index"><img src="/static/logo.png" alt=""></router-link> -->
       <router-link to="/admin/index">
         <div style="width:80%; margin: 0 auto;">
