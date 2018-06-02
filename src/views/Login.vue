@@ -112,7 +112,7 @@ export default {
           password: this.loginForm.password
         }).then((response) => {
           let res = response.data;
-          console.log(res);
+          // console.log(res);
           if (res.status == "200") {
             // console.log(res.result);
             if (res.result == 'student') {

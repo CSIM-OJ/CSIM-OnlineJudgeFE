@@ -32,10 +32,10 @@
                 </template>
               </el-table-column>
               <el-table-column fixed prop="class" label="系級" width="120"></el-table-column>
-              <el-table-column :key="problem" v-for="(problem, index) in formThead " :label="problem" width="120">
+              <el-table-column :key="index" v-for="(problem, index) in formThead " :label="problem" width="120">
                 <template slot-scope="scope">
-                    <span>{{ scope.row.problems[index].score }}</span>
-                  </template>
+                  <span>{{ scope.row.problems[index].score }}</span>
+                </template>
               </el-table-column>
             </el-table>
             <el-row>

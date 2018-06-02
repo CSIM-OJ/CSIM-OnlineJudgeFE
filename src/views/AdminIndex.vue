@@ -44,7 +44,7 @@
                     </el-form-item>
                     <!-- TODO -->
                     <el-form-item label="最佳解答">
-                        <span>{{ props.row.deadline }}</span>
+                        <span>{{ props.row.bestStudentID }}&nbsp;{{ props.row.bestStudentName }}</span>
                     </el-form-item>
                     <!-- TODO -->
                     <el-form-item label="抄襲偵測" style="width: 100%;" id="detectCopyFormItem" v-loading="detectCopyLoading">
@@ -369,6 +369,7 @@ export default {
       axios.get('/api/ta/getProblems').then((response) => {
         let res = response.data;
         if (res.status == '200') {
+          console.log(res.result);
           this.tableData = res.result;
           this.loading = false;
         }

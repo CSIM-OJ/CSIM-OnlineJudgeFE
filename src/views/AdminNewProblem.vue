@@ -340,7 +340,6 @@ export default {
       } else if (this.problemData.outputSample2 == '') {
         this.$message.error('請填寫題目輸出範例2！');
       } else {
-        console.log('type' + this.problemData.type);
         this.loading = true;
         axios.post('/api/ta/newProblem', {
           readWriteList: this.problemData.readWriteList,
@@ -393,3 +392,9 @@ export default {
   }
 }
 </script>
+
+<style>
+  .el-loading-mask {
+    height: 150% !important;
+  }
+</style>

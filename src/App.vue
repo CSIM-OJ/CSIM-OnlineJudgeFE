@@ -140,7 +140,9 @@ export default {
   },
   // vue progressbar
   mounted () {
-    this.$Progress.finish()
+    this.$Progress.finish();
+    this.getCorrectRank();
+    this.getBestCodeRank();
   },
   created () {
     this.$Progress.start()
@@ -204,6 +206,22 @@ export default {
         this.correctRankFlag = false;
         this.bestCodeRankFlag = true;
       }
+    },
+    getCorrectRank() {
+      axios.get('/api/rank/getCorrectRank').then((response)=> {
+        let res = response.data;
+        if(res.status=='200') {
+          this.correctRankData = res.result;
+        }
+      });
+    },
+    getBestCodeRank() {
+      axios.get('/api/rank/getBestCodeRank').then((response)=> {
+        let res = response.data;
+        if(res.status=='200') {
+          this.bestCodeRankData = res.result;
+        }
+      });
     }
   }
 }

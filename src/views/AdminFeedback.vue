@@ -21,7 +21,7 @@
           </el-row>
           <el-row class="box-square">
             <el-col :span="20" :offset="2">
-              <el-table :data="feedbackTableData" style="width: 100%; height: 500px;">
+              <el-table :data="feedbackTableData" height="500" style="width: 100%;">
                 <el-table-column prop="account" label="學號" width="180">
                 </el-table-column>
                 <el-table-column prop="date" label="日期" width="180">
@@ -61,6 +61,36 @@ export default {
         date: '2018-03-31',
         feedback: '測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試'
       }]
+    }
+  },
+  mounted() {
+    this.checkLogin();
+    this.getStudentFeedback();
+  },
+  methods: {
+    checkLogin() {
+      axios.get('/api/checkLogin').then((response) => {
+        let res = response.data;
+        if (res.status == "200") {
+          if (res.result.authority == 'student') {
+            this.$router.push('/student/index');
+          } else if (res.result.authority == 'admin') {
+            // pass
+          }
+        } else {
+          this.$router.push('/login');
+        }
+      });
+    },
+    getStudentFeedback() {
+      axios.get('/api/ta/getFeedback').then((response)=> {
+        let res = response.data;
+        if(res.status=='200') {
+          this.feedbackTableData = res.result;
+        } else {
+          console.log(res.msg);
+        }
+      });
     }
   }
 }
