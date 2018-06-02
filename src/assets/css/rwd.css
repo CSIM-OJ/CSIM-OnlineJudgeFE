@@ -101,6 +101,11 @@
     height: 10vw !important;
     zoom: 125%;
   } */
+
+  /* admin logo */
+  #admin-logo {
+    width: 75% !important;
+  }
 }
 
 /* xl */
@@ -113,5 +118,10 @@
 
   .el-card .el-tooltip {
     zoom: 100% !important;
+  }
+
+  /* admin logo */
+  #admin-logo {
+    width: 75% !important;
   }
 }

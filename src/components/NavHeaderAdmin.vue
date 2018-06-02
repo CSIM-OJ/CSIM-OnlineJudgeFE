@@ -6,7 +6,7 @@
       <!-- <router-link to="/admin/index"><img src="/static/logo.png" alt=""></router-link> -->
       <router-link to="/admin/index">
         <div style="width:80%; margin: 0 auto;">
-          <img src="/static/adminLogo.png" style="width:100%; margin-top:15px;">
+          <img id="admin-logo" src="/static/adminLogo.png" style="width:100%; margin-top:15px;">
         </div>
       </router-link>
     </div>

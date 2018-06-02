@@ -21,7 +21,7 @@
           </el-row>
           <el-row class="box-square">
             <el-col :span="20" :offset="2">
-              <el-table :data="feedbackTableData" height="500" style="width: 100%;">
+              <el-table :data="feedbackTableData" height="70vh" style="width: 100%;">
                 <el-table-column prop="account" label="學號" width="180">
                 </el-table-column>
                 <el-table-column prop="date" label="日期" width="180">
