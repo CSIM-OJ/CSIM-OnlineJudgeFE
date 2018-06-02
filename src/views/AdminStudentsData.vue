@@ -188,7 +188,7 @@ export default {
       axios.get('/api/ta/getStudentsData').then((response) => {
         let res = response.data;
         if (res.status == '200') {
-          console.log(res.result);
+          // console.log(res.result);
           this.tableData = res.result;
           this.loading = false;
         }
@@ -257,7 +257,36 @@ export default {
     },
     clearFilter() {
       this.$refs.table.clearFilter(this.filterList);
-    }
+    },
+    // // vue-progressbar
+    // start () {
+    //     this.$Progress.start()
+    // },
+    // set (num) {
+    //     this.$Progress.set(num)
+    // },
+    // increase (num) {
+    //     this.$Progress.increase(num)
+    // },
+    // decrease (num) {
+    //     this.$Progress.decrease(num)
+    // },
+    // finish () {
+    //     this.$Progress.finish()
+    // },
+    // fail () {
+    //     this.$Progress.fail()
+    // },
+    // test(){
+    //   this.$Progress.start()
+    //
+    //   this.$http.jsonp('http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey=7waqfqbprs7pajbz28mqf6vz')
+    //   .then((response) => {
+    //       this.$Progress.finish()
+    //   }, (response) => {
+    //       this.$Progress.fail()
+    //   })
+    // }
   }
 }
 </script>
