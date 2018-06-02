@@ -125,6 +125,29 @@ hr {
   color: #409EFF;
 }
 
+/* admin */
+.admin-page {
+  background-color: white;
+  border: solid 1px #DDDDDD;
+  border-bottom: 0px;
+  height: 60px;
+  line-height: 60px;
+}
+
+.admin-page .title {
+  color: #1F618D;
+  font-size: 23px;
+  margin-left: 30px;
+}
+
+.admin-page .breadcrumb {
+  float: right;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 60px;
+  margin-right: 20px;
+}
 /* fab */
 #bottom-right-wrapper {
   right: 30px !important;

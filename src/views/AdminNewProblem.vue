@@ -11,9 +11,17 @@
       </el-aside>
       <el-container>
         <el-main>
+          <el-row class="admin-page">
+            <span class="title">新增題目</span>
+            <div class="breadcrumb">
+              <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item :to="{ path: '/admin/index' }">首頁</el-breadcrumb-item>
+                <el-breadcrumb-item>新增題目</el-breadcrumb-item>
+              </el-breadcrumb>
+            </div>
+          </el-row>
           <el-row class="box-square">
             <el-col :span="20" :offset="2">
-              <div id="title">新增題目</div>
               <el-form :model="problemData" label-width="100px" label-position="top">
                 <el-row>
                   <el-col :span="12">

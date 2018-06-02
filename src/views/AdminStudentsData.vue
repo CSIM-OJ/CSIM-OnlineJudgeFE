@@ -11,8 +11,16 @@
       </el-aside>
       <el-container>
         <el-main>
+          <el-row class="admin-page">
+            <span class="title">學生資訊</span>
+            <div class="breadcrumb">
+              <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item :to="{ path: '/admin/index' }">首頁</el-breadcrumb-item>
+                <el-breadcrumb-item>學生資訊</el-breadcrumb-item>
+              </el-breadcrumb>
+            </div>
+          </el-row>
           <div class="box-square">
-            <div id="title">學生資訊</div>
             搜尋:
             <el-input class='filterInput' v-model='filterQuery' placeholder='請輸入想查找的學號'></el-input>
             <!-- <el-button plain size="mini" @click="changeTableWidth" class="ctbtn hidden-xs-only"><i class="fas fa-arrows-alt"></i></el-button> -->
