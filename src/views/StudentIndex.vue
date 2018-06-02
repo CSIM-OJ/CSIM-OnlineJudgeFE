@@ -69,29 +69,26 @@
       </section>
     </el-col>
   </el-row>
-  <!-- feedback block start -->
-  <div class="feedback" @click="sendFeedback">
-    <i class="el-icon-edit-outline"></i>
-  </div>
-  <!-- feedback block end -->
+
   <nav-footer></nav-footer>
 </div>
 </template>
 
 <script>
 import axios from 'axios'
+import fab from 'vue-fab'
 
 import NavHeaderStudent from '@/components/NavHeaderStudent.vue'
 import NavFooter from '@/components/NavFooter.vue'
 
 import '@/assets/css/student-index.css'
 import '@/assets/css/transition.css'
-import '@/assets/css/feedback-block.css'
 
 export default {
   components: {
     NavHeaderStudent,
-    NavFooter
+    NavFooter,
+    fab
   },
   data() {
     return {
@@ -116,7 +113,8 @@ export default {
       doneLoading: false,
       // new
       undoFlag: false,
-      doneFlag: false
+      doneFlag: false,
+
     }
   },
   computed: {
@@ -218,37 +216,7 @@ export default {
     doProblem(problemID) {
       this.$router.push('/student/coding?problemID=' + problemID);
     },
-    sendFeedback() {
-      this.$prompt('請輸入對系統的建議', '系統回饋', {
-        confirmButtonText: '確定',
-        cancelButtonText: '取消',
-        inputType: 'textarea'
-      }).then(({
-        value
-      }) => {
-        axios.post('/api/student/sendFeedback', {
-          feedback: value
-        }).then((response) => {
-          let res = response.data;
-          if (res.status == '200') {
-            this.$message({
-              type: 'success',
-              message: '已經收到您的回饋！'
-            });
-          } else {
-            this.$message({
-              type: 'error',
-              message: '傳送回饋失敗 :('
-            });
-          }
-        });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '取消輸入'
-        });
-      });
-    },
+    
     // new
     undoShow() {
       this.undoFlag = true;
@@ -257,7 +225,19 @@ export default {
     doneShow() {
       this.undoFlag = false;
       this.doneFlag = true;
-    }
+    },
+
   }
 }
 </script>
+
+<style>
+#bottom-right-wrapper {
+  right: 30px !important;
+}
+
+.fab-main.pointer {
+  padding: 23px !important;
+  box-shadow: 3px 3px 3px rgba(30%, 30%, 40%, 0.2) !important;
+}
+</style>

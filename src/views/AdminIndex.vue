@@ -36,6 +36,11 @@
                   <el-form-item label="繳交期限">
                       <span>{{ props.row.deadline }}</span>
                   </el-form-item>
+                  <!-- TODO -->
+                  <el-form-item label="最佳解答">
+                      <span>{{ props.row.deadline }}</span>
+                  </el-form-item>
+                  <!-- TODO -->
                   <el-form-item label="抄襲偵測" style="width: 100%;" id="detectCopyFormItem" v-loading="detectCopyLoading">
                       <span><el-button type="primary" size="small" @click="detectCopy(props.row.problemID)">偵測</el-button></span>
                       <div class="detectCopyTable">
@@ -352,36 +357,7 @@ export default {
       this.doInfoDialogPName = problemName;
       this.doInfoDialogStatus = status;
       this.doInfoDialogVisible = true;
-    },
-    // vue-progressbar
-    // start () {
-    //     this.$Progress.start()
-    // },
-    // set (num) {
-    //     this.$Progress.set(num)
-    // },
-    // increase (num) {
-    //     this.$Progress.increase(num)
-    // },
-    // decrease (num) {
-    //     this.$Progress.decrease(num)
-    // },
-    // finish () {
-    //     this.$Progress.finish()
-    // },
-    // fail () {
-    //     this.$Progress.fail()
-    // },
-    // test(){
-    //   this.$Progress.start()
-    //
-    //   this.$http.jsonp('http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey=7waqfqbprs7pajbz28mqf6vz')
-    //   .then((response) => {
-    //       this.$Progress.finish()
-    //   }, (response) => {
-    //       this.$Progress.fail()
-    //   })
-    // }
+    }
   }
 }
 </script>
