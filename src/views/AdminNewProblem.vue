@@ -376,6 +376,7 @@ export default {
             this.dialogFormVisible = false;
             this.loading = false;
           } else {
+            this.loading = false;
             this.$message.error(res.msg);
           }
         });
