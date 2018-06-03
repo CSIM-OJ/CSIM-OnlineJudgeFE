@@ -84,58 +84,8 @@ export default {
       rankDialogVisible: false,
       correctRankFlag: true,
       bestCodeRankFlag: false,
-      correctRankData: [{
-        'rank': '1',
-        'studentID': '04156147',
-        'studentName': '蘇靖軒',
-        'correctNum': '13'
-      }, {
-        'rank': '1',
-        'studentID': '04156146',
-        'studentName': '波波',
-        'correctNum': '13'
-      }, {
-        'rank': '3',
-        'studentID': '04156148',
-        'studentName': '皮皮',
-        'correctNum': '11'
-      }, {
-        'rank': '4',
-        'studentID': '04156150',
-        'studentName': '小白',
-        'correctNum': '10'
-      }, {
-        'rank': '5',
-        'studentID': '04156149',
-        'studentName': '小至',
-        'correctNum': '9'
-      }],
-      bestCodeRankData: [{
-        'rank': '1',
-        'studentID': '04156147',
-        'studentName': '蘇靖軒',
-        'bestCodeNum': '5'
-      }, {
-        'rank': '1',
-        'studentID': '04156146',
-        'studentName': '波波',
-        'bestCodeNum': '4'
-      }, {
-        'rank': '3',
-        'studentID': '04156148',
-        'studentName': '皮皮',
-        'bestCodeNum': '3'
-      }, {
-        'rank': '4',
-        'studentID': '04156150',
-        'studentName': '小白',
-        'bestCodeNum': '2'
-      }, {
-        'rank': '5',
-        'studentID': '04156149',
-        'studentName': '小至',
-        'bestCodeNum': '1'
-      }]
+      correctRankData: [],
+      bestCodeRankData: []
     }
   },
   // vue progressbar
@@ -162,6 +112,8 @@ export default {
     // fabActions
     rank() {
       this.rankDialogVisible = true;
+      this.getCorrectRank();
+      this.getBestCodeRank();
     },
     sendFeedback() {
       this.$prompt('請輸入對系統的建議', '系統回饋', {
