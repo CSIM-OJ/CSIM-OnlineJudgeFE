@@ -71,24 +71,24 @@
                 <el-row>
                   <el-col :span="12">
                     <el-form-item label="輸入範例1 (Input Sample1)">
-                      <el-input type="textarea" rows="3" resize="none" placeholder="請輸入題目的輸入範例" v-model="problemData.inputSample1" style="width: 90%;"></el-input>
+                      <el-input type="textarea" rows="3" resize="vertical" placeholder="請輸入題目的輸入範例" v-model="problemData.inputSample1" style="width: 90%;"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="11" :offset="1">
                     <el-form-item label="輸出範例1 (Output Sample1)">
-                      <el-input type="textarea" rows="3" resize="none" placeholder="請輸入題目的輸出範例" v-model="problemData.outputSample1" style="width: 100%;"></el-input>
+                      <el-input type="textarea" rows="3" resize="vertical" placeholder="請輸入題目的輸出範例" v-model="problemData.outputSample1" style="width: 100%;"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row>
                   <el-col :span="12">
                     <el-form-item label="輸入範例2 (Input Sample2)">
-                      <el-input type="textarea" rows="3" resize="none" placeholder="請輸入題目的輸入範例" v-model="problemData.inputSample2" style="width: 90%;"></el-input>
+                      <el-input type="textarea" rows="3" resize="vertical" placeholder="請輸入題目的輸入範例" v-model="problemData.inputSample2" style="width: 90%;"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="11" :offset="1">
                     <el-form-item label="輸出範例2 (Output Sample2)">
-                      <el-input type="textarea" rows="3" resize="none" placeholder="請輸入題目的輸出範例" v-model="problemData.outputSample2" style="width: 100%;"></el-input>
+                      <el-input type="textarea" rows="3" resize="vertical" placeholder="請輸入題目的輸出範例" v-model="problemData.outputSample2" style="width: 100%;"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>

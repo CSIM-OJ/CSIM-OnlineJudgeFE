@@ -5,8 +5,8 @@
     <div class="logo" style="background-color: #545c64; width: 15vw; margin-left:0px;">
       <!-- <router-link to="/admin/index"><img src="/static/logo.png" alt=""></router-link> -->
       <router-link to="/admin/index">
-        <div style="width:80%; margin: 0 auto;">
-          <img id="admin-logo" src="/static/adminLogo.png" style="width:100%; margin-top:15px;">
+        <div style="height: 60px; display: flex; flex-direction: column; justify-content: center;">
+          <img id="admin-logo" src="/static/adminLogo.png" style="width:100%; margin-top:15px; display: block; margin: 0 auto;">
         </div>
       </router-link>
     </div>
