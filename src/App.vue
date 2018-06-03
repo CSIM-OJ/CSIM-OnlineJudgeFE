@@ -111,9 +111,9 @@ export default {
   methods: {
     // fabActions
     rank() {
-      this.rankDialogVisible = true;
       this.getCorrectRank();
       this.getBestCodeRank();
+      this.rankDialogVisible = true;
     },
     sendFeedback() {
       this.$prompt('請輸入對系統的建議', '系統回饋', {
