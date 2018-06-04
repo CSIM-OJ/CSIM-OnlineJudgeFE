@@ -22,24 +22,45 @@
           <div class="title">Output</div>
           <div class="content" v-text="problem.output"></div>
         </div>
-        <el-row v-for="(sample, index) in problem.samples" :key="index">
+        <el-row>
           <el-col :xs="24" :sm="12">
             <div class="problem-info">
-              <div class="title">
-                Sample Input {{index+1}}
-                <a style="cursor: pointer" @click="copy(sample.input)"><i class="el-icon-document"></i></a>
+              <div class="title">Sample Input 1
+                <a style="cursor: pointer" @click="copy(problem.inputSample1)"><i class="el-icon-document"></i></a>
               </div>
               <div class="content">
-                <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="sample.input" resize="none">
+                <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="problem.inputSample1" resize="none">
                 </el-input>
               </div>
             </div>
           </el-col>
           <el-col :xs="24" :sm="12">
             <div class="problem-info">
-              <div class="title">Sample Output {{index+1}}</div>
+              <div class="title">Sample Output 1</div>
               <div class="content">
-                <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="sample.output" resize="none">
+                <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="problem.outputSample1" resize="none">
+                </el-input>
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :xs="24" :sm="12">
+            <div class="problem-info">
+              <div class="title">Sample Input 2
+                <a style="cursor: pointer" @click="copy(problem.inputSample2)"><i class="el-icon-document"></i></a>
+              </div>
+              <div class="content">
+                <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="problem.inputSample2" resize="none">
+                </el-input>
+              </div>
+            </div>
+          </el-col>
+          <el-col :xs="24" :sm="12">
+            <div class="problem-info">
+              <div class="title">Sample Output 2</div>
+              <div class="content">
+                <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="problem.outputSample2" resize="none">
                 </el-input>
               </div>
             </div>
@@ -170,13 +191,10 @@ export default {
         'description': '',
         'input': '',
         'output': '',
-        'samples': [{
-          'input': '',
-          'output': ''
-        }, {
-          'input': '',
-          'output': ''
-        }],
+        'inputSample1': '',
+        'outputSample1': '',
+        'inputSample2': '',
+        'outputSample2': '',
         'correctNum': null,
         'incorrectNum': null
       },
@@ -355,10 +373,10 @@ export default {
           this.problem.description = res.result.desc;
           this.problem.input = res.result.inputDesc;
           this.problem.output = res.result.outputDesc;
-          this.problem.samples[0].input = res.result.inputSample1.replace(new RegExp("/n ", "g"), '\n');
-          this.problem.samples[0].output = res.result.outputSample1.replace(new RegExp("/n ", "g"), '\n');
-          this.problem.samples[1].input = res.result.inputSample2.replace(new RegExp("/n ", "g"), '\n');;
-          this.problem.samples[1].output = res.result.outputSample2.replace(new RegExp("/n ", "g"), '\n');
+          this.problem.inputSample1 = res.result.inputSample1.replace(new RegExp(" /n ", "g"), '\n');
+          this.problem.outputSample1 = res.result.outputSample1.replace(new RegExp(" /n ", "g"), '\n');
+          this.problem.inputSample2 = res.result.inputSample2.replace(new RegExp(" /n ", "g"), '\n');;
+          this.problem.outputSample2 = res.result.outputSample2.replace(new RegExp(" /n ", "g"), '\n');
           this.problem.correctNum = parseInt(res.result.correctNum);
           this.problem.incorrectNum = parseInt(res.result.incorrectNum);
         }
@@ -474,7 +492,11 @@ export default {
               // 練習題無限送出更改judging狀態及清空code
               if (this.problem.type == '練習題') {
                 this.judging = false;
-                this.code = '';
+                this.code = `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello! World!");
+    }
+}`;
               }
             } else {
               console.log('judgedErrorMsg:' + res.msg);

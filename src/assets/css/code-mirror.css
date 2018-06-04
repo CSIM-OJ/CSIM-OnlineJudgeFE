@@ -15,9 +15,9 @@
   float: right;
 }
 
-#codemirror-section .setting {
+/* #codemirror-section .setting {
   margin-bottom: 10px;
-}
+} */
 
 #codemirror-section .judging-block {
   display: flex;
