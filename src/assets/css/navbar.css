@@ -44,12 +44,14 @@
   margin-right: 30px;
 }
 
-/* Safari */
+/* Safari 10.1+ */
 
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-  #navbar .el-menu {
-    float: right;
-    margin-right: 30px;
-    width: 22vw;
+@media not all and (min-resolution:.001dpcm) {
+  @media {
+    #navbar .el-menu {
+      float: right;
+      margin-right: 30px;
+      width: 22vw;
+    }
   }
 }

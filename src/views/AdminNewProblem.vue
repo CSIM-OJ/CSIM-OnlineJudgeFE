@@ -105,7 +105,7 @@
     </el-container>
   </el-container>
   <!-- 確認題目 dialog start -->
-  <el-dialog title="確認題目" :visible.sync="dialogFormVisible" v-loading="loading">
+  <el-dialog id="confirmProblemDialog" title="確認題目" :visible.sync="dialogFormVisible" v-loading="loading">
     <el-form :model="form">
       <el-row>
         <el-col :span="24" :offset="2">
@@ -320,7 +320,7 @@ export default {
 </script>
 
 <style>
-  .el-loading-mask {
+  #confirmProblemDialog .el-loading-mask {
     height: 160% !important;
   }
 </style>
