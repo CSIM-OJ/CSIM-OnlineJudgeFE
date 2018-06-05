@@ -549,48 +549,48 @@ export default {
       } else if (this.editProblemData.outputSample2 == '') {
         this.$message.error('請填寫題目輸出範例2！');
       } else {
-        // this.editProblemLoading = true;
+        this.editProblemLoading = true;
         console.log(this.editProblemData);
-        // axios.post('/api/ta/editProblem', {
-        //   problemID: this.editProblemData.id,
-        //   readWriteList: this.editProblemData.readWriteList,
-        //   name: this.editProblemData.name,
-        //   type: this.editProblemData.type,
-        //   deadline: this.formatDate(this.editProblemData.deadline),
-        //   desc: this.editProblemData.description,
-        //   inputDesc: this.editProblemData.input,
-        //   outputDesc: this.editProblemData.output,
-        //   inputSample1: this.editProblemData.inputSample1.replace(/\n/g, ' /n '),
-        //   outputSample1: this.editProblemData.outputSample1.replace(/\n/g, ' /n '),
-        //   inputSample2: this.editProblemData.inputSample2.replace(/\n/g, ' /n '),
-        //   outputSample2: this.editProblemData.outputSample2.replace(/\n/g, ' /n ')
-        // }).then((response) => {
-        //   let res = response.data;
-        //   if (res.status == '200') {
-        //     this.$message({
-        //       type: 'success',
-        //       message: '新增題目成功!'
-        //     });
-        //     this.editProblemData = {
-        //       'readWriteList': [],
-        //       'name': '',
-        //       'type': '',
-        //       'deadline': '',
-        //       'description': '',
-        //       'input': '',
-        //       'output': '',
-        //       'inputSample1': '',
-        //       'outputSample1': '',
-        //       'inputSample2': '',
-        //       'outputSample2': ''
-        //     }
-        //     this.editProblemDialogVisible = false;
-        //     this.editProblemLoading = false;
-        //   } else {
-        //     this.editProblemLoading = false;
-        //     this.$message.error(res.msg);
-        //   }
-        // });
+        axios.post('/api/ta/editProblem', {
+          problemID: this.editProblemData.id,
+          readWriteList: this.editProblemData.readWriteList,
+          name: this.editProblemData.name,
+          type: this.editProblemData.type,
+          deadline: this.formatDate(this.editProblemData.deadline),
+          desc: this.editProblemData.description,
+          inputDesc: this.editProblemData.input,
+          outputDesc: this.editProblemData.output,
+          inputSample1: this.editProblemData.inputSample1.replace(/\n/g, ' /n '),
+          outputSample1: this.editProblemData.outputSample1.replace(/\n/g, ' /n '),
+          inputSample2: this.editProblemData.inputSample2.replace(/\n/g, ' /n '),
+          outputSample2: this.editProblemData.outputSample2.replace(/\n/g, ' /n ')
+        }).then((response) => {
+          let res = response.data;
+          if (res.status == '200') {
+            this.$message({
+              type: 'success',
+              message: '新增題目成功!'
+            });
+            this.editProblemData = {
+              'readWriteList': [],
+              'name': '',
+              'type': '',
+              'deadline': '',
+              'description': '',
+              'input': '',
+              'output': '',
+              'inputSample1': '',
+              'outputSample1': '',
+              'inputSample2': '',
+              'outputSample2': ''
+            }
+            this.editProblemDialogVisible = false;
+            this.editProblemLoading = false;
+          } else {
+            this.editProblemLoading = false;
+            this.$message.error(res.msg);
+          }
+        });
       }
     }
   }
