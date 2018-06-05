@@ -215,7 +215,9 @@ export default {
       nowTheme: 'Default',
       themes: ['Default', 'Eclipse', 'Darcula', 'Blackboard'],
       // CodeMirror
-      code: `public class Main {
+      code: `import java.util.*;
+
+public class Main {
     public static void main(String[] args) {
         System.out.println("Hello! World!");
     }
@@ -492,7 +494,9 @@ export default {
               // 練習題無限送出更改judging狀態及清空code
               if (this.problem.type == '練習題') {
                 this.judging = false;
-                this.code = `public class Main {
+                this.code = `import java.util.*;
+
+public class Main {
     public static void main(String[] args) {
         System.out.println("Hello! World!");
     }

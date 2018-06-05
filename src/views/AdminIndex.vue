@@ -571,7 +571,7 @@ export default {
           if (res.status == '200') {
             this.$message({
               type: 'success',
-              message: '新增題目成功!'
+              message: '編輯題目成功!'
             });
             this.editProblemData = {
               'readWriteList': [],
@@ -588,6 +588,7 @@ export default {
             }
             this.editProblemDialogVisible = false;
             this.editProblemLoading = false;
+            this.getProblemsData();
           } else {
             this.editProblemLoading = false;
             this.$message.error(res.msg);
