@@ -1,12 +1,12 @@
 #navbar {
-    position: fixed;
-    overflow: hidden;
-    top: 0;
-    left: 0;
-    height: 60px;
-    width: 100%;
-    z-index: 1000;
-    width: 100%;
+  position: fixed;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  height: 60px;
+  width: 100%;
+  z-index: 1000;
+  width: 100%;
 }
 
 #navbar .logo img {
@@ -15,31 +15,41 @@
 }
 
 #navbar a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 #navbar .logo {
-    margin-left: 2%;
-    font-size: 20px;
-    float: left;
-    line-height: 60px;
+  margin-left: 2%;
+  font-size: 20px;
+  float: left;
+  line-height: 60px;
 }
 
 #navbar .logo a {
-    text-decoration: none;
-    color: black;
+  text-decoration: none;
+  color: black;
 }
 
 #navbar button {
-    margin-top: 15px;
-    margin-left: 17px;
+  margin-top: 15px;
+  margin-left: 17px;
 }
 
 #navbar {
-    float: right;
+  float: right;
 }
 
 #navbar .el-menu {
-    float:right;
+  float: right;
+  margin-right: 30px;
+}
+
+/* Safari */
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  #navbar .el-menu {
+    float: right;
     margin-right: 30px;
+    width: 22vw;
+  }
 }
