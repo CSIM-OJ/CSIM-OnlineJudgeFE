@@ -107,7 +107,10 @@
         </el-col>
         <el-col :span="6" :offset="1">
           <el-form-item label="題目類型">
-            <el-input v-model="editProblemData.type"></el-input>
+            <el-select v-model="editProblemData.type" placeholder="請選擇類型" style="width: 100%;">
+              <el-option label="作業" value="作業"></el-option>
+              <el-option label="練習題" value="練習題"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6" :offset="1">
@@ -424,12 +427,12 @@ export default {
             this.editProblemData.deadline = res.result.deadline;
             this.editProblemData.description = res.result.desc;
             // TODO
-            // if(res.result.readFile == true) {
-            //   this.problemData.readWriteList.push('讀檔');
-            // }
-            // if(res.result.writeFile == true) {
-            //   this.problemData.readWriteList.push('寫檔');
-            // }
+            if(res.result.readFile == true) {
+              this.editProblemData.readWriteList.push('讀檔');
+            }
+            if(res.result.writeFile == true) {
+              this.editProblemData.readWriteList.push('寫檔');
+            }
             this.editProblemData.input = res.result.inputDesc;
             this.editProblemData.output = res.result.outputDesc;
             this.editProblemData.inputSample1 = res.result.inputSample1.replace(new RegExp(" /n ", "g"), '\n');
@@ -550,7 +553,6 @@ export default {
         this.$message.error('請填寫題目輸出範例2！');
       } else {
         this.editProblemLoading = true;
-        console.log(this.editProblemData);
         axios.post('/api/ta/editProblem', {
           problemID: this.editProblemData.id,
           readWriteList: this.editProblemData.readWriteList,
