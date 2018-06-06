@@ -62,15 +62,27 @@
               <el-table-column label="題目 ID" prop="problemID"></el-table-column>
               <el-table-column label="題目名稱">
                 <template slot-scope="scope">
-                <a class="id-hyperlink" href="javascript:void(0)" @click="getProblemInfo(scope.row)">{{ scope.row.name }}</a>
-              </template>
+                  <a class="id-hyperlink" href="javascript:void(0)" @click="getProblemInfo(scope.row)">{{ scope.row.name }}</a>
+                  <span v-if="scope.row.status=='可作答'" style="color: #67C23A; font-size: 25px;">&bull;</span>
+                  <span v-else style="color: #F56C6C; font-size: 25px;">&bull;</span>
+                </template>
               </el-table-column>
               <el-table-column label="類型" prop="type"></el-table-column>
-              <el-table-column label="狀態" prop="status">
+              <el-table-column label="作題率">
                 <template slot-scope="scope">
-                <el-tag :type="scope.row.status === '可作答' ? 'success' : 'danger'" close-transition>{{scope.row.status}}</el-tag>
-              </template>
+                  <span>{{ (parseInt(scope.row.doneStudentNum)/(parseInt(scope.row.doneStudentNum)+ parseInt(scope.row.undoStudentNum))*100).toFixed(1) }}%</span>
+                </template>
               </el-table-column>
+              <el-table-column label="難易度">
+                <template slot-scope="scope">
+                  <span><el-rate v-model="scope.row.rate" disabled text-color="#ff9900" score-template="{value}"></el-rate></span>
+                </template>
+              </el-table-column>
+              <!-- <el-table-column label="狀態" prop="status">
+                <template slot-scope="scope">
+                  <el-tag :type="scope.row.status === '可作答' ? 'success' : 'danger'" close-transition>{{scope.row.status}}</el-tag>
+                </template>
+              </el-table-column> -->
               <el-table-column label="操作">
                 <template slot-scope="scope">
                 <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">編輯</el-button>
@@ -323,7 +335,6 @@ export default {
       doInfoDialogVisible: false,
       doInfoDialogPName: '',
       doInfoDialogStatus: ''
-
     }
   },
   computed: {
@@ -427,10 +438,10 @@ export default {
             this.editProblemData.deadline = res.result.deadline;
             this.editProblemData.description = res.result.desc;
             // TODO
-            if(res.result.readFile == true) {
+            if (res.result.readFile == true) {
               this.editProblemData.readWriteList.push('讀檔');
             }
-            if(res.result.writeFile == true) {
+            if (res.result.writeFile == true) {
               this.editProblemData.readWriteList.push('寫檔');
             }
             this.editProblemData.input = res.result.inputDesc;

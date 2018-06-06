@@ -5,6 +5,8 @@ import StudentIndex from '@/views/StudentIndex'
 import StudentScorePanel from '@/views/StudentScorePanel'
 import StudentMypage from '@/views/StudentMypage'
 import StudentCoding from '@/views/StudentCoding'
+import StudentRepository from '@/views/StudentRepository'
+import StudentRepositoryProject from '@/views/StudentRepositoryProject'
 import AdminIndex from '@/views/AdminIndex'
 import AdminNewProblem from '@/views/AdminNewProblem'
 import AdminStudentsData from '@/views/AdminStudentsData'
@@ -39,6 +41,16 @@ export default new Router({
       path: '/student/coding',
       name: 'StudentCoding',
       component: StudentCoding
+    },
+    {
+      path:'/student/repository',
+      name: 'StudentRepository',
+      component: StudentRepository
+    },
+    {
+      path: '/student/repository/project',
+      name: 'StudentRepositoryProject',
+      component: StudentRepositoryProject
     },
     {
       path: '/admin/index',

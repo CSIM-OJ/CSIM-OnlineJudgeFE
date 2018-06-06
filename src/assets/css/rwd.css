@@ -92,6 +92,11 @@
     height: 10vw !important;
     zoom: 125%;
   } */
+
+  /* admin logo */
+  #admin-logo {
+    width: 70% !important;
+  }
 }
 
 /* lg */
@@ -101,11 +106,6 @@
     height: 10vw !important;
     zoom: 125%;
   } */
-
-  /* admin logo */
-  #admin-logo {
-    width: 60% !important;
-  }
 }
 
 /* xl */
@@ -122,6 +122,6 @@
 
   /* admin logo */
   #admin-logo {
-    width: 60% !important;
+    width: 65% !important;
   }
 }

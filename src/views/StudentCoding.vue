@@ -168,10 +168,10 @@ import "codemirror/theme/eclipse.css"
 // animated
 import "@/assets/animated/animate.css"
 
-var codes = {
-  'text/x-java': ``,
-  'text/x-python': 'int'
-}
+// var codes = {
+//   'text/x-java': ``,
+//   'text/x-python': 'int'
+// }
 
 export default {
   components: {
