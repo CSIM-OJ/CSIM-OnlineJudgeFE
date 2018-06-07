@@ -11,10 +11,11 @@
       <el-container>
         <el-main>
           <div class="box-square">
-            <div class="manageClassGroup">
+            <!-- <div class="manageClassGroup">
               <el-tag>{{ manageClassGroup }}</el-tag>
-            </div>
-            <el-table :data="tableData" style="width: 100%" v-loading="loading">
+            </div> -->
+            <el-input class='filterInput' v-model='filterQuery' placeholder='請輸入題目ID或名稱' clearable><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
+            <el-table :data="tableFiltered" style="width: 100%" v-loading="loading">
               <el-table-column type="expand">
                 <template slot-scope="props">
                 <el-form label-position="left" inline class="table-expand">
@@ -104,7 +105,7 @@
       <el-row>
         <el-col :span="20" :offset="2">
           <el-form-item label="讀寫檔">
-            <el-checkbox-group v-model="editProblemData.readWriteList" @change="changeBox">
+            <el-checkbox-group v-model="editProblemData.readWriteList">
               <el-checkbox label="讀檔" border></el-checkbox>
               <el-checkbox label="寫檔" border></el-checkbox>
             </el-checkbox-group>
@@ -307,6 +308,7 @@ export default {
       detectCopyLoading: false,
       tableData: [],
       loading: false,
+      filterQuery: '',
       // edit problem dialog
       editProblemDialogVisible: false,
       editProblemLoading: false,
@@ -352,6 +354,22 @@ export default {
     }
   },
   computed: {
+    // problems data table
+    tableFiltered() {
+      let oriTable = this.tableData;
+      let filteredTable = [];
+
+      if (this.filterQuery == '') {
+        return oriTable
+      } else {
+        for (let i = 0; i < oriTable.length; i++) {
+          if (oriTable[i].problemID.includes(this.filterQuery) || oriTable[i].name.includes(this.filterQuery)) {
+            filteredTable.push(oriTable[i]);
+          }
+        }
+        return filteredTable
+      }
+    },
     doStatusData() {
       // TODO 使用PID判別
       let data = this.studentData;

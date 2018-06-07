@@ -20,7 +20,7 @@
             </div>
           </el-row>
           <div class="box-square">
-            <el-input class='filterInput' v-model='filterQuery' placeholder='請輸入想查找的學號'><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
+            <el-input class='filterInput' v-model='filterQuery' placeholder='請輸入學號或姓名' clearable><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
             <!-- <el-button plain size="mini" @click="changeTableWidth" class="ctbtn hidden-xs-only"><i class="fas fa-arrows-alt"></i></el-button> -->
             <el-table :data="tableFiltered" border style="width: 100%" ref="studentsTable" v-loading="loading" height="80vh">
               <el-table-column fixed prop="studentID" label="學號" width="120"></el-table-column>
@@ -141,7 +141,7 @@ export default {
         return oriTable
       } else {
         for (let i = 0; i < oriTable.length; i++) {
-          if (oriTable[i].studentID.includes(this.filterQuery)) {
+          if (oriTable[i].studentID.includes(this.filterQuery) || oriTable[i].name.includes(this.filterQuery)) {
             filteredTable.push(oriTable[i]);
           }
         }
