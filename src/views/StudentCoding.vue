@@ -106,7 +106,7 @@
       </el-col>
     </el-row>
   </section>
-  <section id="codemirror-section" v-if="problem.judged==false || problem.type=='練習題'">
+  <section id="codemirror-section" v-if="problem.judged==false || problem.type=='練習題' ||  problem.type=='作業'">
     <el-row>
       <el-col :span="20" :offset="2" class="box" v-loading="judging" element-loading-text="批改中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
         <div class="coding-block">
@@ -491,8 +491,8 @@ public class Main {
                   this.problem.incorrectNum = parseInt(res.result.incorrectNum);
                 }
               });
-              // 練習題無限送出更改judging狀態及清空code
-              if (this.problem.type == '練習題') {
+              // 練習題與作業無限送出更改judging狀態及清空code
+              if (this.problem.type == '練習題' || this.problem.type == '作業') {
                 this.judging = false;
                 this.code = `import java.util.*;
 
