@@ -48,6 +48,11 @@
       </el-tabs>
     </el-col>
   </el-row>
+  <el-row>
+    <el-col :span="20" :offset="2" class="box">
+      <div class="file-title">費氏數列.java</div>
+    </el-col>
+  </el-row>
   <nav-footer></nav-footer>
 </div>
 </template>
@@ -120,7 +125,8 @@ export default {
       fontSizeList: ['16', '17', '18', '19', '20'],
       theme: 'default',
       nowTheme: 'Default',
-      themes: ['Default', 'Eclipse', 'Darcula', 'Blackboard']
+      themes: ['Default', 'Eclipse', 'Darcula', 'Blackboard'],
+      code: ``
     }
   },
   computed: {
@@ -143,7 +149,24 @@ export default {
         showCursorWhenSelecting: true, // 反白時顯示鼠標位置
         // 代碼折疊
         foldGutter: true,
-        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter']
+        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+      }
+    }
+  },
+  methods: {
+    changeNowTheme(theme) {
+      if (theme == 'Default') {
+        this.nowTheme = theme;
+        this.theme = 'default';
+      } else if (theme == 'Eclipse') {
+        this.nowTheme = theme;
+        this.theme = 'eclipse';
+      } else if (theme == 'Darcula') {
+        this.nowTheme = theme;
+        this.theme = 'darcula';
+      } else if (theme == 'Blackboard') {
+        this.nowTheme = theme;
+        this.theme = 'blackboard';
       }
     }
   }
@@ -175,5 +198,34 @@ export default {
 
 .fileName:hover {
   color: #409EFF;
+}
+
+/* show file */
+.file-title {
+  color: #303133;
+  border-bottom: 1px solid #DDD;
+}
+
+/* code mirror */
+.coding-block .CodeMirror-gutters {
+  height: 50vh !important;
+}
+
+.coding-block .CodeMirror-scroll {
+  min-height: 50vh !important;
+  height: auto;
+}
+
+.coding-block .CodeMirror {
+  min-height: 50vh !important;
+  height: auto;
+}
+
+.coding-block .CodeMirror-sizer {
+  margin-left: 41px !important;
+}
+
+.coding-block .CodeMirror-linenumbers {
+  width: 29px !important;
 }
 </style>

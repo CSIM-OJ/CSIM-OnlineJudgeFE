@@ -177,6 +177,18 @@
           </el-form-item>
         </el-col>
       </el-row>
+      <el-row>
+        <el-col :span="9" :offset="2">
+          <el-form-item label="特殊輸入範例">
+            <el-input type="textarea" rows="3" resize="none" v-model="problemData.inputSample3" readonly></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="9" :offset="1">
+          <el-form-item label="特殊輸出範例3">
+            <el-input type="textarea" rows="3" resize="none" v-model="problemData.outputSample3" readonly></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible=false">取 消</el-button>
@@ -215,7 +227,9 @@ export default {
         'inputSample1': '',
         'outputSample1': '',
         'inputSample2': '',
-        'outputSample2': ''
+        'outputSample2': '',
+        'inputSample3': '',
+        'outputSample3': ''
       },
       loading: false
     }
@@ -277,7 +291,9 @@ export default {
           inputSample1: this.problemData.inputSample1.replace(/\n/g, ' /n '),
           outputSample1: this.problemData.outputSample1.replace(/\n/g, ' /n '),
           inputSample2: this.problemData.inputSample2.replace(/\n/g, ' /n '),
-          outputSample2: this.problemData.outputSample2.replace(/\n/g, ' /n ')
+          outputSample2: this.problemData.outputSample2.replace(/\n/g, ' /n '),
+          inputSample3: this.problemData.inputSample3.replace(/\n/g, ' /n '),
+          outputSample3: this.problemData.outputSample3.replace(/\n/g, ' /n ')
         }).then((response) => {
           let res = response.data;
           if (res.status == '200') {
@@ -296,7 +312,9 @@ export default {
               'inputSample1': '',
               'outputSample1': '',
               'inputSample2': '',
-              'outputSample2': ''
+              'outputSample2': '',
+              'inputSample3': '',
+              'outputSample3': ''
             }
             this.dialogFormVisible = false;
             this.loading = false;

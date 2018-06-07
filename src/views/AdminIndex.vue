@@ -310,7 +310,9 @@ export default {
         'inputSample1': '',
         'outputSample1': '',
         'inputSample2': '',
-        'outputSample2': ''
+        'outputSample2': '',
+        'inputSample3': '',
+        'outputSample3': ''
       },
       // problem dialog
       problemDialogVisible: false,
@@ -450,6 +452,8 @@ export default {
             this.editProblemData.outputSample1 = res.result.outputSample1.replace(new RegExp(" /n ", "g"), '\n');
             this.editProblemData.inputSample2 = res.result.inputSample2.replace(new RegExp(" /n ", "g"), '\n');;
             this.editProblemData.outputSample2 = res.result.outputSample2.replace(new RegExp(" /n ", "g"), '\n');
+            this.editProblemData.inputSample3 = res.result.inputSample3.replace(new RegExp(" /n ", "g"), '\n');;
+            this.editProblemData.outputSample3 = res.result.outputSample3.replace(new RegExp(" /n ", "g"), '\n');
           }
         });
         this.editProblemDialogVisible = true;
@@ -576,7 +580,9 @@ export default {
           inputSample1: this.editProblemData.inputSample1.replace(/\n/g, ' /n '),
           outputSample1: this.editProblemData.outputSample1.replace(/\n/g, ' /n '),
           inputSample2: this.editProblemData.inputSample2.replace(/\n/g, ' /n '),
-          outputSample2: this.editProblemData.outputSample2.replace(/\n/g, ' /n ')
+          outputSample2: this.editProblemData.outputSample2.replace(/\n/g, ' /n '),
+          inputSample3: this.editProblemData.inputSample3.replace(/\n/g, ' /n '),
+          outputSample3: this.editProblemData.outputSample3.replace(/\n/g, ' /n ')
         }).then((response) => {
           let res = response.data;
           if (res.status == '200') {
@@ -595,7 +601,9 @@ export default {
               'inputSample1': '',
               'outputSample1': '',
               'inputSample2': '',
-              'outputSample2': ''
+              'outputSample2': '',
+              'inputSample3': '',
+              'outputSample3': ''
             }
             this.editProblemDialogVisible = false;
             this.editProblemLoading = false;

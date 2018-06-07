@@ -9,7 +9,7 @@
       <el-button type="danger" icon="el-icon-plus" circle @click="newProject"></el-button>
       <section id="repository-main">
         <el-row>
-          <el-col :xs="24" :sm="12" :md="6" :xl="4" v-for="(project, index) in projectTable" :key="index" >
+          <el-col :xs="24" :sm="12" :md="6" :xl="4" v-for="(project, index) in projectTable" :key="index">
             <a @click="toProject(project.projectID)" class="project">
               <i class="fas fa-folder project-icon"></i>
               <span class="project-name">{{ project.projectName }}</span>
@@ -137,5 +137,4 @@ export default {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-
 </style>
