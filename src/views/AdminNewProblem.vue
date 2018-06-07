@@ -92,6 +92,18 @@
                   </el-col>
                 </el-row>
                 <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="特殊輸入範例 (Input Sample3)">
+                      <el-input type="textarea" rows="3" resize="vertical" placeholder="請輸入題目的輸入範例" v-model="problemData.inputSample3" style="width: 90%;"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="11" :offset="1">
+                    <el-form-item label="特殊輸出範例 (Output Sample3)">
+                      <el-input type="textarea" rows="3" resize="vertical" placeholder="請輸入題目的輸出範例" v-model="problemData.outputSample3" style="width: 100%;"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
                   <el-button type="primary" @click="dialogFormVisible=true" style="float: right;">確定</el-button>
                 </el-row>
               </el-form>
