@@ -184,7 +184,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="9" :offset="1">
-          <el-form-item label="特殊輸出範例3">
+          <el-form-item label="特殊輸出範例">
             <el-input type="textarea" rows="3" resize="none" v-model="problemData.outputSample3" readonly></el-input>
           </el-form-item>
         </el-col>

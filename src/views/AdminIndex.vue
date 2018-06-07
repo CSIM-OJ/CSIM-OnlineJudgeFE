@@ -174,6 +174,18 @@
           </el-form-item>
         </el-col>
       </el-row>
+      <el-row>
+        <el-col :span="9" :offset="2">
+          <el-form-item label="特殊輸入範例">
+            <el-input type="textarea" rows="5" resize="vertical" v-model="editProblemData.inputSample3"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10" :offset="1">
+          <el-form-item label="特殊輸出範例">
+            <el-input type="textarea" rows="5" resize="vertical" v-model="editProblemData.outputSample3"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="editProblemDialogVisible=false">取 消</el-button>
