@@ -28,6 +28,11 @@ hr {
   /* IE6 */
 }
 
+.change-line {
+  white-space: pre-wrap;
+  /* word-wrap: break-word; */
+}
+
 .ellipsis {
   width: 90%;
   overflow: hidden;

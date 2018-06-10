@@ -11,11 +11,15 @@
             <el-select v-model="undoSelectValue" placeholder="選擇類型" @change="undoChange">
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
+            <el-select v-model="undoSortValue" placeholder="排序方式" @change="undoSortChange" clearable @clear="undoSortClear" style="margin-right: 10px;">
+              <el-option label="難易度" value="rate"></el-option>
+              <el-option label="繳交期限" value="deadline"></el-option>
+            </el-select>
           </div>
           <el-row>
             <el-col class="undoCol" :span="24" v-loading="undoLoading">
               <transition-group name="slide-fade">
-                <el-col v-for="problem in undoProblems" :xs="24" :sm="12" :md="6" :key="problem.problemID" style="padding-right: 23px;">
+                <el-col v-for="problem in undoProblemsFiltered" :xs="24" :sm="12" :md="6" :key="problem.problemID" style="padding-right: 23px;">
                   <a href="javascript:void(0);" @click="doProblem(problem.problemID)">
                     <el-card :body-style="{ padding: '5px' }">
                       <div style="padding: 14px;">
@@ -42,11 +46,15 @@
             <el-select v-model="doneSelectValue" placeholder="選擇類型" @change="doneChange">
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
+            <el-select v-model="doneSortValue" placeholder="排序方式" @change="doneSortChange" clearable @clear="doneSortClear" style="margin-right: 10px;">
+              <el-option label="難易度" value="rate"></el-option>
+              <el-option label="繳交日期" value="handDate"></el-option>
+            </el-select>
           </div>
           <el-row>
             <el-col class="doneCol" :span="24" v-loading="doneLoading">
               <transition-group name="slide-fade">
-                <el-col v-for="problem in doneProblems" :xs="24" :sm="12" :md="6" :key="problem.problemID" style="padding-right: 23px;">
+                <el-col v-for="problem in doneProblemsFiltered" :xs="24" :sm="12" :md="6" :key="problem.problemID" style="padding-right: 23px;">
                   <a href="javascript:void(0);" @click="doProblem(problem.problemID)">
                     <el-card :body-style="{ padding: '5px' }">
                       <div style="padding: 14px;">
@@ -104,6 +112,13 @@ export default {
         'value': 'practice',
         'label': '練習題'
       }],
+      // sort
+      undoProblemsStarFilter: false,
+      undoProblemshandDateFilter: false,
+      undoSortValue: '',
+      doneProblemsStarFilter: false,
+      doneProblemshandDateFilter: false,
+      doneSortValue: '',
       // main
       undoProblems: [],
       doneProblems: [],
@@ -119,6 +134,41 @@ export default {
     },
     doneNum() {
       return this.doneProblems.length;
+    },
+    // problems
+    undoProblemsFiltered() {
+      let undoProblems = this.undoProblems;
+
+      if (this.undoProblemsStarFilter == true) {
+        let rateList = undoProblems.sort((a, b) => {
+          return a.rate > b.rate ? 1 : -1;
+        });
+        return rateList
+      } else if (this.undoProblemshandDateFilter == true) {
+        let deadlineList = undoProblems.sort((a, b) => {
+          return (Date.parse(a.deadline)).valueOf() > (Date.parse(b.deadline)).valueOf() ? 1 : -1;
+        });
+        return deadlineList
+      } else {
+        return undoProblems
+      }
+    },
+    doneProblemsFiltered() {
+      let doneProblems = this.doneProblems;
+
+      if (this.doneProblemsStarFilter == true) {
+        let rateList = doneProblems.sort((a, b) => {
+          return a.rate > b.rate ? 1 : -1;
+        });
+        return rateList
+      } else if (this.doneProblemshandDateFilter == true) {
+        let handDateList = doneProblems.sort((a, b) => {
+          return (Date.parse(a.handDate)).valueOf() > (Date.parse(b.handDate)).valueOf() ? 1 : -1;
+        });
+        return handDateList
+      } else {
+        return doneProblems
+      }
     }
   },
   mounted() {
@@ -208,6 +258,54 @@ export default {
         });
       }
     },
+    // sort
+    undoSortChange(val) {
+      if (val == 'rate') {
+        this.undoProblemsStarFilter = true;
+        this.undoProblemshandDateFilter = false;
+        this.undoSortValue = '難易度';
+      } else if (val == 'deadline') {
+        this.undoProblemsStarFilter = false;
+        this.undoProblemshandDateFilter = true;
+        this.undoSortValue = '繳交期限';
+      }
+    },
+    undoSortClear() {
+      this.undoProblemsStarFilter = false;
+      this.undoProblemshandDateFilter = false;
+
+      if (this.undoSelectValue == 'all') {
+        this.undoChange('all');
+      } else if (this.undoSelectValue == 'homework') {
+        this.undoChange('homework');
+      } else if (this.undoSelectValue == 'practice') {
+        this.undoChange('practice');
+      }
+    },
+    doneSortChange(val) {
+      if (val == 'rate') {
+        this.doneProblemsStarFilter = true;
+        this.doneProblemshandDateFilter = false;
+        this.doneSortValue = '難易度';
+      } else if (val == 'handDate') {
+        this.doneProblemsStarFilter = false;
+        this.doneProblemshandDateFilter = true;
+        this.doneSortValue = '繳交日期';
+      }
+    },
+    doneSortClear() {
+      this.doneProblemsStarFilter = false;
+      this.doneProblemshandDateFilter = false;
+
+      if (this.doneSelectValue == 'all') {
+        this.doneChange('all');
+      } else if (this.doneSelectValue == 'homework') {
+        this.doneChange('homework');
+      } else if (this.doneSelectValue == 'practice') {
+        this.doneChange('practice');
+      }
+    },
+    // go to problem
     doProblem(problemID) {
       this.$router.push('/student/coding?problemID=' + problemID);
     }

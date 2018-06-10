@@ -12,15 +12,15 @@
         <hr>
         <div class="problem-info">
           <div class="title">Description</div>
-          <div class="content" v-text="problem.description"></div>
+          <div class="content change-line" v-text="problem.description"></div>
         </div>
         <div class="problem-info">
           <div class="title">Input</div>
-          <div class="content" v-text="problem.input"></div>
+          <div class="content change-line" v-text="problem.input"></div>
         </div>
         <div class="problem-info">
           <div class="title">Output</div>
-          <div class="content" v-text="problem.output"></div>
+          <div class="content change-line" v-text="problem.output"></div>
         </div>
         <el-row>
           <el-col :xs="24" :sm="12">

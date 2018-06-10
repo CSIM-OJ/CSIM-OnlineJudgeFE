@@ -23,7 +23,7 @@
           </el-table>
         </el-tab-pane>
         <el-tab-pane label="新增文件">
-          <div class="coding-block">
+          <div id="newFileCodingBlock" class="coding-block">
             <div class="setting">
               <span>Language:</span>
               <el-select v-model="nowLang" @change="changeNowLang" style="width: 100px;">
@@ -207,25 +207,25 @@ export default {
 }
 
 /* code mirror */
-.coding-block .CodeMirror-gutters {
+#newFileCodingBlock .CodeMirror-gutters {
   height: 50vh !important;
 }
 
-.coding-block .CodeMirror-scroll {
+#newFileCodingBlock .CodeMirror-scroll {
   min-height: 50vh !important;
   height: auto;
 }
 
-.coding-block .CodeMirror {
+#newFileCodingBlock .CodeMirror {
   min-height: 50vh !important;
   height: auto;
 }
 
-.coding-block .CodeMirror-sizer {
+#newFileCodingBlock .CodeMirror-sizer {
   margin-left: 41px !important;
 }
 
-.coding-block .CodeMirror-linenumbers {
+#newFileCodingBlock .CodeMirror-linenumbers {
   width: 29px !important;
 }
 </style>

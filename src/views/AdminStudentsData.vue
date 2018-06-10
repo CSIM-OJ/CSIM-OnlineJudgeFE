@@ -241,7 +241,7 @@ export default {
       });
 
       let Today = new Date();
-      let filename = Today.getFullYear() + "-" + Today.getMonth() + "-" + Today.getDate();
+      let filename = Today.getFullYear() + "-" + (Today.getMonth()+1) + "-" + Today.getDate();
       CsvExport(fields, data, filename);
     },
     changeTableWidth() {
