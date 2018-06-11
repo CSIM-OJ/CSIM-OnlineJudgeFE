@@ -280,6 +280,8 @@ export default {
         this.undoChange('homework');
       } else if (this.undoSelectValue == 'practice') {
         this.undoChange('practice');
+      } else {
+        this.undoChange('all');
       }
     },
     doneSortChange(val) {
@@ -303,6 +305,8 @@ export default {
         this.doneChange('homework');
       } else if (this.doneSelectValue == 'practice') {
         this.doneChange('practice');
+      } else {
+        this.doneChange('all');
       }
     },
     // go to problem
