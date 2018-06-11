@@ -53,7 +53,12 @@
                   </el-col>
                 </el-row>
                 <el-form-item label="題目描述 (Description)">
-                  <el-input type="textarea" rows="5" resize="none" placeholder="請輸入題目的描述內容" v-model="problemData.description" style="width: 100%;"></el-input>
+                  <!-- <el-input type="textarea" rows="5" resize="none" placeholder="請輸入題目的描述內容" v-model="problemData.description" style="width: 100%;"></el-input> -->
+                  <div id="markdown-editor">
+                    <el-input type="textarea" rows="5" resize="none" placeholder="請輸入題目的描述內容" :value="problemData.description" style="width: 100%;" @input="update"></el-input>
+                    <!-- <textarea :value="problemData.description" @input="update" style="width: 100%; border-radius: 5px; border-color: #c0c4cc;"></textarea> -->
+                    <div v-html="compiledMarkdown"></div>
+                  </div>
                 </el-form-item>
                 <el-row>
                   <el-col :span="12">
@@ -218,6 +223,10 @@ import NavHeaderAdmin from '@/components/NavHeaderAdmin'
 import SideNavAdmin from '@/components/SideNavAdmin'
 import NavFooterAdmin from '@/components/NavFooterAdmin'
 
+import '@/assets/markdownParser/github.css'
+import '@/assets/markdownParser/marked.js'
+import '@/assets/markdownParser/lodash.js'
+
 export default {
   components: {
     NavHeaderAdmin,
@@ -249,12 +258,22 @@ export default {
   computed: {
     formatedDeadline() {
       return this.formatDate(this.problemData.deadline)
+    },
+    // markdown
+    compiledMarkdown() {
+      return marked(this.problemData.description, { sanitize: true })
     }
   },
   mounted() {
     this.checkLogin();
   },
   methods: {
+    //markdown
+    update: _.debounce(function (e) {
+      // console.log(e.target.value);
+      this.problemData.description = e
+      // this.problemData.description = e.target.value
+    }, 300),
     checkLogin() {
       axios.get('/api/checkLogin').then((response) => {
         let res = response.data;
@@ -350,7 +369,39 @@ export default {
 </script>
 
 <style>
-  #confirmProblemDialog .el-loading-mask {
-    height: 160% !important;
-  }
+#confirmProblemDialog .el-loading-mask {
+  height: 160% !important;
+}
+
+/* markdown editor */
+/* html, body, #editor {
+  margin: 0;
+  height: 100%;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: #333;
+} */
+
+/* #markdown-editor textarea, #markdown-editor div {
+  display: inline-block;
+  width: 49%;
+  height: 100%;
+  vertical-align: top;
+  box-sizing: border-box;
+  padding: 0 20px;
+}
+
+#markdown-editor textarea {
+  border: none;
+  border-right: 1px solid #ccc;
+  resize: none;
+  outline: none;
+  background-color: #f6f6f6;
+  font-size: 14px;
+  font-family: 'Monaco', courier, monospace;
+  padding: 20px;
+} */
+
+#markdown-editor code {
+  color: #f66;
+}
 </style>

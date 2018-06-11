@@ -8,10 +8,10 @@
           <div class="items-nav">
             <div class="item">可作答</div>
             <i class="fas fa-pencil-alt"></i> {{ undoNum }}
-            <el-select v-model="undoSelectValue" placeholder="選擇類型" @change="undoChange">
+            <el-select class="select-custom" v-model="undoSelectValue" placeholder="選擇類型" @change="undoChange">
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
-            <el-select v-model="undoSortValue" placeholder="排序方式" @change="undoSortChange" clearable @clear="undoSortClear" style="margin-right: 10px;">
+            <el-select class="select-custom" v-model="undoSortValue" placeholder="排序方式" @change="undoSortChange" clearable @clear="undoSortClear" style="margin-right: 10px;">
               <el-option label="難易度" value="rate"></el-option>
               <el-option label="繳交期限" value="deadline"></el-option>
             </el-select>
@@ -43,10 +43,10 @@
           <div class="items-nav">
             <div class="item">已作答</div>
             <i class="fas fa-paperclip"></i> {{ doneNum }}
-            <el-select v-model="doneSelectValue" placeholder="選擇類型" @change="doneChange">
+            <el-select class="select-custom" v-model="doneSelectValue" placeholder="選擇類型" @change="doneChange">
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
-            <el-select v-model="doneSortValue" placeholder="排序方式" @change="doneSortChange" clearable @clear="doneSortClear" style="margin-right: 10px;">
+            <el-select class="select-custom" v-model="doneSortValue" placeholder="排序方式" @change="doneSortChange" clearable @clear="doneSortClear" style="margin-right: 10px;">
               <el-option label="難易度" value="rate"></el-option>
               <el-option label="繳交日期" value="handDate"></el-option>
             </el-select>
@@ -312,3 +312,19 @@ export default {
   }
 }
 </script>
+
+<style>
+.select-custom {
+  width: 100px !important;
+  margin: 0px;
+}
+
+.select-custom .el-input__inner {
+  border: 0px !important;
+}
+
+.select-custom .el-input {
+  width: 105px;
+}
+
+</style>
