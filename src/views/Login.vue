@@ -36,11 +36,8 @@
         </el-col>
       </el-row>
       <el-row style="padding-bottom: 30px;">
-        <!-- <el-col :xs="5" :sm="2" :offset="13">
-          <el-button @click="loginCancel">取 消</el-button>
-        </el-col> -->
-        <el-col :xs="5" :sm="2" :offset="16">
-          <el-button type="primary" @click="login">ＧＯ</el-button>
+        <el-col :xs="5" :sm="14" :offset="5">
+          <el-button type="primary" @click="login" style="float: right;">ＧＯ</el-button>
         </el-col>
       </el-row>
     </el-form>

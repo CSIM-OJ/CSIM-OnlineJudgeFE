@@ -12,7 +12,10 @@
         <hr>
         <div class="problem-info">
           <div class="title">Description</div>
-          <div class="content change-line" v-text="problem.description"></div>
+          <div id="markdown-editor">
+            <div class="content change-line" v-html="compiledMarkdown"></div>
+          </div>
+          <!-- <div class="content change-line" v-text="problem.description"></div> -->
         </div>
         <div class="problem-info">
           <div class="title">Input</div>
@@ -127,6 +130,7 @@
               </el-option>
             </el-select>
             <el-button plain size="mini" @click="changeCodemirrorHeight" class="chbtn hidden-xs-only"><i class="fas fa-arrows-alt"></i></el-button>
+            <el-button plain size="mini" @click="copy(code)" class="chbtn hidden-xs-only"><i class="fas fa-copy"></i></el-button>
           </div>
           <codemirror v-model="code" :options="options" ref="myEditor" :style="{'font-size': fontSize+'px'}"></codemirror>
           <el-button type="primary" @click="submitCode">submit</el-button>
@@ -287,6 +291,10 @@ public class Main {
         ]
       }
       return chartData
+    },
+    // markdown
+    compiledMarkdown() {
+      return marked(this.problem.description, { sanitize: true })
     }
   },
   mounted() {

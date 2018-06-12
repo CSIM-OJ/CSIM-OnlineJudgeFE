@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     handleSelect(key, keyPath) {
-      console.log(key, keyPath);
+      // console.log(key, keyPath);
     },
     navController() {
       this.scroll = document.documentElement.scrollTop || document.body.scrollTop;
