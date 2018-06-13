@@ -327,7 +327,6 @@ export default {
       aDate = sDate2.split("-")
       oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])
       iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24) //把相差的毫秒數轉換为天數
-      console.log(iDays);
       return iDays
     },
     // 把deadline+1天

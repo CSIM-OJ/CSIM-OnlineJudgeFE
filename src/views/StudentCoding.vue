@@ -300,6 +300,7 @@ public class Main {
     // 判斷題目是否過期，過期則不給再提交
     isCanDoRepeat() {
       let deadline = new Date(this.problem.deadline);
+      deadline.setDate(deadline.getDate() + 1);
       let today = new Date();
 
       if(today.valueOf() > deadline.valueOf()) { // 過期
