@@ -13,7 +13,8 @@
         <div class="problem-info">
           <div class="title">Description</div>
           <div id="markdown-editor">
-            <div class="content change-line" v-html="compiledMarkdown"></div>
+            <vue-markdown class="content" :source="problem.description"></vue-markdown>
+            <!-- <div class="content" v-html="compiledMarkdown"></div> -->
           </div>
           <!-- <div class="content change-line" v-text="problem.description"></div> -->
         </div>
@@ -147,6 +148,7 @@ import axios from 'axios'
 import {
   codemirror
 } from 'vue-codemirror-lite'
+import VueMarkdown from 'vue-markdown'
 
 import NavHeaderStudent from '@/components/NavHeaderStudent'
 import NavFooter from '@/components/NavFooter'
@@ -181,7 +183,8 @@ export default {
   components: {
     NavHeaderStudent,
     NavFooter,
-    codemirror
+    codemirror,
+    VueMarkdown
   },
   data() {
     return {

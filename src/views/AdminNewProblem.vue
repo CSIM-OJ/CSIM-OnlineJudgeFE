@@ -57,7 +57,8 @@
                   <div id="markdown-editor">
                     <el-input type="textarea" rows="5" resize="none" placeholder="請輸入題目的描述內容" :value="problemData.description" style="width: 100%;" @input="update"></el-input>
                     <!-- <textarea :value="problemData.description" @input="update" style="width: 100%; border-radius: 5px; border-color: #c0c4cc;"></textarea> -->
-                    <div v-html="compiledMarkdown"></div>
+                    <!-- <div v-html="compiledMarkdown"></div> -->
+                    <vue-markdown :source="problemData.description"></vue-markdown>
                   </div>
                 </el-form-item>
                 <el-row>
@@ -218,6 +219,7 @@
 
 <script>
 import axios from 'axios'
+import VueMarkdown from 'vue-markdown'
 
 import NavHeaderAdmin from '@/components/NavHeaderAdmin'
 import SideNavAdmin from '@/components/SideNavAdmin'
@@ -226,12 +228,14 @@ import NavFooterAdmin from '@/components/NavFooterAdmin'
 import '@/assets/markdownParser/github.css'
 import '@/assets/markdownParser/marked.js'
 import '@/assets/markdownParser/lodash.js'
+import '@/assets/markdownParser/katex.min.css'
 
 export default {
   components: {
     NavHeaderAdmin,
     SideNavAdmin,
-    NavFooterAdmin
+    NavFooterAdmin,
+    VueMarkdown
   },
   data() {
     return {
@@ -260,9 +264,9 @@ export default {
       return this.formatDate(this.problemData.deadline)
     },
     // markdown
-    compiledMarkdown() {
-      return marked(this.problemData.description, { sanitize: true })
-    }
+    // compiledMarkdown() {
+    //   return marked(this.problemData.description, { sanitize: true })
+    // }
   },
   mounted() {
     this.checkLogin();
