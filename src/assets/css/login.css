@@ -17,6 +17,9 @@
   background-size: cover; */
   background: url('/static/background.png');
   background-repeat: repeat;
+  /* new */
+  /* background: url('/static/background-new.jpg');
+  background-size: cover; */
 }
 
 .banner .block p {

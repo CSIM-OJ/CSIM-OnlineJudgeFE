@@ -216,7 +216,9 @@
           <hr>
           <div class="problem-info">
             <div class="title">Description</div>
-            <div class="content change-line" v-text="problemData.description"></div>
+            <div id="markdown-editor">
+              <vue-markdown class="content" :source="problemData.description"></vue-markdown>
+            </div>
           </div>
           <div class="problem-info">
             <div class="title">Input</div>
@@ -296,6 +298,7 @@
 
 <script>
 import axios from 'axios'
+import VueMarkdown from 'vue-markdown'
 
 import NavHeaderAdmin from '@/components/NavHeaderAdmin'
 import SideNavAdmin from '@/components/SideNavAdmin'
@@ -307,7 +310,8 @@ export default {
   components: {
     NavHeaderAdmin,
     SideNavAdmin,
-    NavFooterAdmin
+    NavFooterAdmin,
+    VueMarkdown
   },
   data() {
     return {
