@@ -52,7 +52,12 @@
                     </el-form-item>
                   </el-col>
                 </el-row>
-                <el-form-item label="題目描述 (Description)">
+                <el-form-item>
+                  <label slot="label">
+                    題目描述 (Description)
+                    <img src="/static/md-icon.png" alt="md-icon" style="width: 25px; margin-left: 10px;">
+                    <img src="/static/katex-icon.png" alt="md-icon" style="width: 40px; margin-left: 3px;">
+                  </label>
                   <!-- <el-input type="textarea" rows="5" resize="none" placeholder="請輸入題目的描述內容" v-model="problemData.description" style="width: 100%;"></el-input> -->
                   <div id="markdown-editor">
                     <el-input type="textarea" rows="5" resize="none" placeholder="請輸入題目的描述內容" :value="problemData.description" style="width: 100%;" @input="update"></el-input>

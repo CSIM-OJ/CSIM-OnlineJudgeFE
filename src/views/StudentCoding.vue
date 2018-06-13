@@ -296,9 +296,9 @@ public class Main {
       return chartData
     },
     // markdown
-    compiledMarkdown() {
-      return marked(this.problem.description, { sanitize: true })
-    }
+    // compiledMarkdown() {
+    //   return marked(this.problem.description, { sanitize: true })
+    // }
   },
   mounted() {
     this.checkLogin();
