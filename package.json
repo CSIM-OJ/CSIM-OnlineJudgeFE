@@ -20,7 +20,8 @@
     "vue-fab": "^2.1.4",
     "vue-markdown": "^2.2.4",
     "vue-progressbar": "^0.7.5",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vuejs-countdown": "^0.2.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.2.6",

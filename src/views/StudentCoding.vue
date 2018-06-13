@@ -8,6 +8,7 @@
           <span v-text="problem.name"></span>
           <el-rate allow-half v-model="problem.rate" @change="changeRate"></el-rate>
           <span class="type" v-text="problem.type"></span>
+          <span class="deadline" v-text="problem.deadline"></span>
         </div>
         <hr>
         <div class="problem-info">
@@ -110,7 +111,7 @@
       </el-col>
     </el-row>
   </section>
-  <section id="codemirror-section" v-if="problem.judged==false || problem.type=='練習題' ||  problem.type=='作業'">
+  <section id="codemirror-section" v-if="isCanDoRepeat">
     <el-row>
       <el-col :span="20" :offset="2" class="box" v-loading="judging" element-loading-text="批改中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
         <div class="coding-block">
@@ -195,6 +196,7 @@ export default {
         'name': '',
         'rate': null,
         'type': '',
+        'deadline': '',
         'description': '',
         'input': '',
         'output': '',
@@ -295,6 +297,19 @@ public class Main {
       }
       return chartData
     },
+    // 判斷題目是否過期，過期則不給再提交
+    isCanDoRepeat() {
+      let deadline = new Date(this.problem.deadline);
+      let today = new Date();
+
+      if(today.valueOf() > deadline.valueOf()) { // 過期
+        return false
+      } else { // 沒過期
+        if(this.problem.judged==false || this.problem.type=='練習題' || this.problem.type=='作業') {
+          return true
+        }
+      }
+    }
     // markdown
     // compiledMarkdown() {
     //   return marked(this.problem.description, { sanitize: true })
@@ -383,6 +398,7 @@ public class Main {
           this.problem.name = res.result.name;
           this.problem.rate = parseInt(res.result.rate);
           this.problem.type = res.result.type;
+          this.problem.deadline = res.result.deadline;
           this.problem.description = res.result.desc;
           this.problem.input = res.result.inputDesc;
           this.problem.output = res.result.outputDesc;
@@ -560,6 +576,17 @@ public class Main {
         codemirror.style.height = '300px';
         chbtn.style.color = '#303133';
       }
+    },
+    // 兩日期天數差
+    dateDiff(sDate1, sDate2) { //sDate1和sDate2是2018-6-18格式
+      var aDate, oDate1, oDate2, iDays
+      aDate = sDate1.split("-")
+      oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]) //轉換為6-18-2018格式
+      aDate = sDate2.split("-")
+      oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])
+      iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24) //把相差的毫秒數轉換为天數
+      console.log(iDays);
+      return iDays
     }
   }
 }

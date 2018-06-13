@@ -28,7 +28,8 @@
                         </span>
                         <div class="bottom clearfix">
                           <el-rate disabled v-model="problem.rate"></el-rate>
-                          <el-button type="text" class="button"><a href="javascript:void(0);" @click="doProblem(problem.problemID)">來去做題</a></el-button>
+                          <Countdown v-if="dateDiff(todayDate, problem.deadline)<=1" :deadline="deadlineParse(problem.deadline)"></Countdown>
+                          <el-button v-if="dateDiff(todayDate, problem.deadline)>3" type="text" class="button"><a href="javascript:void(0);" @click="doProblem(problem.problemID)">來去做題</a></el-button>
                         </div>
                         <div class="type">{{ problem.type }}</div>
                       </div>
@@ -83,7 +84,7 @@
 
 <script>
 import axios from 'axios'
-import fab from 'vue-fab'
+import Countdown from 'vuejs-countdown'
 
 import NavHeaderStudent from '@/components/NavHeaderStudent.vue'
 import NavFooter from '@/components/NavFooter.vue'
@@ -95,7 +96,7 @@ export default {
   components: {
     NavHeaderStudent,
     NavFooter,
-    fab
+    Countdown
   },
   data() {
     return {
@@ -169,6 +170,11 @@ export default {
       } else {
         return doneProblems
       }
+    },
+    todayDate() {
+      let date = new Date();
+      let today = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+      return today
     }
   },
   mounted() {
@@ -312,6 +318,24 @@ export default {
     // go to problem
     doProblem(problemID) {
       this.$router.push('/student/coding?problemID=' + problemID);
+    },
+    // 兩日期天數差
+    dateDiff(sDate1, sDate2) { //sDate1和sDate2是2018-6-18格式
+      var aDate, oDate1, oDate2, iDays
+      aDate = sDate1.split("-")
+      oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]) //轉換為6-18-2018格式
+      aDate = sDate2.split("-")
+      oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])
+      iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24) //把相差的毫秒數轉換为天數
+      console.log(iDays);
+      return iDays
+    },
+    // 把deadline+1天
+    deadlineParse(deadline) {
+      var deadline = new Date(deadline);
+      deadline.setDate(deadline.getDate() + 1);
+      var newDeadline = deadline.getFullYear()+"-" + (deadline.getMonth()+1) + "-" + deadline.getDate();
+      return newDeadline
     }
   }
 }
@@ -331,4 +355,31 @@ export default {
   width: 105px;
 }
 
+/* count down */
+
+.el-card .vuejs-countdown {
+  position: absolute;
+  bottom: 18px;
+  right: 15px;
+}
+
+.vuejs-countdown li {
+  margin-right: 0px !important;
+}
+
+.vuejs-countdown li::after {
+  font-size: 10px !important;
+  color: #F56C6C;
+  margin-right: 5px;
+}
+
+.vuejs-countdown p.digit {
+  font-size: 10px;
+  color: #F56C6C;
+}
+
+.vuejs-countdown p.text {
+  font-size: 10px;
+  color: #F56C6C;
+}
 </style>

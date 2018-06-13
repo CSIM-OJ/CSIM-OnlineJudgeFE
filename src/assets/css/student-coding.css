@@ -23,7 +23,17 @@
 #problem-section .problem-name .type {
   display: block;
   color: #888888;
-  font-size: 17px;
+  font-size: 15px;
+  font-weight: 400;
+  position: absolute;
+  bottom: 20px;
+  right: 5px;
+}
+
+#problem-section .problem-name .deadline {
+  display: block;
+  color: #888888;
+  font-size: 15px;
   font-weight: 400;
   position: absolute;
   bottom: 0px;
