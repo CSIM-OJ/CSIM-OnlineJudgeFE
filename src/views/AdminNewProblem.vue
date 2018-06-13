@@ -63,7 +63,7 @@
                     <el-input type="textarea" rows="5" resize="none" placeholder="請輸入題目的描述內容" :value="problemData.description" style="width: 100%;" @input="update"></el-input>
                     <!-- <textarea :value="problemData.description" @input="update" style="width: 100%; border-radius: 5px; border-color: #c0c4cc;"></textarea> -->
                     <!-- <div v-html="compiledMarkdown"></div> -->
-                    <vue-markdown :source="problemData.description"></vue-markdown>
+                    <vue-markdown class="md-preview" :source="problemData.description"></vue-markdown>
                   </div>
                 </el-form-item>
                 <el-row>
@@ -278,7 +278,7 @@ export default {
   },
   methods: {
     //markdown
-    update: _.debounce(function (e) {
+    update: _.debounce(function(e) {
       // console.log(e.target.value);
       this.problemData.description = e
       // this.problemData.description = e.target.value
@@ -383,6 +383,7 @@ export default {
 }
 
 /* markdown editor */
+
 /* html, body, #editor {
   margin: 0;
   height: 100%;
@@ -412,5 +413,13 @@ export default {
 
 #markdown-editor code {
   color: #f66;
+}
+
+/* md預覽 */
+
+.md-preview {
+  font-size: 18px;
+  line-height: 25px;
+  color: #666;
 }
 </style>
