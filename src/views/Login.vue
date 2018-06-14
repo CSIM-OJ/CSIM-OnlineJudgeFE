@@ -104,6 +104,7 @@ export default {
         this.$message.error('請填寫密碼！');
       } else {
         this.loading = true;
+        let self = this;
         axios.post('/api/login', {
           account: this.loginForm.account,
           password: this.loginForm.password
@@ -122,13 +123,8 @@ export default {
             this.$message.error('帳號或密碼錯誤！');
           }
         }).catch(function(error) {
-          this.loading = false;
-          this.dialogFormVisible = false;
-          this.loginForm = {
-            account: '',
-            password: ''
-          }
-          this.$message.error('登入失敗');
+          self.loading = false;
+          self.$message.error('登入失敗');
         });;
       }
     },

@@ -395,7 +395,7 @@ public class Main {
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
-          // console.log(res);
+          console.log(res);
           this.problem.name = res.result.name;
           this.problem.rate = parseInt(res.result.rate);
           this.problem.type = res.result.type;

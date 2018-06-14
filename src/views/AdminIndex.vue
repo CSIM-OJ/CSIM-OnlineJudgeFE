@@ -14,25 +14,25 @@
           <el-row :gutter="20">
             <el-col :span="6">
               <div class="box-square dashboard-square" style="background-color: #9B59B6;">
-                <div class="num">53</div>
+                <div class="num">{{ onlineNum }}</div>
                 <div class="desc">在線人數</div>
               </div>
             </el-col>
             <el-col :span="6">
               <div class="box-square dashboard-square" style="background-color: #2874A6;">
-                <div class="num">24</div>
+                <div class="num">{{ activeNum }}</div>
                 <div class="desc">活躍人數</div>
               </div>
             </el-col>
             <el-col :span="6">
               <div class="box-square dashboard-square" style="background-color: #229954;">
-                <div class="num">67</div>
+                <div class="num">{{ todayDoNum }}</div>
                 <div class="desc">今日做題次數</div>
               </div>
             </el-col>
             <el-col :span="6">
               <div class="box-square dashboard-square" style="background-color: #F39C12;">
-                <div class="num">213</div>
+                <div class="num">{{ weekDoNum }}</div>
                 <div class="desc">本週做題次數</div>
               </div>
             </el-col>
@@ -114,10 +114,10 @@ export default {
     }
     return {
       // 基本統計
-      onlineNum: '53',
-      activeNum: '27',
-      todayDoNum: '43',
-      weekDoNum: '124',
+      onlineNum: '',
+      activeNum: '',
+      todayDoNum: '',
+      weekDoNum: '',
       // line chart
       onlineChartData: {
         columns: ['日期', '在線人數', '活躍人數'],
@@ -225,7 +225,10 @@ export default {
   },
   mounted() {
     this.checkLogin();
-
+    this.getBasicData();
+    this.getOnlineData();
+    this.getDoPerDayData();
+    this.getJudgeLiveData();
   },
   methods: {
     checkLogin() {
@@ -258,6 +261,7 @@ export default {
     getOnlineData() {
       axios.get('/api/data/getOnlineData').then((response) => {
         let res = response.data;
+        console.log(res.result);
         if (res.status == '200') {
           let rawOnlineData = res.result;
           let transOnlineData = [];

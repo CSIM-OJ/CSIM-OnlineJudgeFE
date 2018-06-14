@@ -19,7 +19,7 @@
           <el-row>
             <el-col class="undoCol" :span="24" v-loading="undoLoading">
               <transition-group name="slide-fade">
-                <el-col v-for="problem in undoProblemsFiltered" :xs="24" :sm="12" :md="6" :key="problem.problemID" style="padding-right: 23px;">
+                <el-col v-for="problem in undoProblemsFiltered" :xs="24" :sm="12" :md="8" :lg="6" :key="problem.problemID" style="padding-right: 23px;">
                   <a href="javascript:void(0);" @click="doProblem(problem.problemID)">
                     <el-card :body-style="{ padding: '5px' }">
                       <div style="padding: 14px;">
@@ -28,8 +28,8 @@
                         </span>
                         <div class="bottom clearfix">
                           <el-rate disabled v-model="problem.rate"></el-rate>
-                          <Countdown v-if="dateDiff(todayDate, problem.deadline)<=1" :deadline="deadlineParse(problem.deadline)"></Countdown>
-                          <el-button v-if="dateDiff(todayDate, problem.deadline)>3" type="text" class="button"><a href="javascript:void(0);" @click="doProblem(problem.problemID)">來去做題</a></el-button>
+                          <Countdown v-if="dateDiff(todayDate, problem.deadline)<1" :deadline="deadlineParse(problem.deadline)"></Countdown>
+                          <el-button v-if="dateDiff(todayDate, problem.deadline)>=1" type="text" class="button"><a href="javascript:void(0);" @click="doProblem(problem.problemID)">來去做題</a></el-button>
                         </div>
                         <div class="type">{{ problem.type }}</div>
                       </div>
@@ -55,7 +55,7 @@
           <el-row>
             <el-col class="doneCol" :span="24" v-loading="doneLoading">
               <transition-group name="slide-fade">
-                <el-col v-for="problem in doneProblemsFiltered" :xs="24" :sm="12" :md="6" :key="problem.problemID" style="padding-right: 23px;">
+                <el-col v-for="problem in doneProblemsFiltered" :xs="24" :sm="12" :md="8" :lg="6"  :key="problem.problemID" style="padding-right: 23px;">
                   <a href="javascript:void(0);" @click="doProblem(problem.problemID)">
                     <el-card :body-style="{ padding: '5px' }">
                       <div style="padding: 14px;">
@@ -362,14 +362,10 @@ export default {
   right: 15px;
 }
 
-.vuejs-countdown li {
-  margin-right: 0px !important;
-}
-
 .vuejs-countdown li::after {
   font-size: 10px !important;
   color: #F56C6C;
-  margin-right: 5px;
+  margin-right: 0px;
 }
 
 .vuejs-countdown p.digit {
@@ -380,5 +376,6 @@ export default {
 .vuejs-countdown p.text {
   font-size: 10px;
   color: #F56C6C;
+  transform:scale(.7);
 }
 </style>
