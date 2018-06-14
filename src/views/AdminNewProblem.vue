@@ -60,7 +60,7 @@
                   </label>
                   <!-- <el-input type="textarea" rows="5" resize="none" placeholder="請輸入題目的描述內容" v-model="problemData.description" style="width: 100%;"></el-input> -->
                   <div id="markdown-editor">
-                    <el-input type="textarea" rows="5" resize="none" placeholder="請輸入題目的描述內容" :value="problemData.description" style="width: 100%;" @input="update"></el-input>
+                    <el-input type="textarea" rows="5" resize="vertical" placeholder="請輸入題目的描述內容" :value="problemData.description" style="width: 100%;" @input="update"></el-input>
                     <!-- <textarea :value="problemData.description" @input="update" style="width: 100%; border-radius: 5px; border-color: #c0c4cc;"></textarea> -->
                     <!-- <div v-html="compiledMarkdown"></div> -->
                     <vue-markdown class="md-preview" :source="problemData.description"></vue-markdown>

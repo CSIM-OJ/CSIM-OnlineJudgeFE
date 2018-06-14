@@ -212,6 +212,7 @@
             <span v-text="problemData.name"></span>
             <span v-text="problemData.id" style="font-size: 16px; color: #909399; font-weight: 500;"></span>
             <span class="type" v-text="problemData.type"></span>
+            <span class="deadline" v-text="problemData.deadline"></span>
           </div>
           <hr>
           <div class="problem-info">
@@ -349,6 +350,7 @@ export default {
         'name': '',
         'rate': null,
         'type': '',
+        'deadline': '',
         'description': '',
         'input': '',
         'output': '',
@@ -565,6 +567,7 @@ export default {
           this.problemData.id = data.problemID;
           this.problemData.name = res.result.name;
           this.problemData.type = res.result.type;
+          this.problemData.deadline = res.result.deadline;
           this.problemData.description = res.result.desc;
           this.problemData.input = res.result.inputDesc;
           this.problemData.output = res.result.outputDesc;
