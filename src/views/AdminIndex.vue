@@ -58,21 +58,22 @@
           <el-row>
             <el-col :span="24" class="box-square">
               <div class="chart-title"><i class="fas fa-stream"></i> 即時批改實況</div>
-              <el-table :data="judgeLiveTable" style="width: 100%" height="288">
-                <el-table-column prop="time" label="時間">
+              <el-table :data="judgeLiveTable" style="width: 100%; margin-bottom: 25px;" height="288">
+                <el-table-column prop="time" label="時間" width="180">
                 </el-table-column>
-                <el-table-column prop="studentID" label="學號">
+                <el-table-column prop="studentID" label="學號" width="120">
                 </el-table-column>
-                <el-table-column prop="studentName" label="姓名">
+                <el-table-column prop="studentName" label="姓名" width="120">
                 </el-table-column>
-                <el-table-column prop="problemID" label="題目ID">
+                <el-table-column prop="problemID" label="題目ID" width="120">
                 </el-table-column>
-                <el-table-column prop="problemName" label="題目名稱">
+                <el-table-column prop="problemName" label="題目名稱" width="130">
                 </el-table-column>
-                <el-table-column prop="score" label="分數">
+                <el-table-column prop="score" label="分數" width="100">
+                </el-table-column>
+                <el-table-column prop="errorMsg" label="錯誤訊息">
                 </el-table-column>
               </el-table>
-              <el-button v-on:click="streamTest" style="margin-top: 20px;">開始</el-button>
             </el-col>
           </el-row>
           <!-- 做題實況 end -->
@@ -241,14 +242,66 @@ export default {
         }
       });
     },
-    streamTest() {
-      this.judgeLiveTable.unshift({
-        time: '2018-05-03 20:10:02',
-        studentID: '06156158',
-        studentName: '張小明',
-        problemID: 'P0017',
-        problemName: '計算英文名詞',
-        score: '100'
+    getBasicData() {
+      axios.get('/api/data/getBasicData').then((response) => {
+        let res = response.data;
+        if (res.status == '200') {
+          this.onlineNum = res.result.onlineNum;
+          this.activeNum = res.result.activeNum;
+          this.todayDoNum = res.result.todayDoNum;
+          this.weekDoNum = res.result.weekDoNum;
+        } else {
+          console.log(res.msg);
+        }
+      });
+    },
+    getOnlineData() {
+      axios.get('/api/data/getOnlineData').then((response) => {
+        let res = response.data;
+        if (res.status == '200') {
+          let rawOnlineData = res.result;
+          let transOnlineData = [];
+          for (let i = 0; i < rawOnlineData.length; i++) {
+            let obj = {
+              '日期': rawOnlineData[i].date,
+              '在線人數': rawOnlineData[i].onlineNum,
+              '活躍人數': rawOnlineData[i].activeNum
+            }
+            transOnlineData.push(obj);
+          }
+          this.onlineChartData.rows = transOnlineData;
+        } else {
+          console.log(res.msg);
+        }
+      });
+    },
+    getDoPerDayData() {
+      axios.get('/api/data/getDoPerDayData').then((response) => {
+        let res = response.data;
+        if (res.status == '200') {
+          let rawDoPerDayData = res.result;
+          let transDoPerDayData = [];
+          for (let i = 0; i < rawDoPerDayData.length; i++) {
+            let obj = {
+              '日期': rawDoPerDayData[i].date,
+              '做題次數': rawDoPerDayData[i].doPerDayNum
+            }
+            transDoPerDayData.push(obj);
+          }
+          this.doPerDayChartData.rows = transDoPerDayData;
+        } else {
+          console.log(res.msg);
+        }
+      });
+    },
+    getJudgeLiveData() {
+      axios.get('/api/data/getJudgeLiveData').then((response) => {
+        let res = response.data;
+        if (res.status == '200') {
+          this.judgeLiveTable = res.result;
+        } else {
+          console.log(res.msg);
+        }
       });
     }
   }
