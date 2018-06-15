@@ -102,7 +102,7 @@
               <el-form-item label="程式碼">
                 <el-input readonly :class="isBestCode" type="textarea" v-model="judgedResultForm.code" autosize resize="none"></el-input>
               </el-form-item>
-              <el-form-item label="錯誤訊息" v-if="judgedResultForm.errorInfo!=''">
+              <el-form-item label="錯誤訊息" v-if="judgedResultForm.score!='100.0'">
                 <el-input readonly type="textarea" v-model="judgedResultForm.errorInfo" autosize resize="none"></el-input>
               </el-form-item>
             </el-form>

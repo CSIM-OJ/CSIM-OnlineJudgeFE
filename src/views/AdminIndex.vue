@@ -58,7 +58,7 @@
           <el-row>
             <el-col :span="24" class="box-square">
               <div class="chart-title"><i class="fas fa-stream"></i> 即時批改實況</div>
-              <el-table :data="judgeLiveTable" style="width: 100%; margin-bottom: 25px;" height="288">
+              <el-table :data="reverseJudgeLiveTable" style="width: 100%; margin-bottom: 25px;" height="288">
                 <el-table-column prop="time" label="時間" width="180">
                 </el-table-column>
                 <el-table-column prop="studentID" label="學號" width="120">
@@ -121,114 +121,33 @@ export default {
       // line chart
       onlineChartData: {
         columns: ['日期', '在線人數', '活躍人數'],
-        rows: [{
-            '日期': '1/1',
-            '在線人數': 1393,
-            '活躍人數': 1093
-          },
-          {
-            '日期': '1/2',
-            '在線人數': 3530,
-            '活躍人數': 3230
-          },
-          {
-            '日期': '1/3',
-            '在線人數': 2923,
-            '活躍人數': 2623
-          },
-          {
-            '日期': '1/4',
-            '在線人數': 1723,
-            '活躍人數': 1423
-          },
-          {
-            '日期': '1/5',
-            '在線人數': 3792,
-            '活躍人數': 3492
-          },
-          {
-            '日期': '1/6',
-            '在線人數': 4593,
-            '活躍人數': 4293
-          }
-        ]
+        rows: []
       },
       doPerDayChartData: {
         columns: ['日期', '做題次數'],
-        rows: [{
-            '日期': '1/1',
-            '做題次數': 1393
-          },
-          {
-            '日期': '1/2',
-            '做題次數': 3530
-          },
-          {
-            '日期': '1/3',
-            '做題次數': 2923
-          },
-          {
-            '日期': '1/4',
-            '做題次數': 1723
-          },
-          {
-            '日期': '1/5',
-            '做題次數': 3792
-          },
-          {
-            '日期': '1/6',
-            '做題次數': 4593
-          }
-        ]
+        rows: []
       },
       // 即時批改實況
-      judgeLiveTable: [{
-        time: '2018-05-02 20:25:00',
-        studentID: '06156125',
-        studentName: '蘇靖軒',
-        problemID: 'P0003',
-        problemName: '計算複利',
-        score: '100'
-      }, {
-        time: '2018-05-04 12:35:24',
-        studentID: '04156147',
-        studentName: '波波',
-        problemID: 'P0005',
-        problemName: '計算成績',
-        score: '0'
-      }, {
-        time: '2018-05-01 15:40:03',
-        studentID: '06156130',
-        studentName: '皮皮',
-        problemID: 'P0011',
-        problemName: '計算複利',
-        score: '100'
-      }, {
-        time: '2018-05-03 20:10:02',
-        studentID: '06156158',
-        studentName: '張小明',
-        problemID: 'P0017',
-        problemName: '計算英文名詞',
-        score: '100'
-      }, {
-        time: '2018-05-04 12:35:24',
-        studentID: '04156147',
-        studentName: '波波',
-        problemID: 'P0005',
-        problemName: '計算成績',
-        score: '0'
-      }]
+      judgeLiveTable: []
     }
   },
   computed: {
-
+    reverseJudgeLiveTable() {
+      return this.judgeLiveTable.reverse();
+    }
   },
   mounted() {
     this.checkLogin();
+
     this.getBasicData();
     this.getOnlineData();
     this.getDoPerDayData();
     this.getJudgeLiveData();
+
+    setInterval(()=> {
+      this.getBasicData();
+      this.getJudgeLiveData();
+    }, 600000);
   },
   methods: {
     checkLogin() {

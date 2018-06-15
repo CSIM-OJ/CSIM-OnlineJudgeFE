@@ -450,7 +450,7 @@ export default {
       axios.get('/api/ta/getProblems').then((response) => {
         let res = response.data;
         if (res.status == '200') {
-          // console.log(res.result);
+          console.log(res.result);
           this.tableData = res.result;
           this.loading = false;
         }

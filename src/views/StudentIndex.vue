@@ -55,7 +55,7 @@
           <el-row>
             <el-col class="doneCol" :span="24" v-loading="doneLoading">
               <transition-group name="slide-fade">
-                <el-col v-for="problem in doneProblemsFiltered" :xs="24" :sm="12" :md="8" :lg="6"  :key="problem.problemID" style="padding-right: 23px;">
+                <el-col v-for="problem in doneProblemsFiltered" :xs="24" :sm="12" :md="8" :lg="6" :key="problem.problemID" style="padding-right: 23px;">
                   <a href="javascript:void(0);" @click="doProblem(problem.problemID)">
                     <el-card :body-style="{ padding: '5px' }">
                       <div style="padding: 14px;">
@@ -140,35 +140,43 @@ export default {
     undoProblemsFiltered() {
       let undoProblems = this.undoProblems;
 
-      if (this.undoProblemsStarFilter == true) {
-        let rateList = undoProblems.sort((a, b) => {
-          return a.rate > b.rate ? 1 : -1;
-        });
-        return rateList
-      } else if (this.undoProblemshandDateFilter == true) {
-        let deadlineList = undoProblems.sort((a, b) => {
-          return (Date.parse(a.deadline)).valueOf() > (Date.parse(b.deadline)).valueOf() ? 1 : -1;
-        });
-        return deadlineList
-      } else {
+      if(undoProblems.length == 0) {
         return undoProblems
+      } else {
+        if (this.undoProblemsStarFilter == true) {
+          let rateList = undoProblems.sort((a, b) => {
+            return a.rate > b.rate ? 1 : -1;
+          });
+          return rateList
+        } else if (this.undoProblemshandDateFilter == true) {
+          let deadlineList = undoProblems.sort((a, b) => {
+            return (Date.parse(a.deadline)).valueOf() > (Date.parse(b.deadline)).valueOf() ? 1 : -1;
+          });
+          return deadlineList
+        } else {
+          return undoProblems
+        }
       }
     },
     doneProblemsFiltered() {
       let doneProblems = this.doneProblems;
 
-      if (this.doneProblemsStarFilter == true) {
-        let rateList = doneProblems.sort((a, b) => {
-          return a.rate > b.rate ? 1 : -1;
-        });
-        return rateList
-      } else if (this.doneProblemshandDateFilter == true) {
-        let handDateList = doneProblems.sort((a, b) => {
-          return (Date.parse(a.handDate)).valueOf() > (Date.parse(b.handDate)).valueOf() ? 1 : -1;
-        });
-        return handDateList
-      } else {
+      if(doneProblems.length == 0) {
         return doneProblems
+      } else {
+        if (this.doneProblemsStarFilter == true) {
+          let rateList = doneProblems.sort((a, b) => {
+            return a.rate > b.rate ? 1 : -1;
+          });
+          return rateList
+        } else if (this.doneProblemshandDateFilter == true) {
+          let handDateList = doneProblems.sort((a, b) => {
+            return (Date.parse(a.handDate)).valueOf() > (Date.parse(b.handDate)).valueOf() ? 1 : -1;
+          });
+          return handDateList
+        } else {
+          return doneProblems
+        }
       }
     },
     todayDate() {
@@ -333,7 +341,7 @@ export default {
     deadlineParse(deadline) {
       var deadline = new Date(deadline);
       deadline.setDate(deadline.getDate() + 1);
-      var newDeadline = deadline.getFullYear()+"-" + (deadline.getMonth()+1) + "-" + deadline.getDate();
+      var newDeadline = deadline.getFullYear() + "-" + (deadline.getMonth() + 1) + "-" + deadline.getDate();
       return newDeadline
     }
   }
@@ -376,6 +384,6 @@ export default {
 .vuejs-countdown p.text {
   font-size: 10px;
   color: #F56C6C;
-  transform:scale(.7);
+  transform: scale(.7);
 }
 </style>
