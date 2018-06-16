@@ -88,11 +88,6 @@
                   <span><el-rate v-model="scope.row.rate" disabled text-color="#ff9900" score-template="{value}"></el-rate></span>
                 </template>
               </el-table-column>
-              <!-- <el-table-column label="狀態" prop="status">
-                <template slot-scope="scope">
-                  <el-tag :type="scope.row.status === '可作答' ? 'success' : 'danger'" close-transition>{{scope.row.status}}</el-tag>
-                </template>
-              </el-table-column> -->
               <el-table-column label="操作">
                 <template slot-scope="scope">
                 <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">編輯</el-button>
@@ -278,18 +273,37 @@
   </el-dialog>
   <!-- problem dialog end -->
   <!-- done & undo dialog start -->
-  <el-dialog :visible.sync="doInfoDialogVisible">
-    <el-row>
+  <el-dialog :visible.sync="doInfoDialogVisible" @close="doInfoDialogActiveStudentCode=false;">
+    <el-row v-if="doInfoDialogActiveStudentCode==false">
       <el-col :span="20" :offset="2">
         <div class="items-nav">
           <div class="item">{{ doInfoDialogPName }}</div>
         </div>
-        <el-table max-height="350" :data="doStatusData" style="width: 100%; margin-bottom: 60px;">
+        <el-table max-height="336" :data="doStatusData" style="width: 100%; margin-bottom: 60px;">
           <el-table-column prop="studentID" label="學生學號">
           </el-table-column>
           <el-table-column prop="studentName" label="學生姓名"></el-table-column>
           <el-table-column prop="score" label="成績"></el-table-column>
+          <el-table-column v-if="doInfoDialogStatus=='done'" label="程式碼">
+            <template slot-scope="scope">
+              <span><a @click="seeStudentCode(scope.row)" href="javascript:void(0)" style="color: #409EFF; text-decoration: none;"><i class="fas fa-code"></i> 檢視</a></span>
+            </template>
+          </el-table-column>
         </el-table>
+      </el-col>
+    </el-row>
+    <el-row v-if="doInfoDialogActiveStudentCode">
+      <el-col>
+        <div class="code">
+          <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item>
+              <a href="javascript:void(0)" @click="doInfoDialogActiveStudentCode=false" style="text-decoration: none; ">{{doInfoDialogPName}}</a>
+            </el-breadcrumb-item>
+            <el-breadcrumb-item>{{doInfoDianlogNowStudentID}} {{doInfoDianlogNowStudentName}}</el-breadcrumb-item>
+          </el-breadcrumb>
+          <codemirror v-model="doInfoDianlogNowStudentCode" :options="options" style="margin-top: 20px;"></codemirror>
+          <a class="code-copy" @click="copy(doInfoDianlogNowStudentCode)"><i class="el-icon-document"></i>複製代碼</a>
+        </div>
       </el-col>
     </el-row>
   </el-dialog>
@@ -300,6 +314,9 @@
 <script>
 import axios from 'axios'
 import VueMarkdown from 'vue-markdown'
+import {
+  codemirror
+} from 'vue-codemirror-lite'
 
 import NavHeaderAdmin from '@/components/NavHeaderAdmin'
 import SideNavAdmin from '@/components/SideNavAdmin'
@@ -312,7 +329,8 @@ export default {
     NavHeaderAdmin,
     SideNavAdmin,
     NavFooterAdmin,
-    VueMarkdown
+    VueMarkdown,
+    codemirror
   },
   data() {
     return {
@@ -365,7 +383,33 @@ export default {
       studentData: [], // getStudentsData
       doInfoDialogVisible: false,
       doInfoDialogPName: '',
-      doInfoDialogStatus: ''
+      doInfoDialogStatus: '',
+      doInfoDialogActiveStudentCode: false, // 是否正在檢視學生的code
+      doInfoDianlogNowStudentID: '', // 當下檢視的學生的學號
+      doInfoDianlogNowStudentName: '', // 當下檢視的學生的姓名
+      doInfoDianlogNowStudentCode: '', // 當下檢視的學生code
+      // codemirror options
+      options: {
+        mode: 'text/x-java',
+        theme: 'default',
+        indentUnit: 4, // 縮進單位
+        tabSize: 4,
+        lineNumbers: true,
+        matchBrackets: true, // 括號匹配
+        smartIndent: true, // 自動縮排
+        autoCloseBrackets: true, // 括號補全
+        viewportMargin: Infinity,
+        gutter: true,
+        fixedGutter: true,
+        extraKeys: {
+          'Ctrl-Space': 'autocomplete'
+        },
+        showCursorWhenSelecting: true, // 反白時顯示鼠標位置
+        // 代碼折疊
+        foldGutter: true,
+        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+        readOnly: 'nocursor'
+      },
     }
   },
   computed: {
@@ -401,7 +445,14 @@ export default {
               let obj = {
                 studentID: id,
                 studentName: name,
-                score: problems[j].score
+                score: problems[j].score,
+                code: `import java.util.*;
+
+          public class Main {
+              public static void main(String[] args) {
+                  System.out.println("Hello! World!");
+              }
+          }`
               };
               tableData.push(obj)
             }
@@ -421,9 +472,6 @@ export default {
       }
       return tableData
     }
-    // formatedDeadline() {
-    //   return this.formatDate(this.editProblemData.deadline)
-    // }
   },
   mounted() {
     this.checkLogin();
@@ -450,7 +498,7 @@ export default {
       axios.get('/api/ta/getProblems').then((response) => {
         let res = response.data;
         if (res.status == '200') {
-          console.log(res.result);
+          // console.log(res.result);
           this.tableData = res.result;
           this.loading = false;
         }
@@ -586,6 +634,12 @@ export default {
       this.doInfoDialogStatus = status;
       this.doInfoDialogVisible = true;
     },
+    seeStudentCode(data) {
+      this.doInfoDianlogNowStudentID = data.studentID;
+      this.doInfoDianlogNowStudentName = data.studentName;
+      this.doInfoDianlogNowStudentCode = data.code;
+      this.doInfoDialogActiveStudentCode = true;
+    },
     formatDate(oriDate) {
       let d = new Date(oriDate);
       let date = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
@@ -660,6 +714,23 @@ export default {
           }
         });
       }
+    },
+    copy(s) {
+      // 複製功能
+      var clip_area = document.createElement('textarea');
+      clip_area.textContent = s;
+
+      document.body.appendChild(clip_area);
+      clip_area.select();
+
+      document.execCommand('copy');
+      clip_area.remove();
+
+      // success msg
+      this.$message({
+        message: '複製成功',
+        type: 'success'
+      });
     }
   }
 }
@@ -681,5 +752,19 @@ export default {
 
 #viewProblemDialog .el-dialog {
   width: 70vw;
+}
+
+/* doInfoDialog copy */
+.code .code-copy {
+  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  float: right;
+  color: #303133;
+  transition: all .3s ease;
+}
+
+.code .code-copy:hover {
+  color: #409EFF;
 }
 </style>

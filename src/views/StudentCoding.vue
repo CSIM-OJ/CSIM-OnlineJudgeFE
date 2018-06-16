@@ -15,9 +15,7 @@
           <div class="title">Description</div>
           <div id="markdown-editor">
             <vue-markdown class="content" :source="problem.description"></vue-markdown>
-            <!-- <div class="content" v-html="compiledMarkdown"></div> -->
           </div>
-          <!-- <div class="content change-line" v-text="problem.description"></div> -->
         </div>
         <div class="problem-info">
           <div class="title">Input</div>
