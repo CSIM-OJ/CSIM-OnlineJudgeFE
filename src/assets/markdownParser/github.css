@@ -62,7 +62,7 @@ body>*:last-child {
   margin-bottom: 0 !important;
 }
 
-a {
+#markdown-editor a {
   color: #4183C4;
 }
 
@@ -252,7 +252,7 @@ body>#markdown-editor h3:first-child, body>#markdown-editor h4:first-child, body
   border-right: 1px solid #ddd;
 }
 
-#markdown-editor .md-fences, code, tt {
+#markdown-editor .md-fences, #markdown-editor code, #markdown-editor tt {
   border: 1px solid #ddd;
   background-color: #f8f8f8;
   border-radius: 3px;

@@ -18,6 +18,10 @@
      		"judged": null, // Boolean, 是否已被批改
      		"rate": null, // Double, 題目難易度
      		"code": "", // String, 題目代碼
+             "historyCode": [{ // 此題的歷史代碼
+                 "handDate": '', // String, 繳交日期
+                 "code": '' // String, 程式碼
+             }],
      		"runTime": "", // Double, 程式運行時間
      		"errorInfo": "", // String, 程式錯誤訊息
      		"score": null, // Double, 程式分數
@@ -167,7 +171,7 @@
    | ---------- | -------------------------- | ---------------------- | --------------------------------- | ------------------------------------------------------------ |
    | POST       | URL/student/changePassword | 更改密碼               | account, oriPassowrd, newPassword |                                                              |
    | GET        | URL/student/info           | 個人學生資料           |                                   | studentdID, name, student_class, undoNum, doneNum, bestCodeNum, correctNum, incorrectNum |
-   | GET        | URL/student/historyScore   | 學生歷史成績及題目資訊 |                                   | [{problemID, problemName, type, score, handDate, rate, runTime, correctRate, isBestCode(Boolean), copys: [{studentID, similarity}]}] |
+   | GET        | URL/student/historyScore   | 學生歷史成績及題目資訊 |                                   | [{problemID, problemName, type, *code, *historyCode(Array),  score, handDate, rate, runTime, correctRate, isBestCode(Boolean), copys: [{studentID, similarity}]}] |
    | GET        | URL/student/undoAllList    | 學生所有未做題目資料   |                                   | [{problemID, name, type, deadline, rate}]                    |
    | GET        | URL/student/undoHwList     | 學生作業未做題目資料   |                                   | [{problemID, name, type, deadline, rate}]                    |
    | GET        | URL/student/undoPraList    | 學生練習題未做題目資料 |                                   | [{problemID, name, type, deadline, rate}]                    |
@@ -199,7 +203,7 @@
    | POST       | URL/ta/editProblem     | 編輯題目                       | problemID, readWriteList:[] (空 or 讀檔 or 寫檔 or 讀檔、寫檔), name, type, deadline, desc, inputDesc, outputDesc, inputSample1, outputSample1, inputSample2, outputSample2, inputSample3, outSample3 |                                                              |
    | GET        | URL/ta/getProblems     | 取得管轄班級的所有題目相關資訊 |                                                              | [{problemID, name, type, status(判斷是否已過期。可作答、已關閉), undoStudentNum, doneStudentNum, rate, correctRate, deadline, bestStudentID, bestStudentName, bestRunTime, detectCopyResult: [{studentOneID, studentOneName,  studentTwoID, studentTwoName,  similarity}] (如果沒有就回空List) |
    | POST       | URL/ta/deleteProblem   | 助教刪除題目                   | problemID                                                    |                                                              |
-   | GET        | URL/ta/getStudentsData | 取得管轄班級的所有學生成績     |                                                              | studentID, name, class, problems: [{name, score(若未被批改回傳"未作答"), date, type, code}] |
+   | GET        | URL/ta/getStudentsData | 取得管轄班級的所有學生成績     |                                                              | [{studentID, name, class, problems: [{name, score(若未被批改回傳"未作答"), date, type, code, *historyCode(Array) }] }] |
    | POST       | URL/ta/judgeCopy       | 判斷抄襲                       | problemID                                                    |                                                              |
    | GET        | URL/ta/getFeedback     | 取得意見回饋內容               |                                                              | [{account, date, feedback}]                                  |
 

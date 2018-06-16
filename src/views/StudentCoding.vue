@@ -97,7 +97,11 @@
                   </el-form-item>
                 </el-col>
               </el-row>
-              <el-form-item label="程式碼">
+              <el-form-item>
+                <label prop="label" style="margin-right: 10px;">程式碼</label>
+                <!-- new -->
+                <span><a class="commit-hyperlink" href="javascript:void(0);" @click="commitDialogVisible=true"><i class="el-icon-time"></i> 1 commits</a></span>
+                <!-- new -->
                 <el-input readonly :class="isBestCode" type="textarea" v-model="judgedResultForm.code" autosize resize="none"></el-input>
               </el-form-item>
               <el-form-item label="錯誤訊息" v-if="judgedResultForm.score!='100.0'">
@@ -138,6 +142,28 @@
       </el-col>
     </el-row>
   </section>
+  <!-- commitDialog start -->
+  <el-dialog id="commitDialog" :title="problem.name+' commits 紀錄'" :visible.sync="commitDialogVisible" @close="commitDialogActive=false">
+    <el-row class="commit-table" v-if="commitDialogActive==false">
+      <el-col :span="20" :offset="2">
+        <el-table :data="commitTableData">
+          <el-table-column property="handDate" label="提交日期"></el-table-column>
+          <el-table-column property="name" label="提交人"></el-table-column>
+          <el-table-column fixed="right" label="操作">
+            <template slot-scope="scope">
+              <span><a @click="seeCommitCode(scope.row)" href="javascript:void(0)" style="color: #409EFF; text-decoration: none;"><i class="fas fa-code"></i> 檢視</a></span>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="sm-space"></div>
+      </el-col>
+    </el-row>
+    <div class="codeDiff-block" v-if="commitDialogActive">
+      <vue-code-diff :old-string="oldCode" :new-string="newCode" :context="10"></vue-code-diff>
+      <div><a class="back2commit-hyperlink" href="javascript:void(0);" @click="commitDialogActive=false"><i class="fas fa-long-arrow-alt-left"></i> 返回</a></div>
+    </div>
+  </el-dialog>
+  <!-- commitDialog end -->
   <nav-footer></nav-footer>
 </div>
 </template>
@@ -148,6 +174,7 @@ import {
   codemirror
 } from 'vue-codemirror-lite'
 import VueMarkdown from 'vue-markdown'
+import vueCodeDiff from 'vue-code-diff'
 
 import NavHeaderStudent from '@/components/NavHeaderStudent'
 import NavFooter from '@/components/NavFooter'
@@ -183,7 +210,8 @@ export default {
     NavHeaderStudent,
     NavFooter,
     codemirror,
-    VueMarkdown
+    VueMarkdown,
+    vueCodeDiff
   },
   data() {
     return {
@@ -239,7 +267,36 @@ public class Main {
         'code': ``,
         'errorInfo': '',
         'bestCode': null
-      }
+      },
+      // commit dialog
+      commitDialogVisible: false,
+      commitTableData: [{
+          index: 0,
+          handDate: '2016-05-02',
+          name: '王小虎',
+          code: 'hi'
+        }, {
+          index: 1,
+          handDate: '2016-05-04',
+          name: '王小虎',
+          code: 'hi123'
+        }, {
+          index: 2,
+          handDate: '2016-05-01',
+          name: '王小虎',
+          code: 'hi123123'
+        }, {
+          index: 3,
+          handDate: '2016-05-03',
+          name: '王小虎',
+          code: 'hi452424'
+        }
+      ],
+      // code difference
+      commitDialogActive: false, // 是否顯示code diff
+      commitIndex: '',
+      oldCode: '',
+      newCode: ''
     }
   },
   created() {
@@ -309,10 +366,6 @@ public class Main {
         }
       }
     }
-    // markdown
-    // compiledMarkdown() {
-    //   return marked(this.problem.description, { sanitize: true })
-    // }
   },
   mounted() {
     this.checkLogin();
@@ -393,7 +446,7 @@ public class Main {
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
-          console.log(res);
+          // console.log(res);
           this.problem.name = res.result.name;
           this.problem.rate = parseInt(res.result.rate);
           this.problem.type = res.result.type;
@@ -586,7 +639,50 @@ public class Main {
       iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24) //把相差的毫秒數轉換为天數
       console.log(iDays);
       return iDays
+    },
+    seeCommitCode(data) {
+      this.commitIndex = data.index;
+      if(data.index == 0) {
+        this.oldCode = '';
+        this.newCode = data.code;
+      } else {
+        this.oldCode = this.commitTableData[data.index-1].code;
+        this.newCode = data.code;
+      }
+      this.commitDialogActive = true;
     }
   }
 }
 </script>
+
+<style>
+  .commit-hyperlink {
+    color: #303133;
+    text-decoration: none;
+    transition: all .3s ease;
+  }
+
+  .commit-hyperlink:hover {
+    color: #409EFF;
+  }
+
+  /* codeDiff-block */
+  #commitDialog .el-dialog {
+    width: 60vw;
+  }
+
+  .codeDiff-block {
+    padding-bottom: 35px;
+  }
+
+  .back2commit-hyperlink {
+    float: right;
+    color: #303133;
+    text-decoration: none;
+    transition: all .3s ease;
+  }
+
+  .back2commit-hyperlink:hover {
+    color: #409EFF;
+  }
+</style>
