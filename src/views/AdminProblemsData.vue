@@ -57,7 +57,7 @@
                     <el-form-item label="抄襲偵測" style="width: 100%;" id="detectCopyFormItem" v-loading="detectCopyLoading">
                         <span><el-button type="primary" size="small" @click="detectCopy(props.row.problemID)">偵測</el-button></span>
                         <div class="detectCopyTable">
-                          <el-table v-if="props.row.detectCopyResult.length!=0" :data="props.row.detectCopyResult" style="width: 80%" height="250">
+                          <el-table v-if="props.row.detectCopyResult.length!=0" :data="props.row.detectCopyResult" style="width: 80%" height="257">
                             <el-table-column prop="studentOneID" label="學生1學號"></el-table-column>
                             <el-table-column prop="studentOneName" label="學生1姓名"></el-table-column>
                             <el-table-column prop="studentTwoID" label="學生2學號"></el-table-column>
@@ -446,13 +446,7 @@ export default {
                 studentID: id,
                 studentName: name,
                 score: problems[j].score,
-                code: `import java.util.*;
-
-          public class Main {
-              public static void main(String[] args) {
-                  System.out.println("Hello! World!");
-              }
-          }`
+                code: problems[j].code
               };
               tableData.push(obj)
             }
