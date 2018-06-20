@@ -32,23 +32,32 @@
             <template slot-scope="props">
               <el-form label-position="left" inline class="table-expand">
                   <el-form-item label="題目名稱">
-                      <span>{{ props.row.problemName }}</span>
+                    <span>{{ props.row.problemName }}</span>
                   </el-form-item>
                   <el-form-item label="運行時間">
-                      <span>{{ props.row.runTime }} ms</span>
+                    <span>{{ props.row.runTime }} ms</span>
                   </el-form-item>
                   <el-form-item label="題目 ID">
-                      <span>{{ props.row.problemID }}</span>
+                    <span>{{ props.row.problemID }}</span>
                   </el-form-item>
                   <el-form-item label="難易度">
-                      <span><el-rate v-model="props.row.rate" disabled show-score text-color="#ff9900" score-template="{value}"></el-rate></span>
+                    <span><el-rate v-model="props.row.rate" disabled show-score text-color="#ff9900" score-template="{value}"></el-rate></span>
                   </el-form-item>
                   <el-form-item label="正確率">
-                      <span>{{ props.row.correctRate }}%</span>
+                    <span>{{ props.row.correctRate }}%</span>
                   </el-form-item>
                   <el-form-item label="繳交日期">
-                      <span>{{ props.row.handDate }}</span>
+                    <span>{{ props.row.handDate }}</span>
                   </el-form-item>
+                  <!-- TODO -->
+                  <!-- <el-form-item>
+                    <template slot-scope="scope">
+                      <label class="el-form-item__label">提交紀錄</label>
+
+                      <span><a class="commit-hyperlink" href="javascript:void(0);" @click="commitDialogVisible=true">{{scope.row.historyCode.length}} commits</a></span>
+
+                    </template>
+                  </el-form-item> -->
               </el-form>
             </template>
           </el-table-column>

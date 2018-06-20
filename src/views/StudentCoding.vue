@@ -100,7 +100,7 @@
               <el-form-item>
                 <label prop="label" style="margin-right: 10px;">程式碼</label>
                 <!-- new -->
-                <span><a class="commit-hyperlink" href="javascript:void(0);" @click="commitDialogVisible=true"><i class="el-icon-time"></i> 1 commits</a></span>
+                <span><a class="commit-hyperlink" href="javascript:void(0);" @click="commitDialogVisible=true"><i class="el-icon-time"></i> {{commitTableData.length}} commits</a></span>
                 <!-- new -->
                 <el-input readonly :class="isBestCode" type="textarea" v-model="judgedResultForm.code" autosize resize="none"></el-input>
               </el-form-item>
@@ -270,28 +270,7 @@ public class Main {
       },
       // commit dialog
       commitDialogVisible: false,
-      commitTableData: [{
-          index: 0,
-          handDate: '2016-05-02',
-          name: '王小虎',
-          code: 'hi'
-        }, {
-          index: 1,
-          handDate: '2016-05-04',
-          name: '王小虎',
-          code: 'hi123'
-        }, {
-          index: 2,
-          handDate: '2016-05-01',
-          name: '王小虎',
-          code: 'hi123123'
-        }, {
-          index: 3,
-          handDate: '2016-05-03',
-          name: '王小虎',
-          code: 'hi452424'
-        }
-      ],
+      commitTableData: [],
       // code difference
       commitDialogActive: false, // 是否顯示code diff
       commitIndex: '',
@@ -371,6 +350,7 @@ public class Main {
     this.checkLogin();
     this.getProblemData();
     this.checkJudged();
+    this.getHistoryScore();
   },
   methods: {
     checkLogin() {
@@ -558,6 +538,7 @@ public class Main {
             if (res.status == '200') {
               this.problem.judged = true;
               this.getJudgedInfo();
+              this.getHistoryScore();
               // 刷新圓餅圖
               axios.get('/api/problem/getInfo', {
                 params: {
@@ -650,7 +631,34 @@ public class Main {
         this.newCode = data.code;
       }
       this.commitDialogActive = true;
-    }
+    },
+    getHistoryScore() {
+      axios.get('/api/student/historyScore').then((response) => {
+        let res = response.data;
+        // console.log(res.result);
+        if (res.status == '200') {
+          this.commitTableData = []; // 先清空
+          let data = res.result;
+          let problemID = this.problem.id;
+
+          for(let i=0; i<data.length; i++) {
+            if(data[i].problemID == problemID) {
+              let historyCode = data[i].historyCode;
+
+              for(let j=0; j<historyCode.length; j++) {
+                let obj = {
+                  index: j,
+                  handDate: historyCode[j].handDate,
+                  name: '我',
+                  code: historyCode[j].code
+                }
+                this.commitTableData.push(obj);
+              }
+            }
+          }
+        }
+      });
+    },
   }
 }
 </script>

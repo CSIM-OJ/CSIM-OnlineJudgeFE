@@ -56,11 +56,7 @@ export default {
   },
   data() {
     return {
-      feedbackTableData: [{
-        account: '04156147',
-        date: '2018-03-31',
-        feedback: '測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試'
-      }]
+      feedbackTableData: []
     }
   },
   mounted() {
