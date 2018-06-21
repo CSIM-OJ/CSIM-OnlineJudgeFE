@@ -4,10 +4,10 @@ CSIM online judge system front-end based on Vue
 
 
 
-## Feactures
+## Features
 
 * Separate frontend and backend
-* Use <a href="https://github.com/vuejs/vue-cli">Vue-Cli</a> to instructure a single page application (SPA)
+* Use <a href="https://github.com/vuejs/vue-cli">Vue-Cli</a> to structure a single page application (SPA)
 * Use <a href="https://github.com/codemirror/CodeMirror">Codemirror</a> editor which supplies a comfortable coding experience
 * Use <a href="https://github.com/yarnpkg/yarn">yarn</a> to manage dependency
 * Visualization chart
@@ -49,7 +49,7 @@ yarn run build
 
 ## Browser Support
 
-Have better resolution with Google Chrome
+It will have better resolution with Google Chrome
 
 
 
