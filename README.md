@@ -1,21 +1,66 @@
-# csim-oj beta
+# CSIM Online Judge Front-End
 
-> CSIM OJ BETA front-end
+CSIM online judge system front-end based on Vue
 
-## Build Setup
 
-``` bash
+
+## Feactures
+
+* Separate frontend and backend
+* Use <a href="https://github.com/vuejs/vue-cli">Vue-Cli</a> to instructure a single page application (SPA)
+* Use <a href="https://github.com/codemirror/CodeMirror">Codemirror</a> editor which supplies a comfortable coding experience
+* Use <a href="https://github.com/yarnpkg/yarn">yarn</a> to manage dependency
+* Visualization chart
+* Markdown & Katex support
+* Easy to use, easy to understand
+
+
+
+## Implementation
+
+**Environment**：
+
+* Ubuntu 16.04 LTS
+
+* Node 9.4.0
+* Yarn 1.7.0
+* Vue 2.x
+
+**Server**：Nginx 1.10.3 (Ubuntu) 
+
+> Proxy Server
+
+
+
+## Get Started
+
+~~~shell
 # install dependencies
-npm install
+yarn install
 
 # serve with hot reload at localhost:3000
-npm run dev
+yarn run dev
 
 # build for production with minification
-npm run build
+yarn run build
+~~~
 
-# build for production and view the bundle analyzer report
-npm run build --report
-```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+## Screenshots
+
+* Student
+
+  ![Imgur](https://i.imgur.com/l99zjNv.png)
+
+  ![Imgur](https://i.imgur.com/FShBZir.png)
+
+  ![Imgur](https://i.imgur.com/DNv2VeJ.png)
+
+* Admin
+
+  ![Imgur](https://i.imgur.com/qvfPzR3.png)
+
+  ![Imgur](https://i.imgur.com/x38tUcP.png)
+
+  ![Imgur](https://i.imgur.com/J0jQKFg.png)
