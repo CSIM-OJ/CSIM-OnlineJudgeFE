@@ -47,6 +47,12 @@ yarn run build
 
 
 
+## Browser Support
+
+Have better resolution with Google Chrome
+
+
+
 ## Screenshots
 
 * Student
@@ -64,3 +70,9 @@ yarn run build
   ![Imgur](https://i.imgur.com/x38tUcP.png)
 
   ![Imgur](https://i.imgur.com/J0jQKFg.png)
+
+
+
+## License
+
+東吳資管系 © 2018, Ching-Hsuan Su
