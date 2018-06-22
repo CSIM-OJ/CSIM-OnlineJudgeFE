@@ -225,6 +225,7 @@
 <script>
 import axios from 'axios'
 import VueMarkdown from 'vue-markdown'
+import DateUtil from '@/utils/DateUtil.js'
 
 import NavHeaderAdmin from '@/components/NavHeaderAdmin'
 import SideNavAdmin from '@/components/SideNavAdmin'
@@ -266,7 +267,7 @@ export default {
   },
   computed: {
     formatedDeadline() {
-      return this.formatDate(this.problemData.deadline)
+      return DateUtil.formatDate(this.problemData.deadline)
     },
     // markdown
     // compiledMarkdown() {
@@ -324,7 +325,7 @@ export default {
           readWriteList: this.problemData.readWriteList,
           name: this.problemData.name,
           type: this.problemData.type,
-          deadline: this.formatDate(this.problemData.deadline),
+          deadline: DateUtil.formatDate(this.problemData.deadline),
           desc: this.problemData.description,
           inputDesc: this.problemData.input,
           outputDesc: this.problemData.output,
@@ -364,11 +365,6 @@ export default {
           }
         });
       }
-    },
-    formatDate(oriDate) {
-      let d = new Date(oriDate);
-      let date = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
-      return date
     },
     changeBox() {
       console.log(this.problemData.readWriteList);

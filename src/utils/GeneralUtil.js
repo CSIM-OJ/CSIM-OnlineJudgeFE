@@ -1,18 +1,18 @@
 /**
  * Some general functions are used in the CSIM Online Judge system
- * 1. codeCheck(code): Check student's code doesn't have package and have a correct class name. Return flag's boolean and errorMsg
- * 2. copy(content): Copy the content to the clipboard
- *
- * Created by Ching-Hsuan Su on 18/06/22.
-**/
+ * Created by Ching-Hsuan Su on 2018/06/22.
+ */
 
-let GeneralUtil = {
-
-  checkCode(code) {
+export default class GeneralUtil {
+  /**
+   * @desc 檢測學生代碼是否符合可批改的格式 (不含package及有正確的public class name)
+   * @param {string} code 學生的代碼
+   * @return {booean, string} 若代碼有錯誤flag=false, 並會回傳錯誤訊息
+   */
+  static checkCode(code) {
     let flag = true;
     let checkErrorMsg = '';
 
-    // 檢測 package 及 public class name
     let subNewLineCode = code.split('\n');
     subNewLineCode.forEach((line) => {
       let subSpaceLine = line.split(' ');
@@ -32,9 +32,13 @@ let GeneralUtil = {
     });
 
     return { 'flag': flag, 'checkErrorMsg': checkErrorMsg }
-  },
+  }
 
-  copy(content) {
+  /**
+   * @desc 將內容複製進剪貼簿
+   * @param {string} content
+   */
+  static copy(content) {
     var clip_area = document.createElement('textarea');
     clip_area.textContent = content;
 
@@ -46,5 +50,3 @@ let GeneralUtil = {
   }
 
 }
-
-export { GeneralUtil };

@@ -173,8 +173,8 @@ import axios from 'axios'
 import {
   codemirror
 } from 'vue-codemirror-lite'
-import { GeneralUtil } from '@/utils/GeneralUtil.js'
-import { DateUtil } from '@/utils/DateUtil.js'
+import GeneralUtil from '@/utils/GeneralUtil.js'
+import DateUtil from '@/utils/DateUtil.js'
 import VueMarkdown from 'vue-markdown'
 import vueCodeDiff from 'vue-code-diff'
 
@@ -334,7 +334,7 @@ public class Main {
     },
     // 判斷題目是否過期，過期則不給再提交
     isCanDoRepeat() {
-      // 調用外部函示太慢
+      // 調用外部函示渲染太慢
       // return !DateUtil.isOverDate(this.problem.deadline)
 
       let deadline = new Date(this.problem.deadline);

@@ -314,9 +314,9 @@
 <script>
 import axios from 'axios'
 import VueMarkdown from 'vue-markdown'
-import {
-  codemirror
-} from 'vue-codemirror-lite'
+import { codemirror } from 'vue-codemirror-lite'
+import DateUtil from '@/utils/DateUtil.js'
+import GeneralUtil from '@/utils/GeneralUtil.js'
 
 import NavHeaderAdmin from '@/components/NavHeaderAdmin'
 import SideNavAdmin from '@/components/SideNavAdmin'
@@ -634,11 +634,6 @@ export default {
       this.doInfoDianlogNowStudentCode = data.code;
       this.doInfoDialogActiveStudentCode = true;
     },
-    formatDate(oriDate) {
-      let d = new Date(oriDate);
-      let date = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
-      return date
-    },
     editProblem() {
       if (this.editProblemData.name == '') {
         this.$message.error('請填寫題目名稱！');
@@ -667,7 +662,7 @@ export default {
           readWriteList: this.editProblemData.readWriteList,
           name: this.editProblemData.name,
           type: this.editProblemData.type,
-          deadline: this.formatDate(this.editProblemData.deadline),
+          deadline: DateUtil.formatDate(this.editProblemData.deadline),
           desc: this.editProblemData.description,
           inputDesc: this.editProblemData.input,
           outputDesc: this.editProblemData.output,
@@ -711,15 +706,7 @@ export default {
     },
     copy(s) {
       // 複製功能
-      var clip_area = document.createElement('textarea');
-      clip_area.textContent = s;
-
-      document.body.appendChild(clip_area);
-      clip_area.select();
-
-      document.execCommand('copy');
-      clip_area.remove();
-
+      GeneralUtil.copy(s);
       // success msg
       this.$message({
         message: '複製成功',

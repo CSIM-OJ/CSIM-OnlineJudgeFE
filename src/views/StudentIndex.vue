@@ -85,7 +85,7 @@
 <script>
 import axios from 'axios'
 import Countdown from 'vuejs-countdown'
-import { DateUtil } from '@/utils/DateUtil.js'
+import DateUtil from '@/utils/DateUtil.js'
 
 import NavHeaderStudent from '@/components/NavHeaderStudent.vue'
 import NavFooter from '@/components/NavFooter.vue'
