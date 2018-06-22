@@ -85,6 +85,7 @@
 <script>
 import axios from 'axios'
 import Countdown from 'vuejs-countdown'
+import { DateUtil } from '@/utils/DateUtil.js'
 
 import NavHeaderStudent from '@/components/NavHeaderStudent.vue'
 import NavFooter from '@/components/NavFooter.vue'
@@ -180,9 +181,7 @@ export default {
       }
     },
     todayDate() {
-      let date = new Date();
-      let today = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-      return today
+      return DateUtil.getTodayDate()
     }
   },
   mounted() {
@@ -328,21 +327,12 @@ export default {
       this.$router.push('/student/coding?problemID=' + problemID);
     },
     // 兩日期天數差
-    dateDiff(sDate1, sDate2) { //sDate1和sDate2是2018-6-18格式
-      var aDate, oDate1, oDate2, iDays
-      aDate = sDate1.split("-")
-      oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]) //轉換為6-18-2018格式
-      aDate = sDate2.split("-")
-      oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])
-      iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24) //把相差的毫秒數轉換为天數
-      return iDays
+    dateDiff(sDate1, sDate2) {
+      return DateUtil.dateDiff(sDate1, sDate2)
     },
     // 把deadline+1天
     deadlineParse(deadline) {
-      var deadline = new Date(deadline);
-      deadline.setDate(deadline.getDate() + 1);
-      var newDeadline = deadline.getFullYear() + "-" + (deadline.getMonth() + 1) + "-" + deadline.getDate();
-      return newDeadline
+      return DateUtil.nextDayDate(deadline)
     }
   }
 }

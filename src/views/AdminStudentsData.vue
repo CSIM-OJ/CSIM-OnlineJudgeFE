@@ -273,7 +273,7 @@ export default {
       return row[property] === value;
     },
     handleFilterChange(val) {
-      console.log(val);
+      // console.log(val);
       this.filterList = val;
     },
     clearFilter() {

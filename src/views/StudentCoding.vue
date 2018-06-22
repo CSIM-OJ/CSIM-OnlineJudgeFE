@@ -173,6 +173,8 @@ import axios from 'axios'
 import {
   codemirror
 } from 'vue-codemirror-lite'
+import { GeneralUtil } from '@/utils/GeneralUtil.js'
+import { DateUtil } from '@/utils/DateUtil.js'
 import VueMarkdown from 'vue-markdown'
 import vueCodeDiff from 'vue-code-diff'
 
@@ -311,7 +313,6 @@ public class Main {
     },
     // judged form
     isBestCode() {
-      // if judgedResultForm.copy==''
       if (this.judgedResultForm.bestCode == true) {
         return 'success-textarea bestcode'
       }
@@ -333,6 +334,9 @@ public class Main {
     },
     // 判斷題目是否過期，過期則不給再提交
     isCanDoRepeat() {
+      // 調用外部函示太慢
+      // return !DateUtil.isOverDate(this.problem.deadline)
+
       let deadline = new Date(this.problem.deadline);
       deadline.setDate(deadline.getDate() + 1);
       let today = new Date();
@@ -445,15 +449,7 @@ public class Main {
     },
     copy(s) {
       // 複製功能
-      var clip_area = document.createElement('textarea');
-      clip_area.textContent = s;
-
-      document.body.appendChild(clip_area);
-      clip_area.select();
-
-      document.execCommand('copy');
-      clip_area.remove();
-
+      GeneralUtil.copy(s);
       // success msg
       this.$message({
         message: '複製成功',
@@ -495,27 +491,17 @@ public class Main {
     },
     // submit code
     submitCode() {
+      // check code
       let flag = true;
-      let subNewLineCode = this.code.split('\n');
+      let checkErrorMsg = '';
+      let checkResult = GeneralUtil.checkCode(this.code);
+      flag = checkResult.flag;
+      checkErrorMsg = checkResult.checkErrorMsg;
 
-      // 檢測 package 及 public class name
-      subNewLineCode.forEach((line) => {
-        let subSpaceLine = line.split(' ');
-        subSpaceLine.forEach((el, index) => {
-          if (el == 'package') {
-            flag = false;
-            this.$message.error('不能有 package 出現');
-          } else if (el == 'public') {
-            if (subSpaceLine[index + 1] == 'class') {
-              if (subSpaceLine[index + 2] != 'Main') {
-                flag = false;
-                this.$message.error('請將 public class 名稱改成 Main');
-              }
-            }
-          }
-        });
-      });
-
+      if(flag == false) {
+        this.$message.error(checkErrorMsg);
+      }
+      // if code check pass
       if (flag == true) {
         this.$confirm('確認是否要提交代碼？', '提示', {
           confirmButtonText: '確定',
@@ -609,17 +595,6 @@ public class Main {
         codemirror.style.height = '300px';
         chbtn.style.color = '#303133';
       }
-    },
-    // 兩日期天數差
-    dateDiff(sDate1, sDate2) { //sDate1和sDate2是2018-6-18格式
-      var aDate, oDate1, oDate2, iDays
-      aDate = sDate1.split("-")
-      oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]) //轉換為6-18-2018格式
-      aDate = sDate2.split("-")
-      oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])
-      iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24) //把相差的毫秒數轉換为天數
-      console.log(iDays);
-      return iDays
     },
     seeCommitCode(data) {
       this.commitIndex = data.index;
