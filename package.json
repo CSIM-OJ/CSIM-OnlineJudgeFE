@@ -1,7 +1,7 @@
 {
   "name": "csim-oj",
-  "version": "5.0.1",
-  "description": "CSIM OJ BETA front-end",
+  "version": "1.0.0",
+  "description": "CSIM OJ Front-End",
   "author": "蘇靖軒 <music1353@gmail.com>",
   "private": true,
   "scripts": {
