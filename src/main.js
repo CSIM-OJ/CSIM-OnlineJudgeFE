@@ -8,6 +8,9 @@ import 'element-ui/lib/theme-chalk/index.css';
 import locale from 'element-ui/lib/locale/lang/zh-TW'
 import VCharts from 'v-charts'
 import VueProgressBar from 'vue-progressbar'
+import Chat from 'vue-beautiful-chat'
+
+Vue.use(Chat)
 
 Vue.use(VueProgressBar, {
   color: '#409EFF',

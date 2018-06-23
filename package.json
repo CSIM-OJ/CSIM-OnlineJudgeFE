@@ -1,6 +1,6 @@
 {
   "name": "csim-oj",
-  "version": "4.4.3",
+  "version": "5.0.1",
   "description": "CSIM OJ BETA front-end",
   "author": "蘇靖軒 <music1353@gmail.com>",
   "private": true,
@@ -16,6 +16,7 @@
     "json2csv": "^4.0.2",
     "v-charts": "^1.16.8",
     "vue": "^2.5.2",
+    "vue-beautiful-chat": "^1.0.0",
     "vue-code-diff": "^0.0.4",
     "vue-codemirror-lite": "^1.0.4",
     "vue-fab": "^2.1.4",

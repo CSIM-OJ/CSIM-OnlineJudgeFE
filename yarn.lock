@@ -1876,6 +1876,16 @@ elliptic@^6.0.0:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.0"
 
+emoji-datasource@4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/emoji-datasource/-/emoji-datasource-4.0.0.tgz#3fc9c0c2f4fb321d9291138819f6d100603d3e2f"
+
+emoji-js@^3.4.0:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/emoji-js/-/emoji-js-3.4.1.tgz#422cdf184fd818a910289861ead4782db3e8dc8d"
+  dependencies:
+    emoji-datasource "4.0.0"
+
 emojis-list@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/emojis-list/-/emojis-list-2.1.0.tgz#4daa4d9db00f9819880c79fa457ae5b09a1fd389"
@@ -5560,6 +5570,12 @@ vm-browserify@0.0.4:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-0.0.4.tgz#5d7ea45bbef9e4a6ff65f95438e0a87c357d5a73"
   dependencies:
     indexof "0.0.1"
+
+vue-beautiful-chat@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/vue-beautiful-chat/-/vue-beautiful-chat-1.0.0.tgz#81ed09dda67e74bd8a621c213522635de3b4eab5"
+  dependencies:
+    emoji-js "^3.4.0"
 
 vue-clickaway@^2.1.0:
   version "2.2.2"

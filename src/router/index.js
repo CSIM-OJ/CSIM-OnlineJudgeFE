@@ -13,6 +13,7 @@ import AdminNewProblem from '@/views/AdminNewProblem'
 import AdminStudentsData from '@/views/AdminStudentsData'
 import AdminFeedback from '@/views/AdminFeedback'
 import Forum from '@/views/Forum'
+import VueChatTest from '@/views/VueChatTest'
 
 Vue.use(Router)
 
@@ -82,6 +83,11 @@ export default new Router({
       path: '/forum',
       name: 'Forum',
       component: Forum
+    },
+    {
+      path: '/chat',
+      name: 'VueChatTest',
+      component: VueChatTest
     }
   ]
 })
