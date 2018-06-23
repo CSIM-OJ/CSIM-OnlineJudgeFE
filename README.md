@@ -2,6 +2,8 @@
 
 CSIM online judge system front-end based on Vue
 
+[![Vue](https://img.shields.io/badge/vue-2.5.3-blue.svg)](https://github.com/vuejs/vue) [![element-ui](https://img.shields.io/badge/element-2.3.1-blue.svg)](https://github.com/ElemeFE/element) [![Build Status](https://travis-ci.org/music1353/CSIM-Online-Judge.svg?branch=master)](https://travis-ci.org/music1353/CSIM-Online-Judge) 
+
 
 
 ## Features
