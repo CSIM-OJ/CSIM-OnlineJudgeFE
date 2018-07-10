@@ -9,6 +9,10 @@
       <i class="el-icon-menu"></i>
       <span slot="title">新增題目</span>
     </el-menu-item>
+    <el-menu-item index="/admin/studentManage">
+      <i class="fas fa-user"></i>
+      <span slot="title">學生管理</span>
+    </el-menu-item>
     <el-menu-item index="/admin/studentsData">
       <i class="el-icon-document"></i>
       <span slot="title">學生資訊</span>

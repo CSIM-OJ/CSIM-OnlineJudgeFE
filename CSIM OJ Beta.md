@@ -6,32 +6,32 @@
 
      ~~~json
      {
-         "account": "",
-     	"password": "0000",
+         "account": "", // 學生學號
+     	"password": "0000",  // 預設密碼
      	"name": "",
-     	"student_class": "106資一A", // String, 學生系級
-     	"classGroup": "106資一A程式設計", // String, 被分到的群組班級 e.g.104計算機程式設計
-     	"problems": [{ // List[Object], 學生可做的題目
-             "problem_id": "", // String, 題目id
-             "problem_name": "", // String, 題目名稱
-             "type": "", // String, 題目類型
-     		"judged": null, // Boolean, 是否已被批改
-     		"rate": null, // Double, 題目難易度
-     		"code": "", // String, 題目代碼
-             "historyCode": [{ // 歷史提交代碼
-                 "handDate": '', // String, 提交日期
-                 "code": '' // String, 程式碼
+     	"student_class": "", // String, 年度+學生系級 e.g.106資一A
+     	"classGroup": "", // String, 年度+課程名稱 e.g.106計算機程式設計
+     	"studentProblems": [{ // List[Object], 學生所擁有的題目
+             "problemID": "", // String, 題目ID
+             "name": "", // String, 題目名稱
+             "type": "", // String, 題目類型(作業 or 練習題)
+     		"judged": false, // Boolean, 是否已被批改, 預設為false
+     		"rate": 0, // Double, 題目難易度, 預設為0
+     		"code": "", // String, 學生該題的代碼
+             "historyCode": [{ // 學生該題的歷史提交代碼
+                 "handDate": "", // String, 提交日期
+                 "code": "" // String, 程式碼
              }],
-     		"runTime": "", // Double, 程式運行時間
+     		"runTime": 0, // Double, 程式運行時間, 預設為0
      		"errorInfo": "", // String, 程式錯誤訊息
-     		"score": null, // Double, 程式分數
-     		"handDate": "", // String, 做題後當時日期時間
+     		"score": 0, // Double, 程式分數, 預設為0
+     		"handDate": "", // String, 做題後當時日期, e.g. 2018-05-02
              "best": false, // boolean, 是否為最佳程式作答者, 預設為false
-             "bestcode": "", // String, 最佳代碼
-     		"copys":[ // 抄襲相似
-                 { 
-     				"studentID": "", // String, 相似的另個學生學號
-     				"similarity": "" // Double, 相似度
+             "bestcode": "", // String, 學生該題的最佳代碼
+     		"copys":[ // 學生與他人代碼的抄襲, 預設為空陣列
+                 {
+                     "studentID": "", // String, 相似的另個學生學號
+                     "similarity": 0 // Double, 相似度, 預設為0
                  }
               ]
      	}]
@@ -42,9 +42,15 @@
   2. **Admin**：管理員
 
      ~~~json
+     // 預設給助教跟開發人員帳號密碼
      {
          "account": "admin",
          "password": "admin123"
+     }
+     // 預設給教授的帳號密碼
+     {
+         "account": "teacher",
+         "password": "teacher123"
      }
      ~~~
 
@@ -57,13 +63,13 @@
 
        ```json
        {
-           "_id": "",
-           "name": "",
-           "type": "", // String, 題目類型
-           "rate": null, // Double, 題目平均難易度
+           "problemID": "", // String, 題目ID
+           "name": "", // String, 題目名稱
+           "type": "", // String, 題目類型(作業 or 練習題)
+           "rate": 0, // Double, 題目平均難易度, 預設為0
            "desc": "", // String, 題目描述
-           "readFile": null, // Boolean, 是否為讀檔題
-           "writeFile": null, // Boolean, 是否為寫檔題
+           "readFile": false, // Boolean, 是否為讀檔題, 預設為false
+           "writeFile": false, // Boolean, 是否為寫檔題, 預設為false
            "inputDesc": "", // String, 輸入描述
            "outputDesc": "", // String, 輸出描述
            "inputSample1": "", // String, 輸入範例1
@@ -73,20 +79,20 @@
            "inputSample3": "", // String, 特殊輸入範例
            "outputSample3": "", // String, 特殊輸出範例
            "deadline": "", // String, 截止日期
-           "correctNum": null, // Int, 此題正確(滿分)人數
-           "incorrectNum": null, // Int, 此題錯誤(未滿分)人數
-           "correctRate": null, // Double, 正確率
-           "bestcode": { // 最佳代碼（解答）
-               "studentID": "", // String, 學生學號（account）
+           "correctNum": 0, // Int, 此題正確(滿分)人數, 預設為0
+           "incorrectNum": 0, // Int, 此題錯誤(未滿分)人數, 預設為0
+           "correctRate": 0, // Double, 正確率, 預設為0
+           "bestcode": { // 該題的最佳代碼(解答), 只會有一人
+               "studentID": "", // String, 學生學號(account)
                "code": "", // String, 學生代碼
-               "runTime": ""// Double 運行時間
+               "runTime": ""// String, 運行時間
            },
-           "detectCopyResults": [{ // List[Object], 題目總抄襲
+           "detectCopyResults": [{ // List[Object], 該題目總抄襲, 預設為空陣列
                studentOneID: "", // String
                studentOneName: "", // String
                studentTwoID: "", // String
                studentTwoName: "", // String
-               similarity: null // Double, 相似度
+               similarity: 0 // Double, 相似度
            }]
        }
        ```
@@ -96,9 +102,9 @@
 
      ~~~json
      {
-         "account": "",
-         "date": "",
-         "feedback": ""
+         "account": "", // 學生學號
+         "date": "", // 日期, e.g. 2018-05-02
+         "feedback": "" // 回饋內容
      }
      ~~~
 
@@ -106,21 +112,21 @@
 
      ~~~json
      {
-         "dashboardID": "", // ID
-         "onlineNum": 0, // (今日)在線人數/int
-         "activeNum": 0, // (今日)活躍人數，當天頁面訪問次數超過5(看checkLogin呼叫幾次)/int
-         "todayDoNum": 0, // 今日做題次數（今日批改次數)/int
-         "weekDoNum": 0, // 本週做題次數（本週批改次數）/int
-         "onlineData": [{ // 在線與活躍人數線圖（上限：6天）
-             "date": "", // 日期
+         "dashboardID": "", // dashboardID
+         "onlineNum": 0, // (今日)在線人數/int, 預設為0
+         "activeNum": 0, // (今日)活躍人數，當天頁面訪問次數超過5(看checkLogin呼叫幾次)/int, 預設為0
+         "todayDoNum": 0, // 今日做題次數（今日批改次數)/int, 預設為0
+         "weekDoNum": 0, // 本週做題次數（本週批改次數）/int, 預設為0
+         "onlineData": [{ // 在線與活躍人數線圖(上限：6天), 預設為空陣列
+             "date": "", // 日期, e.g. 2018-05-02
              "onlineNum": 0, // 日期當天在線人數/int
              "activeNum": 0, // 日期當天活躍人數/int
          }],
-         "doPerDayData": [{ // 每日做題次數（上限：6天）
-             "date": "", // 日期
-             "doPerDayNum": 0 // 當日做題次數/int
+         "doPerDayData": [{ // 每日做題次數(上限：6天), 預設為空陣列
+             "date": "", // 日期, e.g. 2018-05-02
+             "doPerDayNum": 0 // 當日做題次數/int, 預設為0
          }],
-         "judgeLiveData": [{ // 即時批改實況（上限：10則）
+         "judgeLiveData": [{ // 即時批改實況(上限：10則), 預設為空陣列
              "time": "", // 時間 e.g. 2018-05-02 20:25:00
              "studentID": "", // 學生學號
              "studentName": "", // 學生姓名
@@ -137,7 +143,7 @@
 
 # Restful API
 
-* URL = https://hostname:8080/api/
+* URL = https://hostname:8081/api/
 
 * Response Format
 
@@ -171,7 +177,7 @@
    | ---------- | -------------------------- | ---------------------- | --------------------------------- | ------------------------------------------------------------ |
    | POST       | URL/student/changePassword | 更改密碼               | account, oriPassowrd, newPassword |                                                              |
    | GET        | URL/student/info           | 個人學生資料           |                                   | studentdID, name, student_class, undoNum, doneNum, bestCodeNum, correctNum, incorrectNum |
-   | GET        | URL/student/historyScore   | 學生歷史成績及題目資訊 |                                   | [{problemID, problemName, type, *code, *historyCode, score, handDate, rate, runTime, correctRate, isBestCode(Boolean), copys: [{studentID, similarity}]}] |
+   | GET        | URL/student/historyScore   | 學生歷史成績及題目資訊 |                                   | [{problemID, problemName, type, code, historyCode, score, handDate, rate, runTime, correctRate, isBestCode(Boolean), copys: [{studentID, similarity}]}] |
    | GET        | URL/student/undoAllList    | 學生所有未做題目資料   |                                   | [{problemID, name, type, deadline, rate}]                    |
    | GET        | URL/student/undoHwList     | 學生作業未做題目資料   |                                   | [{problemID, name, type, deadline, rate}]                    |
    | GET        | URL/student/undoPraList    | 學生練習題未做題目資料 |                                   | [{problemID, name, type, deadline, rate}]                    |
@@ -203,7 +209,7 @@
    | POST       | URL/ta/editProblem     | 編輯題目                       | problemID, readWriteList:[] (空 or 讀檔 or 寫檔 or 讀檔、寫檔), name, type, deadline, desc, inputDesc, outputDesc, inputSample1, outputSample1, inputSample2, outputSample2, inputSample3, outSample3 |                                                              |
    | GET        | URL/ta/getProblems     | 取得管轄班級的所有題目相關資訊 |                                                              | [{problemID, name, type, status(判斷是否已過期。可作答、已關閉), undoStudentNum, doneStudentNum, rate, correctRate, deadline, bestStudentID, bestStudentName, bestRunTime, detectCopyResult: [{studentOneID, studentOneName, studentTwoID, studentTwoName, similarity}] (如果沒有就回空List)}] |
    | POST       | URL/ta/deleteProblem   | 助教刪除題目                   | problemID                                                    |                                                              |
-   | GET        | URL/ta/getStudentsData | 取得管轄班級的所有學生成績     |                                                              | studentID, name, class, problems: [{name, score(若未被批改回傳"未作答"), date, type, *code, *historyCode}] |
+   | GET        | URL/ta/getStudentsData | 取得管轄班級的所有學生成績     |                                                              | studentID, name, *class(系級), problems: [{name, score(若未被批改回傳"未作答"), date, type, code, historyCode}] |
    | POST       | URL/ta/judgeCopy       | 判斷抄襲                       | problemID                                                    |                                                              |
    | GET        | URL/ta/getFeedback     | 取得意見回饋內容               |                                                              | [{account, date, feedback}]                                  |
 

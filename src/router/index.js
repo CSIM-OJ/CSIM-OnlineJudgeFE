@@ -10,6 +10,7 @@ import StudentRepositoryProject from '@/views/StudentRepositoryProject'
 import AdminIndex from '@/views/AdminIndex'
 import AdminProblemsData from '@/views/AdminProblemsData'
 import AdminNewProblem from '@/views/AdminNewProblem'
+import AdminStudentManage from '@/views/AdminStudentManage'
 import AdminStudentsData from '@/views/AdminStudentsData'
 import AdminFeedback from '@/views/AdminFeedback'
 import Forum from '@/views/Forum'
@@ -68,6 +69,11 @@ export default new Router({
       path: '/admin/newProblem',
       name: 'AdminNewProblem',
       component: AdminNewProblem
+    },
+    {
+      path: '/admin/studentManage',
+      name: 'AdminStudentManage',
+      component: AdminStudentManage
     },
     {
       path: '/admin/studentsData',

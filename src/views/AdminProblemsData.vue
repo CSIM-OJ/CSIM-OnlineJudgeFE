@@ -90,9 +90,9 @@
               </el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
-                <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">編輯</el-button>
-                <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">刪除</el-button>
-              </template>
+                  <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">編輯</el-button>
+                  <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">刪除</el-button>
+                </template>
               </el-table-column>
             </el-table>
           </div>
