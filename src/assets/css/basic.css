@@ -64,6 +64,13 @@ hr {
   padding-bottom: 20px;
 }
 
+.least-shadow-box {
+  border-radius: 3px;
+  background-color: #FFF;
+  transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+  box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+}
+
 .box {
   padding: 30px;
   margin-bottom: 15px;

@@ -64,5 +64,6 @@
   bottom: 15px;
   width: 100%;
   text-align: center;
-  font-weight: bold;
+  font-weight: 400;
+  color: white;
 }

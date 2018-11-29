@@ -69,7 +69,7 @@
                         <el-input v-model="changePasswordForm.newPassword" style="width: 100%;"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :xs="23" :sm="2" :offset="1" style="margin-top: 48px;">
+                    <el-col :xs="23" :sm="2" :offset="1" style="margin-top: 40px;">
                       <el-button type="primary" @click="onChangePassword">更改密碼</el-button>
                     </el-col>
                   </el-row>

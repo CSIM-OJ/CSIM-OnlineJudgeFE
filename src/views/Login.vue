@@ -6,28 +6,58 @@
         <img src="/static/logo.png" alt="">
         <!-- <span>CSIM OJ</span> -->
       </div>
-      <div class="right-item">
+      <!-- <div class="right-item">
         <el-button type="primary" size="small" @click="dialogFormVisible=true">登入</el-button>
-      </div>
+      </div> -->
     </el-menu>
   </header>
-  <div class="banner">
-    <div class="block">
+  <el-row id="login-card">
+    <el-col :span="10" :offset="7" class="least-shadow-box login-block">
+      <el-row style="height: 100%;">
+        <!-- <el-col :span="9" class="left">
+          <p style="text-align: center; font-weight: bold;">東吳資管線上評測系統</p>
+        </el-col> -->
+        <el-col :span="24" class="right">
+          <el-form :model="loginForm" status-icon label-width="40px" class="loginForm" v-loading="loading" element-loading-text="登入中" label-position="top">
+            <el-row>
+              <el-col :span="18" :offset="3">
+                <p style="margin-bottom: 35px; font-size: 30px; text-align: center;">東吳資管線上評測系統</p>
+                <el-form-item label="帳號" prop="account">
+                  <el-input v-model="loginForm.account"></el-input>
+                </el-form-item>
+                <el-form-item label="密碼" prop="password">
+                  <el-input type="password" v-model="loginForm.password" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-row style="padding-bottom: 30px;">
+                  <el-col :span="24">
+                    <el-button type="primary" @click="login" style="width: 100%;">登入</el-button>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            
+          </el-form>
+        </el-col>
+      </el-row>
+    </el-col>
+  </el-row>
+  <!-- <div class="banner">
+    <div class="block box">
       <p>東吳資管線上評測系統</p>
       <div class="icon">
         <span>CSIM OJ</span>
       </div>
     </div>
-  </div>
+  </div> -->
   <div class="programmer">
     <i class="fas fa-code"></i>&nbsp; 陳冠億、蘇靖軒
   </div>
-  <el-dialog :visible.sync="dialogFormVisible" @close="loginCancel">
+  <!-- <el-dialog :visible.sync="dialogFormVisible" @close="loginCancel">
     <el-form :model="loginForm" status-icon label-width="40px" class="loginForm" v-loading="loading" element-loading-text="登入中">
       <div id="title">登入</div>
       <el-row>
         <el-col :span="14" :offset="5">
-          <el-form-item label="帳號" prop="account">
+          <el-form-item label="帳號" prop="account" style="margin-bottom: 0px !important;">
             <el-input v-model="loginForm.account"></el-input>
           </el-form-item>
           <el-form-item label="密碼" prop="password">
@@ -41,7 +71,7 @@
         </el-col>
       </el-row>
     </el-form>
-  </el-dialog>
+  </el-dialog> -->
 </div>
 </template>
 
@@ -150,3 +180,47 @@ export default {
   }
 }
 </script>
+
+<style>
+#login-card {
+  /* background-color: #909399; */
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  /* background: url('/static/background.png');
+  background-repeat: repeat; */
+  background: url('/static/458653.jpg');
+  background-position:center top;
+  background-size: cover;
+}
+
+#login-card .login-block {
+  height: 70%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+}
+
+#login-card .login-block .left {
+  /* background: rgb(19, 211, 137); */
+  height: 100%;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  background-image: url('/static/2144.jpg');
+  background-size: cover;
+}
+
+#login-card .login-block .right {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.el-form-item__label {
+  padding: 0px !important;
+}
+</style>

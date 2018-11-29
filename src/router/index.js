@@ -21,6 +21,11 @@ Vue.use(Router)
 export default new Router({
   mode: 'history',
   routes: [{
+      path: '/',
+      name: 'Root',
+      component: Login
+    },
+    {
       path: '/login',
       name: 'Login',
       component: Login
