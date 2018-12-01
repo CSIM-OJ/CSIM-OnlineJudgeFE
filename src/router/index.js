@@ -5,12 +5,16 @@ import StudentIndex from '@/views/StudentIndex'
 import StudentScorePanel from '@/views/StudentScorePanel'
 import StudentMypage from '@/views/StudentMypage'
 import StudentCoding from '@/views/StudentCoding'
+import StudentRepository from '@/views/StudentRepository'
+import StudentRepositoryProject from '@/views/StudentRepositoryProject'
 import AdminIndex from '@/views/AdminIndex'
 import AdminProblemsData from '@/views/AdminProblemsData'
 import AdminNewProblem from '@/views/AdminNewProblem'
 import AdminStudentManage from '@/views/AdminStudentManage'
 import AdminStudentsData from '@/views/AdminStudentsData'
 import AdminFeedback from '@/views/AdminFeedback'
+import Forum from '@/views/Forum'
+import VueChatTest from '@/views/VueChatTest'
 
 Vue.use(Router)
 
@@ -47,6 +51,16 @@ export default new Router({
       component: StudentCoding
     },
     {
+      path:'/student/repository',
+      name: 'StudentRepository',
+      component: StudentRepository
+    },
+    {
+      path: '/student/repository/project',
+      name: 'StudentRepositoryProject',
+      component: StudentRepositoryProject
+    },
+    {
       path: '/admin/index',
       name: 'AdminIndex',
       component: AdminIndex
@@ -75,6 +89,16 @@ export default new Router({
       path: '/admin/feedback',
       name: 'AdminFeedback',
       component: AdminFeedback
+    },
+    {
+      path: '/forum',
+      name: 'Forum',
+      component: Forum
+    },
+    {
+      path: '/chat',
+      name: 'VueChatTest',
+      component: VueChatTest
     }
   ]
 })
