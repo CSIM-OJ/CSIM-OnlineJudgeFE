@@ -1,0 +1,37 @@
+<template>
+<div>
+  <el-menu :default-active="$route.path" class="side-navbar" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" style="position: fixed; left:0px; height:100%; width: 15vw; border-right:0px;" router>
+    <el-menu-item index="/teacher/courseList">
+      <i class="fas fa-list"></i>
+      <span slot="title">課程列表</span>
+    </el-menu-item>
+    <el-menu-item index="/teacher/newCourse">
+      <i class="el-icon-menu"></i>
+      <span slot="title">新增課程</span>
+    </el-menu-item>
+    <el-menu-item index="/teacher/editCourse">
+      <i class="fas fa-user"></i>
+      <span slot="title">編輯課程</span>
+    </el-menu-item>
+  </el-menu>
+</div>
+</template>
+
+<script>
+export default {
+  components: {},
+  data() {
+    return {}
+  }
+}
+</script>
+
+<style>
+  .el-menu-item [class^=fas] {
+    margin-right: 5px;
+    width: 24px;
+    text-align: center;
+    font-size: 15px;
+    vertical-align: middle;
+  }
+</style>

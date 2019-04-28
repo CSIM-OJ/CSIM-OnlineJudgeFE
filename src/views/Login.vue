@@ -3,7 +3,7 @@
   <header id="login-navbar" :style="{'box-shadow': navbarBoxShadow}">
     <el-menu class="oj-menu" mode="horizontal" :style="{'background-color': navbarBGC}">
       <div class="logo">
-        <img src="/static/logo.png" alt="">
+        <img src="/static/logo/main.png" alt="">
         <!-- <span>CSIM OJ</span> -->
       </div>
       <!-- <div class="right-item">
@@ -144,10 +144,14 @@ export default {
           if (res.status == "200") {
             // console.log(res.result);
             if (res.result == 'student') {
-              this.$router.push("/student/index");
+              this.$router.push("/student/courseList");
+            } else if (res.result == 'teacher') {
+              this.$router.push("/teacher/courseList");
+            } else if (res.result == 'assistant') {
+              this.$router.push("/assistant/index");
             } else if (res.result == 'admin') {
               this.$router.push("/admin/index");
-            }
+            } 
           } else {
             this.loading = false;
             this.$message.error('帳號或密碼錯誤！');
@@ -170,9 +174,11 @@ export default {
         let res = response.data;
         if (res.status == "200") {
           if (res.result.authority == 'student') {
-            this.$router.push("/student/index");
+            this.$router.push("/student/courseList");
           } else if (res.result.authority == 'admin') {
             this.$router.push("/admin/index");
+          } else if (res.result == 'teacher') {
+            this.$router.push("/teacher/courseList");
           }
         }
       });

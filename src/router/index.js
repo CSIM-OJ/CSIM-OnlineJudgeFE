@@ -1,20 +1,32 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/views/Login.vue'
-import StudentIndex from '@/views/StudentIndex'
-import StudentScorePanel from '@/views/StudentScorePanel'
-import StudentMypage from '@/views/StudentMypage'
-import StudentCoding from '@/views/StudentCoding'
-import StudentRepository from '@/views/StudentRepository'
-import StudentRepositoryProject from '@/views/StudentRepositoryProject'
-import AdminIndex from '@/views/AdminIndex'
-import AdminProblemsData from '@/views/AdminProblemsData'
-import AdminNewProblem from '@/views/AdminNewProblem'
-import AdminStudentManage from '@/views/AdminStudentManage'
-import AdminStudentsData from '@/views/AdminStudentsData'
-import AdminFeedback from '@/views/AdminFeedback'
-import Forum from '@/views/Forum'
-import VueChatTest from '@/views/VueChatTest'
+import StudentCourseList from '@/views/Student/StudentCourseList' 
+import StudentIndex from '@/views/Student/StudentIndex'
+import StudentScorePanel from '@/views/Student/StudentScorePanel'
+import StudentMypage from '@/views/Student/StudentMypage'
+import StudentCoding from '@/views/Student/StudentCoding'
+// import StudentRepository from '@/views/StudentRepository'
+// import StudentRepositoryProject from '@/views/StudentRepositoryProject'
+
+import AdminIndex from '@/views/Admin/AdminIndex'
+import AdminProblemsData from '@/views/Admin/AdminProblemsData'
+import AdminNewProblem from '@/views/Admin/AdminNewProblem'
+import AdminStudentManage from '@/views/Admin/AdminStudentManage'
+import AdminStudentsData from '@/views/Admin/AdminStudentsData'
+import AdminFeedback from '@/views/Admin/AdminFeedback'
+
+import TeacherCourseList from '@/views/Teacher/TeacherCourseList'
+import TeacherNewCourse from '@/views/Teacher/TeacherNewCourse'
+import TeacherEditCourse from '@/views/Teacher/TeacherEditCourse'
+import TeacherCourseIndex from '@/views/Teacher/TeacherCourseIndex'
+import TeacherProblemsData from '@/views/Teacher/TeacherProblemsData'
+import TeacherNewProblem from '@/views/Teacher/TeacherNewProblem'
+import TeacherStudentManage from '@/views/Teacher/TeacherStudentManage'
+import TeacherStudentsData from '@/views/Teacher/TeacherStudentsData'
+import TeacherFeedback from '@/views/Teacher/TeacherFeedback'
+// import Forum from '@/views/Forum'
+// import VueChatTest from '@/views/VueChatTest'
 
 Vue.use(Router)
 
@@ -31,34 +43,29 @@ export default new Router({
       component: Login
     },
     {
-      path: '/student/index',
+      path: '/student/courseList',
+      name: 'StudentCourseList',
+      component: StudentCourseList
+    },
+    {
+      path: '/student/:courseName/index',
       name: 'StudentIndex',
       component: StudentIndex
     },
     {
-      path: '/student/scorePanel',
+      path: '/student/:courseName/scorePanel',
       name: 'StudentScorePanel',
       component: StudentScorePanel
     },
     {
-      path: '/student/mypage',
+      path: '/student/:courseName/mypage',
       name: 'StudentMypage',
       component: StudentMypage
     },
     {
-      path: '/student/coding',
+      path: '/student/:courseName/coding',
       name: 'StudentCoding',
       component: StudentCoding
-    },
-    {
-      path:'/student/repository',
-      name: 'StudentRepository',
-      component: StudentRepository
-    },
-    {
-      path: '/student/repository/project',
-      name: 'StudentRepositoryProject',
-      component: StudentRepositoryProject
     },
     {
       path: '/admin/index',
@@ -91,14 +98,42 @@ export default new Router({
       component: AdminFeedback
     },
     {
-      path: '/forum',
-      name: 'Forum',
-      component: Forum
+      path: '/teacher/courseList',
+      name: 'TeacherCourseList',
+      component: TeacherCourseList
     },
     {
-      path: '/chat',
-      name: 'VueChatTest',
-      component: VueChatTest
+      path: '/teacher/newCourse',
+      component: TeacherNewCourse
+    },
+    {
+      path: '/teacher/editCourse',
+      name: 'TeacherEditCourse',
+      component: TeacherEditCourse
+    },
+    {
+      path: '/teacher/:courseName/index',
+      component: TeacherCourseIndex
+    },
+    {
+      path: '/teacher/:courseName/problemsData',
+      component: TeacherProblemsData
+    },
+    {
+      path: '/teacher/:courseName/newProblem',
+      component: TeacherNewProblem
+    },
+    {
+      path: '/teacher/:courseName/studentManage',
+      component: TeacherStudentManage
+    },
+    {
+      path: '/teacher/:courseName/studentsData',
+      component: TeacherStudentsData
+    },
+    {
+      path: '/teacher/:courseName/feedback',
+      component: TeacherFeedback
     }
   ]
 })

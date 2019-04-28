@@ -30,6 +30,14 @@
   right: 5px;
 }
 
+#problem-section .tags {
+  margin-left: 10px;
+}
+
+#problem-section .tags .el-tag {
+ line-height: 24px;
+}
+
 #problem-section .problem-name .deadline {
   display: block;
   color: #888888;
