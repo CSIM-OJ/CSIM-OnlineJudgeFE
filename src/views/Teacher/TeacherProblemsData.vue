@@ -58,9 +58,9 @@
                         <span><el-button type="primary" size="small" @click="detectCopy(props.row.problemId)">偵測</el-button></span>
                         <div class="detectCopyTable">
                           <el-table v-if="props.row.detectCopyResult.length!=0" :data="props.row.detectCopyResult" style="width: 80%" height="257">
-                            <el-table-column prop="studentOneID" label="學生1學號"></el-table-column>
+                            <el-table-column prop="studentOneId" label="學生1學號"></el-table-column>
                             <el-table-column prop="studentOneName" label="學生1姓名"></el-table-column>
-                            <el-table-column prop="studentTwoID" label="學生2學號"></el-table-column>
+                            <el-table-column prop="studentTwoId" label="學生2學號"></el-table-column>
                             <el-table-column prop="studentTwoName" label="學生2姓名"></el-table-column>
                             <el-table-column prop="similarity" label="相似度"></el-table-column>
                           </el-table>

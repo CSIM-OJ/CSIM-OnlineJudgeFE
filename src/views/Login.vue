@@ -195,7 +195,7 @@ export default {
   position: relative;
   /* background: url('/static/background.png');
   background-repeat: repeat; */
-  background: url('/static/458653.jpg');
+  background: url('/static/3.jpeg');
   background-position:center top;
   background-size: cover;
 }

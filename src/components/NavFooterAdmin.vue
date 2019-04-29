@@ -2,7 +2,7 @@
 <div>
   <footer id="nav-footer-admin">
     <p class="admin-programmer"><i class="fas fa-code"></i>&nbsp; 陳冠億、蘇靖軒</p>
-    <p>CSIM OJ Admin &copy; 2018</p>
+    <p>CSIM OJ Admin &copy; {{ new Date().getFullYear() }}</p>
   </footer>
 </div>
 </template>

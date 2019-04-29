@@ -258,7 +258,7 @@
         </el-col>   -->
       </el-row>
       <el-row>
-        <el-col :span="24">
+        <el-col :span="22" :offset="2">
           <p style="color: #F56C6C; margin-top: 0px;">注意！ 最後一項範例會作為隱藏範例，學生題目中看不見！</p>
         </el-col> 
       </el-row>

@@ -32,7 +32,7 @@
               <el-table-column fixed prop="studentClass" label="系級" width="120"></el-table-column>
               <el-table-column :key="index" v-for="(problem, index) in formThead " :label="problem" width="120">
                 <template slot-scope="scope">
-                  <span>{{ scope.row.problems[index].historyCode.slice(-1)[0].score }}</span>
+                  <span>{{ scope.row.problems[index].historyCode.length!=0?scope.row.problems[index].historyCode.slice(-1)[0].score:'未作答' }}</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -72,7 +72,7 @@
         <el-table max-height="250" :data="dialogStudentData" @filter-change="handleFilterChange" ref="table" style="width: 100%; margin-top: 20px; margin-bottom: 20px;">
           <el-table-column prop="name" label="題目名稱">
           </el-table-column>
-          <el-table-column prop="type" label="題目類型" :filters="[{text: '作業', value: '作業'}, {text: '練習題', value: '練習題'}]" :filter-method="typeFilterHandler">
+          <el-table-column prop="type" label="題目類型" :filters="[{text: '作業', value: '作業'}, {text: '練習題', value: '練習題'}, {text: '討論題', value: '討論題'}]" :filter-method="typeFilterHandler">
           </el-table-column>
           <el-table-column prop="score" label="成績" :filters="[{text: '100', value: '100.0'}, {text: '0', value: '0.0'}, {text: '未作答', value: '未作答'}]" :filter-method="scoreFilterHandler">
           </el-table-column>
@@ -154,7 +154,7 @@ export default {
 
       if (this.filterQuery == '') {
         // pagination
-        this.total= oriTable.length;
+        this.total = oriTable.length;
         return oriTable
       } else {
         for (let i = 0; i < oriTable.length; i++) {
@@ -163,45 +163,61 @@ export default {
           }
         }
         // pagination
-        this.total= filteredTable.length;
+        this.total = filteredTable.length;
         return filteredTable
       }
     },
     // TODO
     dialogStudentData() {
-      let list = [];
+      let problemsList = [];
+      let resultList = [];
       let data = this.tableData;
       for (let i = 0; i < data.length; i++) {
         if (this.dialogStudentId == data[i].studentId) {
-          list = data[i].problems;
+          problemsList = data[i].problems;
+          console.log(problemsList[0].historyCode.slice(-1)[0].score);
 
           // 計算 dialogStudentCorrectRate
           let correct = 0;
           let incorrect = 0;
-          for (let j = 0; j < list.length; j++) {
-            if (list[j].score == 100) {
-              correct++;
-            } else if (list[j].score == 0) {
-              incorrect++;
+          for (let j = 0; j < problemsList.length; j++) {
+            // console.log('length:'+problemsList[j].historyCode.length);
+            if (problemsList[j].historyCode.length > 0) {
+              if (problemsList[j].historyCode.slice(-1)[0].score == 100) {
+                correct++;
+              } else if (problemsList[j].historyCode.slice(-1)[0].score == 0) {
+                incorrect++;
+              }
             }
+            
           }
           this.dialogStudentCorrectRate = ((correct / (correct + incorrect)) * 100).toFixed(1);
 
           // 計算 dialogStudentDoRate
           let done = 0;
           let undo = 0;
-          for (let j = 0; j < list.length; j++) {
-            if (list[j].score == '未作答') {
+          for (let j = 0; j < problemsList.length; j++) {
+            if (problemsList[j].historyCode.length == 0) {
               undo++;
             } else {
               done++;
             }
           }
           this.dialogStudentDoRate = ((done / (done + undo)) * 100).toFixed(1);
+
+          // 處理score
+          for(let i=0; i<problemsList.length; i++) {
+            let obj = {
+              'name': problemsList[i].name,
+              'type': problemsList[i].type,
+              'score': problemsList[i].historyCode.length!=0?problemsList[i].historyCode.slice(-1)[0].score:'未作答'
+            }
+            resultList.push(obj);
+          }
           break;
         }
       }
-      return list
+      return resultList
     }
   },
   methods: {
@@ -283,13 +299,17 @@ export default {
       this.tableData.forEach((el) => {
         var temp = {
           "學號": el.studentId,
-          "姓名": el.name,
-          "班級": el.class
+          "姓名": el.studentName,
+          "班級": el.studentClass
         }
 
         let len = el.problems.length;
         for (var i = 0; i < len; i++) {
-          temp[el.problems[i].name] = el.problems[i].score;
+          if (el.problems[i].historyCode.length > 0) {
+            temp[el.problems[i].name] = el.problems[i].historyCode.slice(-1)[0].score;
+          } else {
+            temp[el.problems[i].name] = '未作答';
+          }
         }
 
         data.push(temp);
