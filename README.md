@@ -26,7 +26,7 @@ CSIM online judge system front-end based on Vue
 
 * Node 9.4.0
 * Yarn 1.7.0
-* Vue 2.x
+* Vue 2.5.2
 
 **Server**：Nginx 1.10.3 (Ubuntu) 
 

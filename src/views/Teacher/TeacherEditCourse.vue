@@ -8,6 +8,7 @@
       <el-aside width="15vw">
         <side-nav-course-list-teacher></side-nav-course-list-teacher>
       </el-aside>
+      <!-- TODO: 編輯課程 -->
       <el-container>
         <el-main>
           <el-row class="admin-page">
@@ -60,7 +61,7 @@ export default {
           } else if (res.result.authority == 'assistant') {
             this.$router.push('/assistant/index');
           } else if (res.result.authority == 'admin') {
-            // this.$router.push('/admin/index');
+            this.$router.push('/admin/index');
           }  
         } else {
           this.$router.push('/login');

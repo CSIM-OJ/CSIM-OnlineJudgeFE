@@ -70,7 +70,7 @@
                       </el-form-item>
                     </el-col>
                     <el-col :xs="23" :sm="2" :offset="1" style="margin-top: 40px;">
-                      <el-button type="primary" @click="onChangePassword">更改密碼</el-button>
+                      <el-button type="primary" @click="changePassword">更改密碼</el-button>
                     </el-col>
                   </el-row>
                 </el-form>
@@ -160,23 +160,7 @@ export default {
         }
       });
     },
-    // TODO: new api
     getStudentInfo() {
-      // axios.get('/api/student/info').then((response) => {
-      //   let res = response.data;
-      //   if(res.status=='200') {
-      //     this.user.name = res.result.name;
-      //     this.user.studentId = res.result.studentId;
-      //     this.user.class = res.result.student_class;
-      //     this.user.bestNum = res.result.bestCodeNum;
-      //     this.user.undoNum = res.result.undoNum;
-      //     this.user.doneNum = res.result.doneNum;
-      //     this.user.correctNum = res.result.correctNum;
-      //     this.user.errorNum = res.result.incorrectNum;
-      //   }
-      // });
-
-      // 新路由
       axios.get('/api/student/info', {
         params: {
           courseId: this.courseInfo.courseId
@@ -195,7 +179,7 @@ export default {
         }
       });
     },
-    onChangePassword() {
+    changePassword() {
       if (this.changePasswordForm.account == '') {
         this.$message.error('請輸入帳號！');
       } else if (this.changePasswordForm.oriPassword == '') {

@@ -123,7 +123,7 @@
       </el-row>
       <el-row>
         <el-col :span="20" :offset="2">
-          <!-- TODO: TAGs -->
+          <!-- TAGs -->
           <el-form-item label="題目標籤">
             <el-tag :key="tag" v-for="tag in editProblemData.tag" closable :disable-transitions="false" @close="handleClose(tag)">
               {{tag}}
@@ -131,12 +131,11 @@
             <el-autocomplete class="input-new-tag" v-if="inputVisible" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" v-model="inputValue" popper-class="my-autocomplete" :fetch-suggestions="querySearch" @select="handleSelect">
               <template slot-scope="{ item }">
                 <div class="name">{{ item.value }}</div>
-                <!-- <span class="addr">{{ item.address }}</span> -->
               </template>
             </el-autocomplete>
             <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
           </el-form-item>
-          <!-- TODO: TAGs -->
+          <!-- TAGs -->
         </el-col>
       </el-row>
       <el-row>
@@ -376,7 +375,6 @@ export default {
       // edit problem dialog
       editProblemDialogVisible: false,
       editProblemLoading: false,
-      // TODO: NEW category & tag[]
       editProblemData: {
         'id': '',
         'name': '',
@@ -391,7 +389,6 @@ export default {
       },
       // problem dialog
       problemDialogVisible: false,
-      // TODO: 
       problemData: {
         'id': '',
         'judged': null,
@@ -439,7 +436,7 @@ export default {
         gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
         readOnly: 'nocursor'
       },
-      // TODO: tags
+      // tags
       inputVisible: false,
       inputValue: '',
       autoCompleteTags: [],
@@ -530,7 +527,7 @@ export default {
           } else if (res.result.authority == 'assistant') {
             this.$router.push('/assistant/index');
           } else if (res.result.authority == 'admin') {
-            // this.$router.push('/admin/index');
+            this.$router.push('/admin/index');
           }  
         } else {
           this.$router.push('/login');
@@ -552,7 +549,6 @@ export default {
         }
       });
     },
-    // TODO: 暫時沒問題
     getProblemsData() {
       this.loading = true;
       axios.get('/api/problem/getProblems', {
@@ -562,13 +558,12 @@ export default {
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
-          console.log(res.result);
+          // console.log(res.result);
           this.tableData = res.result;
           this.loading = false;
         }
       });
     },
-    // TODO: 暫時沒問題
     getStudentsData() {
       axios.get('/api/course/getStudentsData', {
         params: {
@@ -577,19 +572,10 @@ export default {
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
-          console.log(res.result);
+          // console.log(res.result);
           this.studentData = res.result;
         }
       });
-
-      // TODO: new api
-      // axios.get('/api/course/getStudentsData').then((response) => {
-      //   let res = response.data;
-      //   if (res.status == '200') {
-      //     // console.log(res.result);
-      //     this.studentData = res.result;
-      //   }
-      // });
     },
     handleEdit(index, data) {
       this.$confirm('確認是否要編輯此題目？', '提示', {
@@ -598,19 +584,17 @@ export default {
         type: 'info',
         center: true
       }).then(() => {
-        // TODO: 多加 category & tag
+        // 多加 category & tag
         axios.get('/api/problem/getInfo', {
           params: {
             problemId: data.problemId
           }
         }).then((response) => {
           let res = response.data;
-          console.log(res.result);
           if (res.status == '200') {
             this.editProblemData.id = data.problemId;
             this.editProblemData.name = res.result.name;
             this.editProblemData.type = res.result.type;
-            // TODO: 新欄位
             this.editProblemData.category = res.result.category;
             this.editProblemData.tag = res.result.tag;
             this.editProblemData.deadline = res.result.deadline;
@@ -618,7 +602,6 @@ export default {
             this.editProblemData.inputDesc = res.result.inputDesc;
             this.editProblemData.outputDesc = res.result.outputDesc;
             this.editProblemData.testCases = res.result.testCases;
-            console.log(this.editProblemData);
           }
         });
         this.editProblemDialogVisible = true;
@@ -687,7 +670,6 @@ export default {
           this.problemData.id = data.problemId;
           this.problemData.name = res.result.name;
           this.problemData.type = res.result.type;
-          // TODO: new category & tag
           this.problemData.category = res.result.category;
           this.problemData.tag = res.result.tag;
           this.problemData.deadline = res.result.deadline;
@@ -695,10 +677,6 @@ export default {
           this.problemData.inputDescDesc = res.result.inputDesc;
           this.problemData.outputDesc = res.result.outputDesc;
           this.problemData.testCases = res.result.testCases;
-          // this.problemData.inputDescSample1 = res.result.inputSample1.replace(new RegExp(" /n ", "g"), '\n');
-          // this.problemData.outputSample1 = res.result.outputSample1.replace(new RegExp(" /n ", "g"), '\n');
-          // this.problemData.inputDescSample2 = res.result.inputSample2.replace(new RegExp(" /n ", "g"), '\n');;
-          // this.problemData.outputSample2 = res.result.outputSample2.replace(new RegExp(" /n ", "g"), '\n');
           this.problemData.correctNum = parseInt(res.result.correctNum);
           this.problemData.incorrectNum = parseInt(res.result.incorrectNum);
         }
@@ -724,7 +702,10 @@ export default {
       } else if (this.editProblemData.category == '') {
         this.$message.error('請選定題目作答類型！');
       } else if (this.editProblemData.tag.length == 0) {
-        this.$message.error('請至少選擇程式語言的標籤！');
+        this.$message.error('請至少選擇一個標籤！');
+      } // TODO: 至少要有java, py的tag
+        else if (!this.problemData.includes('Java')||!this.problemData.includes('Python')) {
+        this.$message.error('請選擇一種程式語言標籤！');
       } else if (this.editProblemData.deadline == '') {
         this.$message.error('請選定截止日期！');
       } else if (this.editProblemData.description == '') {
@@ -743,7 +724,6 @@ export default {
           problemId: this.editProblemData.id,
           name: this.editProblemData.name,
           type: this.editProblemData.type,
-          // TODO: new
           category: this.editProblemData.category,
           tag: this.editProblemData.tag,
           deadline: DateUtil.formatDate(this.editProblemData.deadline),
@@ -751,12 +731,6 @@ export default {
           inputDesc: this.editProblemData.inputDesc,
           outputDesc: this.editProblemData.outputDesc,
           testCases: this.editProblemData.testCases
-          // inputSample1: this.editProblemData.inputDescSample1.replace(/\n/g, ' /n '),
-          // outputSample1: this.editProblemData.outputSample1.replace(/\n/g, ' /n '),
-          // inputSample2: this.editProblemData.inputDescSample2.replace(/\n/g, ' /n '),
-          // outputSample2: this.editProblemData.outputSample2.replace(/\n/g, ' /n '),
-          // inputSample3: this.editProblemData.inputDescSample3.replace(/\n/g, ' /n '),
-          // outputSample3: this.editProblemData.outputSample3.replace(/\n/g, ' /n ')
         }).then((response) => {
           let res = response.data;
           if (res.status == '200') {
@@ -795,7 +769,7 @@ export default {
         type: 'success'
       });
     },
-    // TODO: tags control methods
+    // tags control methods
     handleClose(tag) {
       this.editProblemData.tag.splice(this.editProblemData.tag.indexOf(tag), 1);
     },
@@ -813,11 +787,11 @@ export default {
       this.inputVisible = false;
       this.inputValue = '';
     },
-    // TODO: tags autocomplete
+    // tags autocomplete
     querySearch(queryString, cb) {
       var autoCompleteTags = this.autoCompleteTags;
       var results = queryString ? autoCompleteTags.filter(this.createFilter(queryString)) : autoCompleteTags;
-      // 调用 callback 返回建议列表的数据
+      // 調用 callback 返回建議列表的數據
       cb(results);
     },
     createFilter(queryString) {
@@ -834,7 +808,6 @@ export default {
       ]
     },
     handleSelect(item) {
-      // this.inputValue = item;
       let inputValue = this.inputValue;
       if (inputValue) {
         this.editProblemData.tag.push(inputValue);

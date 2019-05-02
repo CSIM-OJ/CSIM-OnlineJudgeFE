@@ -25,6 +25,8 @@ import TeacherNewProblem from '@/views/Teacher/TeacherNewProblem'
 import TeacherStudentManage from '@/views/Teacher/TeacherStudentManage'
 import TeacherStudentsData from '@/views/Teacher/TeacherStudentsData'
 import TeacherFeedback from '@/views/Teacher/TeacherFeedback'
+
+import ErrorPage404 from '@/components/ErrorPage404.vue'
 // import Forum from '@/views/Forum'
 // import VueChatTest from '@/views/VueChatTest'
 
@@ -134,6 +136,10 @@ export default new Router({
     {
       path: '/teacher/:courseName/feedback',
       component: TeacherFeedback
+    },
+    {
+      path: '*',
+      component: ErrorPage404
     }
   ]
 })

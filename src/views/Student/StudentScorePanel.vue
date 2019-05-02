@@ -49,15 +49,6 @@
                   <el-form-item label="繳交日期">
                     <span>{{ props.row.historyCode.slice(-1)[0].handDate }}</span>
                   </el-form-item>
-                  <!-- TODO -->
-                  <!-- <el-form-item>
-                    <template slot-scope="scope">
-                      <label class="el-form-item__label">提交紀錄</label>
-
-                      <span><a class="commit-hyperlink" href="javascript:void(0);" @click="commitDialogVisible=true">{{scope.row.historyCode.length}} commits</a></span>
-
-                    </template>
-                  </el-form-item> -->
               </el-form>
             </template>
           </el-table-column>
@@ -208,22 +199,6 @@ export default {
       });
     },
     getStudentInfo() {
-      // axios.get('/api/student/info').then((response) => {
-      //   let res = response.data;
-      //   // console.log(res.result);
-      //   if (res.status == '200') {
-      //     this.user.name = res.result.name;
-      //     this.user.studentId = res.result.studentId;
-      //     this.user.class = res.result.student_class;
-      //     this.user.bestNum = res.result.bestCodeNum;
-      //     this.user.undoNum = res.result.undoNum;
-      //     this.user.doneNum = res.result.doneNum;
-      //     this.user.correctNum = res.result.correctNum;
-      //     this.user.errorNum = res.result.incorrectNum;
-      //   }
-      // });
-
-      // 新路由
       axios.get('/api/student/info', {
         params: {
           courseId: this.courseInfo.courseId
@@ -243,23 +218,6 @@ export default {
       });
     },
     getHistoryScore() {
-      // axios.get('/api/student/historyScore').then((response) => {
-      //   let res = response.data;
-      //   if (res.status == '200') {
-      //     this.tableData = res.result;
-
-      //     // transform to line data
-      //     let data = [];
-      //     this.tableData.forEach((element) => {
-      //       data.push({
-      //         '分數': element.score,
-      //         '題目': element.problemName
-      //       });
-      //     })
-      //     this.transformedLineData = data;
-      //   }
-      // });
-
       axios.get('/api/student/historyScore', {
         params: {
           courseId: this.courseInfo.courseId

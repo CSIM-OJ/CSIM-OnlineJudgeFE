@@ -142,12 +142,6 @@ export default {
     // this.getStudentsData();
   },
   computed: {
-    //form
-    // formThead() {
-    //   return this.tableData[0].problems.map(v => {
-    //     return v.name
-    //   })
-    // },
     tableFiltered() {
       let oriTable = this.tableData;
       let filteredTable = [];
@@ -167,7 +161,6 @@ export default {
         return filteredTable
       }
     },
-    // TODO
     dialogStudentData() {
       let problemsList = [];
       let resultList = [];
@@ -229,17 +222,20 @@ export default {
         let res = response.data;
         if (res.status == "200") {
           if (res.result.authority == 'student') {
-            this.$router.push('/student/index');
-          } else if (res.result.authority == 'admin') {
+            this.$router.push('/student/courseList')
+          } else if (res.result.authority == 'teacher') {
             // pass
-          }
+          } else if (res.result.authority == 'assistant') {
+            this.$router.push('/assistant/index');
+          } else if (res.result.authority == 'admin') {
+            this.$router.push('/admin/index');
+          }  
         } else {
           this.$router.push('/login');
         }
       });
     },
     getCourses() {
-      // TODO: api
       axios.get("/api/teacher/courseList").then((response)=> {
         let res = response.data;
         if(res.status=="200") {
@@ -252,22 +248,13 @@ export default {
         }
       });
     },
-    // TODO
+    // TODO:
     getManageClassGroup() {
       // this.manageClassGroup =
     },
     getStudentsData() {
       this.loading = true;
-      // axios.get('/api/ta/getStudentsData').then((response) => {
-      //   let res = response.data;
-      //   if (res.status == '200') {
-      //     // console.log(res.result);
-      //     this.tableData = res.result;
-      //     this.loading = false;
-      //   }
-      // });
 
-      // TODO: new api
       axios.get('/api/course/getStudentsData', {
         params: {
           courseId: this.courseInfo.courseId
@@ -275,7 +262,6 @@ export default {
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
-          console.log(res.result);
           this.tableData = res.result;
           this.loading = false;
           
@@ -348,7 +334,6 @@ export default {
       return row[property] === value;
     },
     handleFilterChange(val) {
-      // console.log(val);
       this.filterList = val;
     },
     clearFilter() {

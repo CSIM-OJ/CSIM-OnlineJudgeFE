@@ -32,19 +32,6 @@
               <teacher-new-course-step1 v-if="step==1" @goNext1To2="getNext1To2"></teacher-new-course-step1>
               <teacher-new-course-step2 v-if="step==2" @goLast2To1="getLast2to1" @goNext2To3="getNext2To3"></teacher-new-course-step2>
               <teacher-new-course-step3 v-if="step==3" @goLast3To2="getLast3to2" @submit="submit"></teacher-new-course-step3>
-              <!-- <transition name="slide-left">
-                <teacher-new-course-step1 v-if="step==1" class="child-view" @sendValueToParent="getValueFromStep1"></teacher-new-course-step1>
-              </transition>
-              <transition name="slide-left">
-                <teacher-new-course-step2 v-if="step==2" class="child-view" ></teacher-new-course-step2>
-              </transition> -->
-              
-              <!-- 步驟欄位 end -->
-              <!-- <el-button-group style="float: right;">
-                <el-button type="primary" icon="el-icon-arrow-left" v-if="step!=1">上一步</el-button>
-                <el-button type="primary">下一步<i class="el-icon-arrow-right el-icon--right"></i></el-button>
-              </el-button-group> -->
-              
             </el-col>
           </el-row>
         </el-main>
@@ -103,7 +90,7 @@ export default {
           } else if (res.result.authority == 'assistant') {
             this.$router.push('/assistant/index');
           } else if (res.result.authority == 'admin') {
-            // this.$router.push('/admin/index');
+            this.$router.push('/admin/index');
           }  
         } else {
           this.$router.push('/login');
@@ -131,7 +118,6 @@ export default {
     },
     submit(data) {
       this.courseData.taList = data;
-      // TODO: axios 
       axios.post('/api/teacher/createCourse', {
         courseName: this.courseData.courseName,
         semester: this.courseData.semester,

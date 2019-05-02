@@ -51,50 +51,6 @@
             </div>
           </el-col>
         </el-row>
-        <!-- <el-row>
-          <el-col :xs="24" :sm="12">
-            <div class="problem-info">
-              <div class="title">Sample Input 1
-                <a style="cursor: pointer" @click="copy(problem.inputSample1)"><i class="el-icon-document"></i></a>
-              </div>
-              <div class="content">
-                <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="problem.inputSample1" resize="none">
-                </el-input>
-              </div>
-            </div>
-          </el-col>
-          <el-col :xs="24" :sm="12">
-            <div class="problem-info">
-              <div class="title">Sample Output 1</div>
-              <div class="content">
-                <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="problem.outputSample1" resize="none">
-                </el-input>
-              </div>
-            </div>
-          </el-col>
-        </el-row> -->
-        <!-- <el-row>
-          <el-col :xs="24" :sm="12">
-            <div class="problem-info">
-              <div class="title">Sample Input 2
-                <a style="cursor: pointer" @click="copy(problem.inputSample2)"><i class="el-icon-document"></i></a>
-              </div>
-              <div class="content">
-                <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="problem.inputSample2" resize="none">
-                </el-input>
-              </div>
-            </div>
-          </el-col>
-          <el-col :xs="24" :sm="12">
-            <div class="problem-info">
-              <div class="title">Sample Output 2</div>
-              <div class="content">
-                <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="problem.outputSample2" resize="none">
-                </el-input>
-              </div>
-            </div>
-          </el-col>
-        </el-row> -->
       </el-col>
     </el-row>
   </section>
@@ -125,9 +81,7 @@
               </el-row>
               <el-form-item>
                 <label prop="label" style="margin-right: 10px;">程式碼</label>
-                <!-- new -->
                 <span><a class="commit-hyperlink" href="javascript:void(0);" @click="commitDialogVisible=true"><i class="el-icon-time"></i> {{commitTableData.length}} commits</a></span>
-                <!-- new -->
                 <el-input readonly :class="isBestCode" type="textarea" v-model="judgedResultForm.code" autosize resize="none"></el-input>
               </el-form-item>
               <el-form-item label="錯誤訊息" v-if="judgedResultForm.score!='100.0'">
@@ -140,15 +94,6 @@
                     <el-input readonly type="textarea" autosize resize="none" :value="info"></el-input>
                   </el-collapse-item>
                 </el-collapse>
-                <!-- <div v-for="(info, index) in judgedResultForm.errorInfo" :key="index">
-                  <span>樣本 {{index+1}}</span>
-                  <el-input readonly type="textarea" autosize resize="none" :value="info"></el-input>
-                </div> -->
-                <!-- <el-input readonly type="textarea" autosize resize="none" v-model="judgedResultForm.errorInfo">
-                  <span v-for="info in judgedResultForm.errorInfo">
-                    {{info}}
-                  </span>
-                </el-input> -->
               </el-form-item>
             </el-form>
           </el-col>
@@ -408,9 +353,6 @@ public class Main {
   mounted() {
     this.checkLogin();
     this.getCourses();
-    // this.getProblemData();
-    // this.checkJudged();
-    // this.getHistoryScore();
   },
   methods: {
     checkLogin() {
@@ -482,7 +424,6 @@ public class Main {
       });
     },
     getJudgedInfo() {
-      // TODO: 後端還在寫
       axios.get('/api/judge/judgedInfo', {
         params: {
           problemId: this.problem.id
@@ -502,7 +443,6 @@ public class Main {
       });
     },
     getProblemData() {
-      // TODO: 
       axios.get('/api/problem/getInfo', {
         params: {
           problemId: this.problem.id
@@ -531,33 +471,6 @@ public class Main {
       });
     },
     getHistoryScore() {
-      // axios.get('/api/student/historyScore').then((response) => {
-      //   let res = response.data;
-      //   // console.log(res.result);
-      //   if (res.status == '200') {
-      //     this.commitTableData = []; // 先清空
-      //     let data = res.result;
-      //     let problemId = this.problem.id;
-
-      //     for(let i=0; i<data.length; i++) {
-      //       if(data[i].problemId == problemId) {
-      //         let historyCode = data[i].historyCode;
-
-      //         for(let j=0; j<historyCode.length; j++) {
-      //           let obj = {
-      //             index: j,
-      //             handDate: historyCode[j].handDate,
-      //             name: '我',
-      //             code: historyCode[j].code
-      //           }
-      //           this.commitTableData.push(obj);
-      //         }
-      //       }
-      //     }
-      //   }
-      // });
-      
-      // TODO: new api
       axios.get('/api/student/historyScore', {
         params: {
           courseId: this.courseInfo.courseId

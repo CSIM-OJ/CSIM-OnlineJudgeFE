@@ -74,17 +74,20 @@ export default {
         let res = response.data;
         if (res.status == "200") {
           if (res.result.authority == 'student') {
-            this.$router.push('/student/index');
-          } else if (res.result.authority == 'admin') {
+            this.$router.push('/student/courseList')
+          } else if (res.result.authority == 'teacher') {
             // pass
-          }
+          } else if (res.result.authority == 'assistant') {
+            this.$router.push('/assistant/index');
+          } else if (res.result.authority == 'admin') {
+            this.$router.push('/admin/index');
+          }  
         } else {
           this.$router.push('/login');
         }
       });
     },
     getCourses() {
-      // TODO: api
       axios.get("/api/teacher/courseList").then((response)=> {
         let res = response.data;
         if(res.status=="200") {
@@ -99,16 +102,6 @@ export default {
       });
     },
     getStudentFeedback() {
-      // axios.get('/api/ta/getFeedback').then((response)=> {
-      //   let res = response.data;
-      //   if(res.status=='200') {
-      //     this.feedbackTableData = res.result;
-      //   } else {
-      //     console.log(res.msg);
-      //   }
-      // });
-
-      // TODO: new api
       axios.get('/api/feedback/getCourseFeedbacks', {
         params: {
           courseId: this.courseInfo.courseId

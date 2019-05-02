@@ -21,6 +21,7 @@
           </div>
           <el-row>
             <el-col class="undoCol" :span="24" v-loading="undoLoading">
+              <!-- FIXME: transition失效問題 -->
               <transition-group name="slide-fade">
                 <el-col v-for="problem in undoProblemsFiltered" :xs="24" :sm="12" :md="8" :lg="6" :key="problem.problemId" style="padding-right: 23px;">
                   <a href="javascript:void(0);" @click="doProblem(problem.problemId)">
@@ -198,8 +199,6 @@ export default {
   mounted() {
     this.checkLogin();
     this.getCourses();
-    // this.initUndoProblems();
-    // this.initDoneProblems();
   },
   methods: {
     checkLogin() {
@@ -237,15 +236,7 @@ export default {
     },
     initUndoProblems() {
       this.undoLoading = true;
-      // axios.get('/api/student/undoAllList').then((response) => {
-      //   let res = response.data;
-      //   if (res.status == '200') {
-      //     this.undoLoading = false;
-      //     this.undoProblems = res.result;
-      //   }
-      // });
 
-      // 新 route
       axios.get('/api/student/problemInfo', {
         params: {
           courseId: this.courseInfo.courseId,
@@ -262,15 +253,7 @@ export default {
     },
     initDoneProblems() {
       this.doneLoading = true;
-      // axios.get('/api/student/doneAllList').then((response) => {
-      //   let res = response.data;
-      //   if (res.status == '200') {
-      //     this.doneLoading = false;
-      //     this.doneProblems = res.result;
-      //   }
-      // });
 
-      // 新 route
       axios.get('/api/student/problemInfo', {
         params: {
           courseId: this.courseInfo.courseId,
@@ -291,15 +274,7 @@ export default {
         this.initUndoProblems();
       } else if (val == 'homework') {
         this.undoLoading = true;
-        // axios.get('/api/student/undoHwList').then((response) => {
-        //   let res = response.data;
-        //   if (res.status == '200') {
-        //     this.undoLoading = false;
-        //     this.undoProblems = res.result;
-        //   }
-        // });
 
-        // 新 route
         axios.get('/api/student/problemInfo', {
           params: {
             courseId: this.courseInfo.courseId,
@@ -315,15 +290,7 @@ export default {
         });
       } else if (val == 'practice') {
         this.undoLoading = true;
-        // axios.get('/api/student/undoPraList').then((response) => {
-        //   let res = response.data;
-        //   if (res.status == '200') {
-        //     this.undoLoading = false;
-        //     this.undoProblems = res.result;
-        //   }
-        // });
-
-        // 新 route
+        
         axios.get('/api/student/problemInfo', {
           params: {
             courseId: this.courseInfo.courseId,
@@ -344,15 +311,7 @@ export default {
         this.initDoneProblems();
       } else if (val == 'homework') {
         this.doneLoading = true;
-        // axios.get('/api/student/doneHwList').then((response) => {
-        //   let res = response.data;
-        //   if (res.status == '200') {
-        //     this.doneLoading = false;
-        //     this.doneProblems = res.result;
-        //   }
-        // });
-
-        // 新 route
+        
         axios.get('/api/student/problemInfo', {
           params: {
             courseId: this.courseInfo.courseId,
@@ -368,15 +327,7 @@ export default {
         });
       } else if (val == 'practice') {
         this.doneLoading = true;
-        // axios.get('/api/student/donePraList').then((response) => {
-        //   let res = response.data;
-        //   if (res.status == '200') {
-        //     this.doneLoading = false;
-        //     this.doneProblems = res.result;
-        //   }
-        // });
-
-        // 新 route
+        
         axios.get('/api/student/problemInfo', {
           params: {
             courseId: this.courseInfo.courseId,

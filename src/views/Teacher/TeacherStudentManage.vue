@@ -171,7 +171,7 @@ export default {
           } else if (res.result.authority == 'assistant') {
             this.$router.push('/assistant/index');
           } else if (res.result.authority == 'admin') {
-            // this.$router.push('/admin/index');
+            this.$router.push('/admin/index');
           }  
         } else {
           this.$router.push('/login');
@@ -202,11 +202,6 @@ export default {
         let res = response.data;
         if (res.status == '200') {
           for (let i = 0; i < res.result.length; i++) {
-            // let obj = {
-            //   studentId: res.result[i].studentID,
-            //   name: res.result[i].name,
-            //   class: res.result[i].class
-            // }
             let obj = {
               studentId: res.result[i].studentId,
               name: res.result[i].studentName,
@@ -237,14 +232,11 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(this.deleteSelection);
         let delID = []
         for (let i = 0; i < this.deleteSelection.length; i++) {
           delID.push(this.deleteSelection[i].studentId);
         }
-        console.log(delID);
 
-        // TODO: delStudent
         axios.post('/api/teacher/deleteStudentList', {
           courseId: this.courseInfo.courseId,
           accountList: delID
@@ -299,7 +291,6 @@ export default {
       // console.log(this.csvFileData);
     },
     addNewOneStudent() {
-      // TODO: new api
       let tempList = [{
         account: this.newOneStudentForm.account,
         studentName: this.newOneStudentForm.name,
@@ -318,7 +309,6 @@ export default {
           });
           this.newOneStudentForm = {
             account: '',
-            // passowrd: '',
             name: '',
             studentClass: ''
           }
@@ -329,7 +319,7 @@ export default {
     addCsvStudent() {
       // TODO: api
       // append csvFileData
-      console.log(this.csvFileData);
+      // console.log(this.csvFileData);
     },
     csvFormatAlert() {
       this.$alert('account, name, studentClass', 'Csv欄位格式', {

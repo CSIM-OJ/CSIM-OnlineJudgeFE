@@ -12,12 +12,6 @@
         <el-main>
           <el-row class="admin-page">
             <span class="title">{{ this.courseInfo.courseName }}</span>
-            <!-- <div class="breadcrumb">
-              <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/admin/index' }">首頁</el-breadcrumb-item>
-                <el-breadcrumb-item>新增題目</el-breadcrumb-item>
-              </el-breadcrumb>
-            </div> -->
           </el-row>
           <el-row class="box-square">
             <el-row :gutter="25">
@@ -77,7 +71,7 @@ export default {
           } else if (res.result.authority == 'assistant') {
             this.$router.push('/assistant/index');
           } else if (res.result.authority == 'admin') {
-            // this.$router.push('/admin/index');
+            this.$router.push('/admin/index');
           }  
         } else {
           this.$router.push('/login');
