@@ -31,41 +31,41 @@ export default {
 }
 </script>
 
-<style>
-renovation {
-      height: 100vh;
-      position: relative;
-    }
+<style scoped>
+  renovation {
+    height: 100vh;
+    position: relative;
+  }
 
-    .main {
-      text-align: center;
-      position: absolute;
-      top: calc(50% - 100px);
-      left: calc(50% - 75px);
-    }
+  .main {
+    text-align: center;
+    position: absolute;
+    top: calc(50% - 100px);
+    left: calc(50% - 75px);
+  }
 
-    .main img {
-      width: 150px;
-      border-radius: 25px;
-    }
+  .main img {
+    width: 150px;
+    border-radius: 25px;
+  }
 
-    .main .text {
-      font-size: 30px;
-      font-weight: bold;
-      margin-top: 20px;
-    }
+  .main .text {
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 20px;
+  }
 
-    footer {
-      width: 100%;
-      text-align: center;
-      position: fixed;
-      bottom: 20px;
-      color: #909399;
-      font-weight: bold;
-      transition: all .3s ease;
-    }
+  footer {
+    width: 100%;
+    text-align: center;
+    position: fixed;
+    bottom: 20px;
+    color: #909399;
+    font-weight: bold;
+    transition: all .3s ease;
+  }
 
-    footer:hover {
-      color: #409EFF;
-    }
+  footer:hover {
+    color: #409EFF;
+  }
 </style>
