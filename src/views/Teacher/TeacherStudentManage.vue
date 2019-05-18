@@ -39,17 +39,17 @@
                 </div>
               </el-col>
               <el-col class="uploadCsvCol" :span="12">
-                <!-- <el-upload class="upload-demo" ref="upload" drag :action="action" accept=".csv" :on-success="handleSuccess" :file-list="fileList" :limit="limitFileNum" :on-exceed="onexceedFunction">
+                <el-upload class="upload-demo" ref="upload" drag :action="action" accept=".csv" :on-success="handleSuccess" :file-list="fileList" :limit="limitFileNum" :on-exceed="onexceedFunction">
                   <i class="el-icon-upload"></i>
                   <div class="el-upload__text">將csv文件拖到此處，或<em>點擊上傳</em></div>
                   <div class="el-upload__tip" slot="tip">只能上傳csv文件，且不超過500kb
                     <a href="javascript:void(0);" @click="csvFormatAlert" style="color: #909399;"><i class="el-icon-info"></i></a>
                   </div>
-                </el-upload> -->
-                <div style="margin-top: 50px; margin-bottom: 30px;">
+                </el-upload>
+                <!-- <div style="margin-top: 50px; margin-bottom: 30px;">
                   <el-transfer style="display: flex; align-items: center; justify-content: center;" filterable :titles="['未加入班級', '已加入班級']" filter-placeholder="請輸入班級名稱" v-model="value" :data="data" @change="handleChange">
                   </el-transfer>
-                </div>
+                </div> -->
               </el-col>
             </el-row>
           </div>
@@ -132,10 +132,7 @@ export default {
       // new one student dialog
       newOneStudentDialogVisible: false,
       newOneStudentForm: {
-        account: '',
-        // passowrd: '',
-        name: '',
-        studentClass: ''
+        account: ''
       },
       // upload csv
       action: 'https://jsonplaceholder.typicode.com/posts/',
@@ -291,13 +288,9 @@ export default {
       // console.log(this.csvFileData);
     },
     addNewOneStudent() {
-      let tempList = [{
-        account: this.newOneStudentForm.account,
-        studentName: this.newOneStudentForm.name,
-        studentClass: this.newOneStudentForm.studentClass
-      }];
+      let tempList = [this.newOneStudentForm.account];
 
-      axios.post('/teacher/addNewStudentList', {
+      axios.post('/api/teacher/addStudentList', {
         courseId: this.courseInfo.courseId,
         accountList: tempList
       }).then((response) => {
@@ -308,11 +301,10 @@ export default {
             message: '新增學生成功!'
           });
           this.newOneStudentForm = {
-            account: '',
-            name: '',
-            studentClass: ''
+            account: ''
           }
           this.newOneStudentDialogVisible=false;
+          this.getStudentsData();
         }
       });
     },
