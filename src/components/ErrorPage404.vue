@@ -1,12 +1,12 @@
 <template>
 <div>
   <div class="renovation">
-    <div class="main">
+    <div class="error-main">
       <img :src="imgSrc">
       <div class="text">404</div>
     </div>
   </div>
-  <footer>CSIM OJ</footer>
+  <footer id="error-footer">CSIM OJ</footer>
 </div>
 </template>
 
@@ -37,25 +37,25 @@ export default {
     position: relative;
   }
 
-  .main {
+  .error-main {
     text-align: center;
     position: absolute;
     top: calc(50% - 100px);
     left: calc(50% - 75px);
   }
 
-  .main img {
+  .error-main img {
     width: 150px;
     border-radius: 25px;
   }
 
-  .main .text {
+  .error-main .text {
     font-size: 30px;
     font-weight: bold;
     margin-top: 20px;
   }
 
-  footer {
+  #error-footer {
     width: 100%;
     text-align: center;
     position: fixed;
@@ -65,7 +65,7 @@ export default {
     transition: all .3s ease;
   }
 
-  footer:hover {
+  #error-footer:hover {
     color: #409EFF;
   }
 </style>
