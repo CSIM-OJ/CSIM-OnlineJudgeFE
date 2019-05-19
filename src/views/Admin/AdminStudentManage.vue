@@ -243,7 +243,7 @@ export default {
     },
     addNewOneStudent() {
       // TODO
-      axios.post('/ta/addNewOneStudent', {
+      axios.post('/teacher/addStudentList', {
         account: this.newOneStudentForm.account,
         passowrd:this.newOneStudentForm.passowrd,
         name: this.newOneStudentForm.name,

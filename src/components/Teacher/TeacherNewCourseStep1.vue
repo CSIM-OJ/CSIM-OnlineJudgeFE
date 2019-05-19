@@ -1,11 +1,11 @@
 <template>
 <div>
   <div style="margin-top: 50px; text-align: center;">
-    <el-form :model="courseData"  label-position="top">
+    <el-form :model="courseData" label-position="top">
       <el-form-item label="課程名稱">
         <el-input v-model="courseData.courseName" style="width: 50%;"></el-input>
       </el-form-item>
-      <el-form-item label="課程日期">
+      <el-form-item label="課程學期 (ex. 108上)">
         <el-input v-model="courseData.semester" style="width: 50%;"></el-input>
       </el-form-item>
     </el-form>

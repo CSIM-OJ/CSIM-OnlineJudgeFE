@@ -345,7 +345,7 @@ export default {
       } else if (this.problemData.tag.length == 0) {
         this.$message.error('請至少選擇一個標籤！');
       } // TODO: 至少要有java, py的tag
-        else if (!this.problemData.includes('Java')||!this.problemData.includes('Python')) {
+        else if (!(this.problemData.tag.includes('Java')||this.problemData.tag.includes('Python'))) {
         this.$message.error('請選擇一種程式語言標籤！');
       } else if (this.problemData.deadline == '') {
         this.$message.error('請選定截止日期！');

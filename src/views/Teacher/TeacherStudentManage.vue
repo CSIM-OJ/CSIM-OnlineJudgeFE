@@ -69,12 +69,12 @@
           <el-form-item label="學生帳號 (學號)" style="margin-bottom: 5px;">
             <el-input v-model="newOneStudentForm.account"></el-input>
           </el-form-item>
-          <el-form-item label="學生姓名" style="margin-bottom: 5px;">
+          <!-- <el-form-item label="學生姓名" style="margin-bottom: 5px;">
             <el-input v-model="newOneStudentForm.name"></el-input>
           </el-form-item>
           <el-form-item label="學生系級" style="margin-bottom: 5px;">
             <el-input v-model="newOneStudentForm.studentClass"></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <div class="operating-btns" style="margin-bottom: 20px;">
             <el-button @click="newOneStudentDialogVisible=false">取消</el-button>
             <el-button type="primary" @click="addNewOneStudent">確定</el-button>
@@ -305,6 +305,8 @@ export default {
           }
           this.newOneStudentDialogVisible=false;
           this.getStudentsData();
+        } else {
+          this.$message.error('找不到此學號的學生！');
         }
       });
     },

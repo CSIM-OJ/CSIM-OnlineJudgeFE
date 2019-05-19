@@ -177,40 +177,29 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row>
+      <el-row v-for="(sample, index) in editProblemData.testCases" :key="index">
         <el-col :span="9" :offset="2">
-          <el-form-item label="輸入範例1">
-            <el-input type="textarea" rows="5" resize="vertical" v-model="editProblemData.inputDescSample1"></el-input>
+          <el-form-item>
+            <span slot="label">輸入範例{{index+1}} (Input Sample{{index+1}})</span>
+            <el-input type="textarea" rows="5" resize="vertical" v-model="sample.inputSample"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="1">
-          <el-form-item label="輸出範例1">
-            <el-input type="textarea" rows="5" resize="vertical" v-model="editProblemData.outputSample1"></el-input>
+          <el-form-item>
+            <span slot="label">輸出範例{{index+1}} (Output Sample{{index+1}})</span>
+            <el-input type="textarea" rows="5" resize="vertical" v-model="sample.outputSample"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="9" :offset="2">
-          <el-form-item label="輸入範例2">
-            <el-input type="textarea" rows="5" resize="vertical" v-model="editProblemData.inputDescSample2"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="10" :offset="1">
-          <el-form-item label="輸出範例2">
-            <el-input type="textarea" rows="5" resize="vertical" v-model="editProblemData.outputSample2"></el-input>
-          </el-form-item>
-        </el-col>
+        <el-col :span="22" :offset="2">
+          <p style="color: #F56C6C; margin-top: 0px;">注意！ 最後一項範例會作為隱藏範例，學生題目中看不見！</p>
+        </el-col> 
       </el-row>
       <el-row>
-        <el-col :span="9" :offset="2">
-          <el-form-item label="特殊輸入範例">
-            <el-input type="textarea" rows="5" resize="vertical" v-model="editProblemData.inputDescSample3"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="10" :offset="1">
-          <el-form-item label="特殊輸出範例">
-            <el-input type="textarea" rows="5" resize="vertical" v-model="editProblemData.outputSample3"></el-input>
-          </el-form-item>
+        <el-col :span="24" :offset="2">
+          <el-button size="small" type="primary" plain @click="addSample">+ 新增範本</el-button>
+          <el-button size="small" type="danger" plain @click="delSample">- 移除範本</el-button>
         </el-col>
       </el-row>
     </el-form>
@@ -246,7 +235,44 @@
             <div class="title">Output</div>
             <div class="content change-line" v-text="problemData.outputDesc"></div>
           </div>
-          <el-row>
+
+          <el-row v-for="(sample, index) in problemData.testCases" :key="index">
+            <el-col :xs="24" :sm="12">
+              <div class="problem-info">
+                <div class="title">Sample Input {{index+1}}</div>
+                <div class="content">
+                  <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="sample.inputSample" resize="none">
+                  </el-input>
+                </div>
+              </div>
+            </el-col>
+            <el-col :xs="24" :sm="12">
+              <div class="problem-info">
+                <div class="title">Sample Output {{index+1}}</div>
+                <div class="content">
+                  <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="sample.outputSample" resize="none">
+                  </el-input>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
+
+            <!-- <el-col :span="9" :offset="2">
+              <el-form-item>
+                <span slot="label">輸入範例{{index+1}} (Input Sample{{index+1}})</span>
+                <el-input type="textarea" rows="3" resize="none" v-model="sample.inputSample" readonly></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="9" :offset="1">
+              <el-form-item>
+                <span slot="label">輸出範例{{index+1}} (Output Sample{{index+1}})</span>
+                <el-input type="textarea" rows="3" resize="none" v-model="sample.outputSample" readonly></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row> -->
+
+
+          <!-- <el-row>
             <el-col :xs="24" :sm="12">
               <div class="problem-info">
                 <div class="title">Sample Input 1</div>
@@ -285,7 +311,7 @@
                 </div>
               </div>
             </el-col>
-          </el-row>
+          </el-row> -->
         </el-col>
       </el-row>
     </section>
@@ -479,23 +505,25 @@ export default {
         if (flag == 'done') {
           for (let j = 0; j < problems.length; j++) {
             // TODO: new
-            if (problems[j].name==this.doInfoDialogPName && problems[j].historyCode.slice(-1)[0].score!='未作答') {
-              let obj = {
-                studentId: id,
-                studentName: name,
-                score: problems[j].historyCode.slice(-1)[0].score,
-                code: problems[j].historyCode.slice(-1)[0].code
-              };
-              tempTableData.push(obj)
+            if (problems[j].historyCode!=0) {
+              if (problems[j].name==this.doInfoDialogPName && problems[j].historyCode.slice(-1)[0].score!='未作答') {
+                let obj = {
+                  studentId: id,
+                  studentName: name,
+                  score: problems[j].historyCode.slice(-1)[0].score,
+                  code: problems[j].historyCode.slice(-1)[0].code
+                };
+                tempTableData.push(obj)
+              }
             }
           }
         } else if (flag == 'undo') { // 未作答的狀況
           for (let j = 0; j < problems.length; j++) {
-            if (problems[j].name==this.doInfoDialogPName && problems[j].historyCode.slice(-1)[0].score=='未作答') {
+            if (problems[j].name==this.doInfoDialogPName && problems[j].historyCode.length==0) {
               let obj = {
                 studentId: id,
                 studentName: name,
-                code: problems[j].historyCode.slice(-1)[0].code
+                score: '未作答'
               };
               tempTableData.push(obj)
             }
@@ -667,14 +695,15 @@ export default {
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
+          console.log(res.result);
           this.problemData.id = data.problemId;
           this.problemData.name = res.result.name;
           this.problemData.type = res.result.type;
           this.problemData.category = res.result.category;
           this.problemData.tag = res.result.tag;
           this.problemData.deadline = res.result.deadline;
-          this.problemData.description = res.result.desc;
-          this.problemData.inputDescDesc = res.result.inputDesc;
+          this.problemData.description = res.result.description;
+          this.problemData.inputDesc = res.result.inputDesc;
           this.problemData.outputDesc = res.result.outputDesc;
           this.problemData.testCases = res.result.testCases;
           this.problemData.correctNum = parseInt(res.result.correctNum);
@@ -694,6 +723,17 @@ export default {
       this.doInfoDianlogNowStudentCode = data.code;
       this.doInfoDialogActiveStudentCode = true;
     },
+    addSample() {
+      let obj = {
+        'inputSample': '',
+        'outputSample': ''
+      }
+      this.editProblemData.testCases.push(obj);
+      // console.log(this.problemData.testCases);
+    },
+    delSample() {
+      this.editProblemData.testCases.pop();
+    },
     editProblem() {
       if (this.editProblemData.name == '') {
         this.$message.error('請填寫題目名稱！');
@@ -704,7 +744,7 @@ export default {
       } else if (this.editProblemData.tag.length == 0) {
         this.$message.error('請至少選擇一個標籤！');
       } // TODO: 至少要有java, py的tag
-        else if (!this.problemData.includes('Java')||!this.problemData.includes('Python')) {
+        else if (!(this.editProblemData.tag.includes('Java')||this.editProblemData.tag.includes('Python'))) {
         this.$message.error('請選擇一種程式語言標籤！');
       } else if (this.editProblemData.deadline == '') {
         this.$message.error('請選定截止日期！');
