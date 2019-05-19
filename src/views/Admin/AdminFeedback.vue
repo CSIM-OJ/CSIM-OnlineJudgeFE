@@ -84,7 +84,7 @@ export default {
         if(res.status=='200') {
           this.feedbackTableData = res.result;
         } else {
-          console.log(res.msg);
+          // console.log(res.msg);
         }
       });
     }

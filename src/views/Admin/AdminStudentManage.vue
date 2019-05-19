@@ -189,12 +189,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(this.deleteSelection);
         let delID = []
         for (let i = 0; i < this.deleteSelection.length; i++) {
           delID.push(this.deleteSelection[i].studentID);
         }
-        console.log(delID);
 
         // TODO axios
 

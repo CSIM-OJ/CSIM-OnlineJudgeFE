@@ -180,7 +180,6 @@ export default {
     getOnlineData() {
       axios.get('/api/data/getOnlineData').then((response) => {
         let res = response.data;
-        console.log(res.result);
         if (res.status == '200') {
           let rawOnlineData = res.result;
           let transOnlineData = [];

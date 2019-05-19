@@ -104,11 +104,11 @@ export default {
       if (lang == 'Java') {
         this.nowLang = 'Java';
         this.mode = 'text/x-java';
-        console.log('Change lang to' + lang);
+        // console.log('Change lang to' + lang);
       } else if (lang == 'Python') {
         this.nowLang = 'Python';
         this.mode = 'text/x-python';
-        console.log('Change lang to' + lang);
+        // console.log('Change lang to' + lang);
       }
     },
     changeNowTheme(theme) {

@@ -256,62 +256,6 @@
               </div>
             </el-col>
           </el-row>
-
-            <!-- <el-col :span="9" :offset="2">
-              <el-form-item>
-                <span slot="label">輸入範例{{index+1}} (Input Sample{{index+1}})</span>
-                <el-input type="textarea" rows="3" resize="none" v-model="sample.inputSample" readonly></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="9" :offset="1">
-              <el-form-item>
-                <span slot="label">輸出範例{{index+1}} (Output Sample{{index+1}})</span>
-                <el-input type="textarea" rows="3" resize="none" v-model="sample.outputSample" readonly></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row> -->
-
-
-          <!-- <el-row>
-            <el-col :xs="24" :sm="12">
-              <div class="problem-info">
-                <div class="title">Sample Input 1</div>
-                <div class="content">
-                  <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="problemData.inputSample1" resize="none">
-                  </el-input>
-                </div>
-              </div>
-            </el-col>
-            <el-col :xs="24" :sm="12">
-              <div class="problem-info">
-                <div class="title">Sample Output 1</div>
-                <div class="content">
-                  <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="problemData.outputSample1" resize="none">
-                  </el-input>
-                </div>
-              </div>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :xs="24" :sm="12">
-              <div class="problem-info">
-                <div class="title">Sample Input 2</div>
-                <div class="content">
-                  <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="problemData.inputSample2" resize="none">
-                  </el-input>
-                </div>
-              </div>
-            </el-col>
-            <el-col :xs="24" :sm="12">
-              <div class="problem-info">
-                <div class="title">Sample Output 2</div>
-                <div class="content">
-                  <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="problemData.outputSample2" resize="none">
-                  </el-input>
-                </div>
-              </div>
-            </el-col>
-          </el-row> -->
         </el-col>
       </el-row>
     </section>

@@ -91,7 +91,6 @@ export default {
       });
     },
     toProject(projectID) {
-      console.log(projectID);
       this.$router.push('/student/repository/project?projectID=' + projectID);
     }
   }

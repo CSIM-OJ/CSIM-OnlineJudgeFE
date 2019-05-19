@@ -35,22 +35,10 @@ export default {
   methods: {
     getStudentClassList() {
       let tempData = [];
-      // axios.get('/fake/teacher/studentClassList').then((response) => {
-      //   let res = response.data;
-      //   let self = this;
-      //   if(res.status == "200") {
-      //     res.result.forEach((className) => {
-      //       self.data.push({
-      //         label: className,
-      //         key: className
-      //       });
-      //     });
-      //   }
 
       axios.get('/api/teacher/studentClassList').then((response) => {
         let res = response.data;
         let self = this;
-        console.log(res.result);
         if(res.status == "200") {
           res.result.forEach((className) => {
             self.data.push({
@@ -63,7 +51,6 @@ export default {
       });
     },
     handleChange() {
-      console.log(this.value);
       if (this.value.length>1) {
         this.$message.error('只能選取一個班級');
         this.value = [];

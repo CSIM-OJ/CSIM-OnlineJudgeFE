@@ -29,7 +29,7 @@
           <div class="content change-line" v-text="problem.output"></div>
         </div>
         <!-- TODO: new -->
-        <el-row v-for="(item, index) in problem.testCases" :key="index">
+        <el-row v-for="(item, index) in problem.testCases.slice(0, problem.testCases.length-1)" :key="index">
           <el-col :xs="24" :sm="12">
             <div class="problem-info">
               <div class="title">Sample Input {{index+1}}
@@ -430,7 +430,6 @@ public class Main {
         }
       }).then((response) => {
         let res = response.data;
-        console.log(res.result);
         if (res.status == '200') {
           this.judgedResultForm.handDate = res.result.handDate;
           this.judgedResultForm.score = res.result.score;
@@ -450,7 +449,6 @@ public class Main {
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
-          console.log(res.result);
           this.problem.name = res.result.name;
           this.problem.rate = parseInt(res.result.rate);
           this.problem.type = res.result.type;

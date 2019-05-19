@@ -68,7 +68,6 @@ export default {
         }
         list.push(chartData);
       }
-      console.log(list);
       return list
     }
   },
