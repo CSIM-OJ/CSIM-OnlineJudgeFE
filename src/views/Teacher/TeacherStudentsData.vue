@@ -36,15 +36,18 @@
                 </template>
               </el-table-column>
             </el-table>
+            <div style="text-align: center;margin-top: 30px;">
+              <el-pagination background layout="prev, pager, next" :total="total" @current-change="currentChange"></el-pagination>
+            </div>
             <el-row>
               <el-col :span="4" :offset="20">
                 <el-button id="tocsv-btn" type="success" @click="exportCsv">匯出成績 <i class="fas fa-file-excel"></i></el-button>
               </el-col>
             </el-row>
           </div>
-          <div style="text-align: center;margin-top: 30px;">
+          <!-- <div style="text-align: center;margin-top: 30px;">
             <el-pagination background layout="prev, pager, next" :total="total" @current-change="currentChange"></el-pagination>
-          </div>
+          </div> -->
         </el-main>
         <el-footer>
           <nav-footer-admin></nav-footer-admin>
@@ -117,7 +120,8 @@ export default {
       formThead: '',
       // pagination
       total: 0,
-      pagesize:10,
+      tableHeight: null,
+      pagesize: 10,
       currentPage:1,
       // manageClassGroup
       manageClassGroup: '106資一A',
@@ -152,7 +156,7 @@ export default {
         return oriTable
       } else {
         for (let i = 0; i < oriTable.length; i++) {
-          if (oriTable[i].studentId.includes(this.filterQuery) || oriTable[i].name.includes(this.filterQuery)) {
+          if (oriTable[i].studentId.includes(this.filterQuery) || oriTable[i].studentName.includes(this.filterQuery)) {
             filteredTable.push(oriTable[i]);
           }
         }
@@ -168,13 +172,11 @@ export default {
       for (let i = 0; i < data.length; i++) {
         if (this.dialogStudentId == data[i].studentId) {
           problemsList = data[i].problems;
-          console.log(problemsList[0].historyCode.slice(-1)[0].score);
 
           // 計算 dialogStudentCorrectRate
           let correct = 0;
           let incorrect = 0;
           for (let j = 0; j < problemsList.length; j++) {
-            // console.log('length:'+problemsList[j].historyCode.length);
             if (problemsList[j].historyCode.length > 0) {
               if (problemsList[j].historyCode.slice(-1)[0].score == 100) {
                 correct++;
@@ -214,6 +216,15 @@ export default {
     }
   },
   methods: {
+    countTableHeight() {
+      console.log(this.$refs.studentsTable);
+      console.log(parseInt(this.$refs.studentsTable.bodyHeight.height.replace('px', '')));
+
+
+      this.tableHeight = parseInt(this.$refs.studentsTable.bodyHeight.height.replace('px', ''));
+      this.pagesize = this.tableHeight/47;
+      console.log(this.pagesize);
+    },
     currentChange(currentPage) {
       this.currentPage = currentPage;
     },
@@ -245,6 +256,7 @@ export default {
             }
           });
           this.getStudentsData();
+          this.countTableHeight();
         }
       });
     },
