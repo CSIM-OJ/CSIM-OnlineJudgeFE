@@ -22,7 +22,7 @@
           <div class="box-square">
             <el-input class='filterInput' v-model='filterQuery' placeholder='請輸入學號或姓名' clearable><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
             <!-- <el-button plain size="mini" @click="changeTableWidth" class="ctbtn hidden-xs-only"><i class="fas fa-arrows-alt"></i></el-button> -->
-            <el-table :data="tableFiltered.slice((currentPage-1)*pagesize,currentPage*pagesize)" border style="width: 100%" ref="studentsTable" v-loading="loading" height="80vh">
+            <el-table :data="tableFiltered.slice((currentPage-1)*pagesize, currentPage*pagesize)" border style="width: 100%" ref="studentsTable" v-loading="loading" height="80vh">
               <el-table-column fixed prop="studentId" label="學號" width="120"></el-table-column>
               <el-table-column fixed label="姓名" width="120">
                 <template slot-scope="scope">
@@ -37,7 +37,7 @@
               </el-table-column>
             </el-table>
             <div style="text-align: center;margin-top: 30px;">
-              <el-pagination background layout="prev, pager, next" :total="total" @current-change="currentChange"></el-pagination>
+              <el-pagination background layout="prev, pager, next" :total="total" @current-change="currentChange" :page-size="pagesize"></el-pagination>
             </div>
             <el-row>
               <el-col :span="4" :offset="20">
@@ -217,13 +217,8 @@ export default {
   },
   methods: {
     countTableHeight() {
-      console.log(this.$refs.studentsTable);
-      console.log(parseInt(this.$refs.studentsTable.bodyHeight.height.replace('px', '')));
-
-
       this.tableHeight = parseInt(this.$refs.studentsTable.bodyHeight.height.replace('px', ''));
       this.pagesize = this.tableHeight/47;
-      console.log(this.pagesize);
     },
     currentChange(currentPage) {
       this.currentPage = currentPage;
