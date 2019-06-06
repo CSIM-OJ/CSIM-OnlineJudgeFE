@@ -20,6 +20,9 @@
             </div>
           </el-row>
           <el-row class="box-square">
+            <el-col :span="20" :offset="2" style="margin-bottom: 10px;">
+              <el-button type="warning" icon="fas fa-book" round @click="viewProblemBank"> 從題庫匯入</el-button>
+            </el-col>
             <el-col :span="20" :offset="2">
               <el-form :model="problemData" label-width="100px" label-position="top">
                 <el-row>
@@ -134,13 +137,14 @@
       </el-container>
     </el-container>
   </el-container>
+
   <!-- 確認題目 dialog start -->
   <el-dialog id="confirmProblemDialog" title="確認題目" :visible.sync="dialogFormVisible" v-loading="loading">
     <el-form :model="form">
       <el-row>
         <el-col :span="20" :offset="2">
           <el-form-item label="題目作答類型">
-            <el-radio-group v-model="problemData.category">
+            <el-radio-group v-model="problemData.category" disabled>
               <el-radio label="輸入輸出" border>輸入輸出</el-radio>
               <el-radio label="輸入寫檔" border>輸入寫檔</el-radio>
               <el-radio label="讀檔輸出" border>讀檔輸出</el-radio>
@@ -227,6 +231,101 @@
     </div>
   </el-dialog>
   <!-- 確認題目 dialog end -->
+
+  <!-- FIXME: 題庫 dialog start -->
+  <el-dialog id="problemBankDialog" title="題庫列表" :visible.sync="problemBankDialogVisible" @close="viewProblemActive=false;problemTagValue = [];">
+    <!-- FIXME: search select -->
+    <div v-if="viewProblemActive==false">
+      <el-select id="problemTagSelector" v-model="problemTagValue" multiple filterable allow-create default-first-option placeholder="請選擇題目標籤">
+        <el-option-group
+          v-for="group in problemTagOptions"
+          :key="group.label"
+          :label="group.label">
+          <el-option
+            v-for="item in group.options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-option-group>
+      </el-select>
+      <el-table :data="tableFiltered" style="width: 100%;">
+        <el-table-column label="題目 ID" prop="id"></el-table-column>
+        <el-table-column label="題目名稱" prop="name"></el-table-column>
+        <el-table-column label="題目類型" prop="category"></el-table-column>
+        <el-table-column label="標籤">
+          <template slot-scope="scope">
+            <span v-for="t in scope.row.tag" style="margin-right: 5px;">
+              <el-tag>{{t}}</el-tag>
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button size="mini" @click="viewProblem(scope.row)">檢視</el-button>
+            <el-button size="mini" type="primary" @click="importProblem(scope.row)">匯入</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div style="text-align: center; margin-top: 30px; padding-bottom: 30px;">
+        <el-pagination background layout="prev, pager, next" :total="total" @current-change="currentChange"></el-pagination>
+      </div>
+    </div>
+
+    <section id="problem-section" v-else style="padding-bottom: 50px;">
+      <el-row>
+        <el-col :span="20" :offset="2">
+          <div class="problem-name">
+            <span v-text="quesData.name"></span>
+            <span v-text="quesData.id" style="font-size: 16px; color: #909399; font-weight: 500;"></span>
+            <span class="tags" v-for="tag in quesData.tag">
+              <el-tag size="small">{{ tag }}</el-tag>
+            </span>
+          </div>
+          <hr>
+          <div class="problem-info">
+            <div class="title">Description</div>
+            <div id="markdown-editor">
+              <vue-markdown class="content" :source="quesData.description"></vue-markdown>
+            </div>
+          </div>
+          <div class="problem-info">
+            <div class="title">Input</div>
+            <div class="content change-line" v-text="quesData.inputDesc"></div>
+          </div>
+          <div class="problem-info">
+            <div class="title">Output</div>
+            <div class="content change-line" v-text="quesData.outputDesc"></div>
+          </div>
+          <el-row v-for="(sample, index) in quesData.testCases" :key="index">
+            <el-col :xs="24" :sm="12">
+              <div class="problem-info">
+                <div class="title">Sample Input {{index+1}}</div>
+                <div class="content">
+                  <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="sample.inputSample" resize="none">
+                  </el-input>
+                </div>
+              </div>
+            </el-col>
+            <el-col :xs="24" :sm="12">
+              <div class="problem-info">
+                <div class="title">Sample Output {{index+1}}</div>
+                <div class="content">
+                  <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="sample.outputSample" resize="none">
+                  </el-input>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-button style="float:right;" type="primary" @click="importProblemFromCxt">匯 入</el-button>
+            <el-button style="float:right; margin-right: 20px;" @click="viewProblemActive=false">返 回</el-button>
+          </el-row>
+        </el-col>
+      </el-row>
+    </section>
+  </el-dialog>
+  <!-- 題庫 dialog end -->
 </div>
 </template>
 
@@ -260,9 +359,7 @@ export default {
         'semester': ''
       },
       dialogFormVisible: false,
-      // 讀寫檔checkbox
       problemData: {
-        // 'readWriteList': [], // TODO: 刪除
         'name': '',
         'type': '',
         'category': '', // TODO: 輸入輸出、...
@@ -281,12 +378,42 @@ export default {
       inputValue: '',
       autoCompleteTags: [],
       // loading
-      loading: false
+      loading: false,
+      // FIXME: problemBank Dialog
+      problemBankDialogVisible: false,
+      quesList: [],
+      viewProblemActive: false,
+      quesData: [],
+      // pagination
+      total: 0,
+      pagesize: 10,
+      currentPage: 1,
+      // FIXME: tag selector
+      problemTagOptions: [{
+        label: '程式語言',
+        options: [{
+          value: 'Java',
+          label: 'Java'
+        }, {
+          value: 'Python',
+          label: 'Python'
+        }]
+      }, {
+        label: '題目類型',
+        options: [{
+          value: '條件',
+          label: '條件'
+        }, {
+          value: '迴圈',
+          label: '迴圈'
+        }]
+      }],
+      problemTagValue: []
     }
   },
   computed: {
     formatedDeadline() {
-      return DateUtil.formatDate(this.problemData.deadline)
+      return DateUtil.formatDate(this.problemData.deadline);
     },
     // markdown
     // compiledMarkdown() {
@@ -297,6 +424,28 @@ export default {
     this.checkLogin();
     this.getCourses();
     this.autoCompleteTags = this.loadAll();
+  },
+  computed: {
+    tableFiltered() {
+      let oriTable = this.quesList;
+      let filteredTable = [];
+
+      if (this.problemTagValue.length==0) {
+        this.total= oriTable.length; // pagination
+        return oriTable;
+      } else {
+        for (let i=0; i<oriTable.length; i++) {
+          let theSet = new Set(oriTable[i].tag); // 此題tag的set
+          let intersect = this.problemTagValue.filter(x => theSet.has(x)); // problemTagValue與theSet的交集
+
+          if (this.problemTagValue.sort().toString()==intersect.sort().toString()) { // 比對problemTagValue跟交集的array是否相同
+            filteredTable.push(oriTable[i]);
+          }
+        }
+        this.total= filteredTable.length; // pagination
+        return filteredTable;
+      }
+    },
   },
   methods: {
     //markdown
@@ -459,6 +608,71 @@ export default {
     },
     delSample() {
       this.problemData.testCases.pop();
+    },
+    // FIXME: problemBank Dialog
+    currentChange(currentPage) {
+      this.currentPage = currentPage;
+    },
+    viewProblemBank() {
+      this.problemBankDialogVisible = true;
+      axios.get('/api/problemBank/getAllProblem').then((response) => {
+        let res = response.data;
+        if (res.status == '200') {
+          this.quesList = res.result;
+        }
+      });
+    },
+    viewProblem(data) {
+      axios.get('/api/problemBank/getProblemInfo', {
+        params: {
+          id: data.id
+        }
+      }).then((response) => {
+        let res = response.data;
+        if (res.status == '200') {
+          this.quesData = res.result;
+          this.quesData.id = data.id;
+        }
+      });
+      this.viewProblemActive = true;
+    },
+    importProblem(data) {
+      axios.get('/api/problemBank/getProblemInfo', {
+        params: {
+          id: data.id
+        }
+      }).then((response) => {
+        let res = response.data;
+        if (res.status == '200') {
+          this.problemData.name = res.result.name;
+          this.problemData.category = res.result.category;
+          this.problemData.tag = res.result.tag;
+          this.problemData.description = res.result.description;
+          this.problemData.inputDesc = res.result.inputDesc;
+          this.problemData.outputDesc = res.result.outputDesc;
+          this.problemData.testCases = res.result.testCases;
+
+          this.$message({type: 'success',message: '匯入成功!'});
+          this.problemBankDialogVisible = false;
+          this.viewProblemActive = false;
+          this.problemTagValue = [];
+        }
+      });
+    },
+    importProblemFromCxt() {
+      this.problemData.name = this.quesData.name;
+      this.problemData.category = this.quesData.category;
+      this.problemData.tag = this.quesData.tag;
+      this.problemData.description = this.quesData.description;
+      this.problemData.inputDesc = this.quesData.inputDesc;
+      this.problemData.outputDesc = this.quesData.outputDesc;
+      this.problemData.testCases = this.quesData.testCases;
+
+      this.$message({type: 'success',message: '匯入成功!'});
+      this.problemBankDialogVisible = false;
+      this.viewProblemActive = false;
+      this.problemTagValue = [];
+      this.quesData = [];
     }
   }
 }

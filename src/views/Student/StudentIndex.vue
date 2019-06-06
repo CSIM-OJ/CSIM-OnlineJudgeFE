@@ -21,11 +21,10 @@
           </div>
           <el-row>
             <el-col class="undoCol" :span="24" v-loading="undoLoading">
-              <!-- FIXME: transition失效問題 -->
               <transition-group name="slide-fade">
                 <el-col v-for="problem in undoProblemsFiltered" :xs="24" :sm="12" :md="8" :lg="6" :key="problem.problemId" style="padding-right: 23px;">
                   <a href="javascript:void(0);" @click="doProblem(problem.problemId)">
-                    <el-card :body-style="{ padding: '5px' }">
+                    <el-card :body-style="{ padding: '5px' }" shadow="hover">
                       <div style="padding: 14px;">
                         <span class="title ellipsis">{{ problem.name }}
                           <el-tooltip class="item" effect="dark" :content="'繳交期限: '+problem.deadline" placement="top"><i class="el-icon-time time"></i></el-tooltip>

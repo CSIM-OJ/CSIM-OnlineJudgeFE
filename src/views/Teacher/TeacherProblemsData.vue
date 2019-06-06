@@ -20,9 +20,6 @@
             </div>
           </el-row>
           <div class="box-square">
-            <!-- <div class="manageClassGroup">
-              <el-tag>{{ manageClassGroup }}</el-tag>
-            </div> -->
             <el-input class='filterInput' v-model='filterQuery' placeholder='請輸入題目ID或名稱' clearable><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
             <el-table :data="tableFiltered.slice((currentPage-1)*pagesize,currentPage*pagesize)" style="width: 100%" v-loading="loading">
               <el-table-column type="expand">
@@ -106,9 +103,69 @@
       </el-container>
     </el-container>
   </el-container>
+  
+  <!-- view problem dialog start -->
+  <el-dialog id="viewProblemDialog" :visible.sync="problemDialogVisible" v-loading="loading">
+    <section id="problem-section">
+      <el-row>
+        <el-col :span="20" :offset="2">
+          <div class="problem-name">
+            <span v-text="problemData.name"></span>
+            <span v-text="problemData.id" style="font-size: 16px; color: #909399; font-weight: 500;"></span>
+            <span class="tags" v-for="tag in problemData.tag">
+              <el-tag size="small">{{ tag }}</el-tag>
+            </span>
+            <span class="type" v-text="problemData.type"></span>
+            <span class="deadline" v-text="problemData.deadline"></span>
+          </div>
+          <hr>
+          <div class="problem-info">
+            <div class="title">Description</div>
+            <div id="markdown-editor">
+              <vue-markdown class="content" :source="problemData.description"></vue-markdown>
+            </div>
+          </div>
+          <div class="problem-info">
+            <div class="title">Input</div>
+            <div class="content change-line" v-text="problemData.inputDesc"></div>
+          </div>
+          <div class="problem-info">
+            <div class="title">Output</div>
+            <div class="content change-line" v-text="problemData.outputDesc"></div>
+          </div>
+
+          <el-row v-for="(sample, index) in problemData.testCases" :key="index">
+            <el-col :xs="24" :sm="12">
+              <div class="problem-info">
+                <div class="title">Sample Input {{index+1}}</div>
+                <div class="content">
+                  <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="sample.inputSample" resize="none">
+                  </el-input>
+                </div>
+              </div>
+            </el-col>
+            <el-col :xs="24" :sm="12">
+              <div class="problem-info">
+                <div class="title">Sample Output {{index+1}}</div>
+                <div class="content">
+                  <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="sample.outputSample" resize="none">
+                  </el-input>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
+        </el-col>
+      </el-row>
+    </section>
+    <div slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="problemDialogVisible=false">確 定</el-button>
+    </div>
+  </el-dialog>
+  <!-- view problem dialog end -->
+
   <!-- edit problem dialog start -->
   <el-dialog id="editProblemDialog" :visible.sync="editProblemDialogVisible" v-loading="editProblemLoading">
-    <el-form :model="form" >
+    <el-form>
       <el-row>
         <el-col :span="20" :offset="2">
           <el-form-item label="題目作答類型">
@@ -209,61 +266,7 @@
     </div>
   </el-dialog>
   <!-- edit problem dialog end -->
-  <!-- problem dialog start -->
-  <el-dialog id="viewProblemDialog" :visible.sync="problemDialogVisible" v-loading="loading">
-    <section id="problem-section">
-      <el-row>
-        <el-col :span="20" :offset="2">
-          <div class="problem-name">
-            <span v-text="problemData.name"></span>
-            <span v-text="problemData.id" style="font-size: 16px; color: #909399; font-weight: 500;"></span>
-            <span class="type" v-text="problemData.type"></span>
-            <span class="deadline" v-text="problemData.deadline"></span>
-          </div>
-          <hr>
-          <div class="problem-info">
-            <div class="title">Description</div>
-            <div id="markdown-editor">
-              <vue-markdown class="content" :source="problemData.description"></vue-markdown>
-            </div>
-          </div>
-          <div class="problem-info">
-            <div class="title">Input</div>
-            <div class="content change-line" v-text="problemData.inputDesc"></div>
-          </div>
-          <div class="problem-info">
-            <div class="title">Output</div>
-            <div class="content change-line" v-text="problemData.outputDesc"></div>
-          </div>
 
-          <el-row v-for="(sample, index) in problemData.testCases" :key="index">
-            <el-col :xs="24" :sm="12">
-              <div class="problem-info">
-                <div class="title">Sample Input {{index+1}}</div>
-                <div class="content">
-                  <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="sample.inputSample" resize="none">
-                  </el-input>
-                </div>
-              </div>
-            </el-col>
-            <el-col :xs="24" :sm="12">
-              <div class="problem-info">
-                <div class="title">Sample Output {{index+1}}</div>
-                <div class="content">
-                  <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="sample.outputSample" resize="none">
-                  </el-input>
-                </div>
-              </div>
-            </el-col>
-          </el-row>
-        </el-col>
-      </el-row>
-    </section>
-    <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="problemDialogVisible=false">確 定</el-button>
-    </div>
-  </el-dialog>
-  <!-- problem dialog end -->
   <!-- done & undo dialog start -->
   <el-dialog :visible.sync="doInfoDialogVisible" @close="doInfoDialogActiveStudentCode=false;">
     <el-row v-if="doInfoDialogActiveStudentCode==false">
@@ -333,8 +336,8 @@ export default {
       },
       // pagination
       total: 0,
-      pagesize:10,
-      currentPage:1,
+      pagesize: 10,
+      currentPage: 1,
       // manageClassGroup
       manageClassGroup: '106資一A',
       // table
@@ -421,8 +424,7 @@ export default {
       let filteredTable = [];
 
       if (this.filterQuery == '') {
-        // pagination
-        this.total= oriTable.length;
+        this.total= oriTable.length; // pagination
         return oriTable
       } else {
         for (let i = 0; i < oriTable.length; i++) {
@@ -430,8 +432,7 @@ export default {
             filteredTable.push(oriTable[i]);
           }
         }
-        // pagination
-        this.total= filteredTable.length;
+        this.total= filteredTable.length; // pagination
         return filteredTable
       }
     },
@@ -448,7 +449,6 @@ export default {
         // 已作答的狀況
         if (flag == 'done') {
           for (let j = 0; j < problems.length; j++) {
-            // TODO: new
             if (problems[j].historyCode!=0) {
               if (problems[j].name==this.doInfoDialogPName && problems[j].historyCode.slice(-1)[0].score!='未作答') {
                 let obj = {
@@ -482,7 +482,7 @@ export default {
     this.getCourses();
     // this.getProblemsData();
     // this.getStudentsData();
-    this.autoCompleteTags = this.loadAll();
+    this.autoCompleteTags = this.loadAll(); // tags
   },
   methods: {
     currentChange(currentPage) {
@@ -694,7 +694,7 @@ export default {
         this.$message.error('請選定截止日期！');
       } else if (this.editProblemData.description == '') {
         this.$message.error('請填寫題目說明！');
-      } else if (this.editProblemData.inputDescDesc == '') {
+      } else if (this.editProblemData.inputDesc == '') {
         this.$message.error('請填寫題目輸入說明！');
       } else if (this.editProblemData.outputDesc == '') {
         this.$message.error('請填寫題目輸出說明！');

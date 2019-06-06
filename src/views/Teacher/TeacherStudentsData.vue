@@ -162,6 +162,7 @@ export default {
         }
         // pagination
         this.total = filteredTable.length;
+        this.currentPage = 1;
         return filteredTable
       }
     },

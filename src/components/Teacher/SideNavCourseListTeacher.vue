@@ -13,6 +13,10 @@
       <i class="fas fa-user"></i>
       <span slot="title">編輯課程</span>
     </el-menu-item>
+    <el-menu-item @click="toQuesBank">
+      <i class="fas fa-book"></i>
+      <span slot="title">題庫系統</span>
+    </el-menu-item>
   </el-menu>
 </div>
 </template>
@@ -22,6 +26,11 @@ export default {
   components: {},
   data() {
     return {}
+  },
+  methods: {
+    toQuesBank() {
+      window.open('/ques/index', '_blank');
+    }
   }
 }
 </script>

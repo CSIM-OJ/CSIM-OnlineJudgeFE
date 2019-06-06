@@ -177,7 +177,7 @@ export default {
             this.$router.push("/student/courseList");
           } else if (res.result.authority == 'admin') {
             this.$router.push("/admin/index");
-          } else if (res.result == 'teacher') {
+          } else if (res.result.authority == 'teacher') {
             this.$router.push("/teacher/courseList");
           }
         }

@@ -26,6 +26,9 @@ import TeacherStudentManage from '@/views/Teacher/TeacherStudentManage'
 import TeacherStudentsData from '@/views/Teacher/TeacherStudentsData'
 import TeacherFeedback from '@/views/Teacher/TeacherFeedback'
 
+import QuesIndex from '@/views/Ques/QuesIndex'
+import QuesNewProblem from '@/views/Ques/QuesNewProblem'
+
 import ErrorPage404 from '@/components/ErrorPage404.vue'
 // import Forum from '@/views/Forum'
 // import VueChatTest from '@/views/VueChatTest'
@@ -69,6 +72,16 @@ export default new Router({
       name: 'StudentCoding',
       component: StudentCoding
     },
+    // {
+    //   path: '/student/studentRepository',
+    //   name: 'StudentRepository',
+    //   component: StudentRepository
+    // },
+    // {
+    //   path: '/student/repository/project',
+    //   name: 'StudentRepositoryProject',
+    //   component: StudentRepositoryProject
+    // },
     {
       path: '/admin/index',
       name: 'AdminIndex',
@@ -136,6 +149,14 @@ export default new Router({
     {
       path: '/teacher/:courseName/feedback',
       component: TeacherFeedback
+    },
+    {
+      path: '/ques/index',
+      component: QuesIndex
+    },
+    {
+      path: '/ques/newProblem',
+      component: QuesNewProblem
     },
     {
       path: '*',

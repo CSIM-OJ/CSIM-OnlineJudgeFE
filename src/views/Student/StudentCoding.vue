@@ -130,6 +130,7 @@
       </el-col>
     </el-row>
   </section>
+
   <!-- commitDialog start -->
   <el-dialog id="commitDialog" :title="problem.name+' commits 紀錄'" :visible.sync="commitDialogVisible" @close="commitDialogActive=false">
     <el-row class="commit-table" v-if="commitDialogActive==false">
@@ -152,6 +153,7 @@
     </div>
   </el-dialog>
   <!-- commitDialog end -->
+  
   <fab-rank></fab-rank>
   <nav-footer></nav-footer>
 </div>
@@ -431,13 +433,14 @@ public class Main {
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
+          console.log(res.result);
           this.judgedResultForm.handDate = res.result.handDate;
           this.judgedResultForm.score = res.result.score;
           this.judgedResultForm.runtime = res.result.runTime + ' ms';
           this.judgedResultForm.code = res.result.code;
           this.judgedResultForm.symbol = res.result.symbol;
           this.judgedResultForm.errorInfo = res.result.errorInfo;
-          this.judgedResultForm.bestCode = res.result.best;
+          this.judgedResultForm.bestCode = res.result.best; // FIXME: 等後端
         }
       });
     },
