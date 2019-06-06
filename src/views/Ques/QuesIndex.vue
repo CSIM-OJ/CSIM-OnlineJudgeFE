@@ -302,10 +302,17 @@ export default {
         return oriTable;
       } else {
         for (let i=0; i<oriTable.length; i++) {
+          // and關係
+          // let theSet = new Set(oriTable[i].tag); // 此題tag的set
+          // let intersect = this.problemTagValue.filter(x => theSet.has(x)); // problemTagValue與theSet的交集
+          // if (this.problemTagValue.sort().toString()==intersect.sort().toString()) { // 比對problemTagValue跟交集的array是否相同
+          //   filteredTable.push(oriTable[i]);
+          // }
+
+          // or關係
           let theSet = new Set(oriTable[i].tag); // 此題tag的set
           let intersect = this.problemTagValue.filter(x => theSet.has(x)); // problemTagValue與theSet的交集
-
-          if (this.problemTagValue.sort().toString()==intersect.sort().toString()) { // 比對problemTagValue跟交集的array是否相同
+          if (intersect.length > 0) {
             filteredTable.push(oriTable[i]);
           }
         }
@@ -537,6 +544,6 @@ export default {
 }
 
 #problemTagSelector {
-  width: 250px;
+  width: 20vw;
 }
 </style>

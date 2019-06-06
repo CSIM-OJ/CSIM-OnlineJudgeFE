@@ -91,7 +91,9 @@
                       樣本{{index+1}}
                     </template>
                     <div style="margin-bottom: 10px;">編譯結果：<el-tag type="warning" size="small">{{ judgedResultForm.symbol[index] }}</el-tag></div>
-                    <el-input readonly type="textarea" autosize resize="none" :value="info"></el-input>
+                    <!-- 如果有info顯示info, 無則顯示output -->
+                    <el-input readonly type="textarea" autosize resize="none" :value="info" v-if="info"></el-input>
+                    <el-input readonly type="textarea" autosize resize="none" :value="judgedResultForm.output[index]" v-else></el-input>
                   </el-collapse-item>
                 </el-collapse>
               </el-form-item>
@@ -270,6 +272,7 @@ public class Main {
         'code': ``,
         'symbol': [],
         'errorInfo': [],
+        'output': [],
         'bestCode': null
       },
       // commit dialog
@@ -433,13 +436,13 @@ public class Main {
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
-          console.log(res.result);
           this.judgedResultForm.handDate = res.result.handDate;
           this.judgedResultForm.score = res.result.score;
           this.judgedResultForm.runtime = res.result.runTime + ' ms';
           this.judgedResultForm.code = res.result.code;
           this.judgedResultForm.symbol = res.result.symbol;
           this.judgedResultForm.errorInfo = res.result.errorInfo;
+          this.judgedResultForm.output = res.result.output;
           this.judgedResultForm.bestCode = res.result.best; // FIXME: 等後端
         }
       });

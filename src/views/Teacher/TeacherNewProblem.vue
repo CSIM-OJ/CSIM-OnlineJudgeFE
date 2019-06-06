@@ -260,10 +260,10 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="135">
           <template slot-scope="scope">
-            <el-button size="mini" @click="viewProblem(scope.row)">檢視</el-button>
-            <el-button size="mini" type="primary" @click="importProblem(scope.row)">匯入</el-button>
+            <el-button size="mini" @click="viewProblem(scope.row)" style="padding-right: 10px; padding-left: 10px; !important">檢視</el-button>
+            <el-button size="mini" type="primary" @click="importProblem(scope.row)" style="padding-right: 10px; padding-left: 10px; !important">匯入</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -435,10 +435,17 @@ export default {
         return oriTable;
       } else {
         for (let i=0; i<oriTable.length; i++) {
+          // and關係
+          // let theSet = new Set(oriTable[i].tag); // 此題tag的set
+          // let intersect = this.problemTagValue.filter(x => theSet.has(x)); // problemTagValue與theSet的交集
+          // if (this.problemTagValue.sort().toString()==intersect.sort().toString()) { // 比對problemTagValue跟交集的array是否相同
+          //   filteredTable.push(oriTable[i]);
+          // }
+
+          // or關係
           let theSet = new Set(oriTable[i].tag); // 此題tag的set
           let intersect = this.problemTagValue.filter(x => theSet.has(x)); // problemTagValue與theSet的交集
-
-          if (this.problemTagValue.sort().toString()==intersect.sort().toString()) { // 比對problemTagValue跟交集的array是否相同
+          if (intersect.length > 0) {
             filteredTable.push(oriTable[i]);
           }
         }
@@ -520,7 +527,9 @@ export default {
           deadline: DateUtil.formatDate(this.problemData.deadline),
           inputDesc: this.problemData.inputDesc,
           outputDesc: this.problemData.outputDesc,
-          testCases: this.problemData.testCases
+          testCases: this.problemData.testCases,
+          keyword: [], // FIXME: 為了活動題
+          pattern: [] // FIXME: 為了活動題
         }).then((response) => {
           let res = response.data;
           if (res.status == '200') {
@@ -741,5 +750,10 @@ export default {
   font-size: 18px;
   line-height: 25px;
   color: #666;
+}
+
+/* problem Bank Dialog */
+#problemTagSelector {
+  width: 20vw;
 }
 </style>
