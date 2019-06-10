@@ -14,10 +14,10 @@
             <span class="title">題目列表</span>
           </el-row>
           <div class="box-square">
-            <!-- FIXME: search select -->
+            <!-- search select -->
             <el-select id="problemTagSelector" v-model="problemTagValue" multiple filterable allow-create default-first-option placeholder="請選擇題目標籤">
               <el-option-group
-                v-for="group in problemTagOptions"
+                v-for="group in quesTagOptions"
                 :key="group.label"
                 :label="group.label">
                 <el-option
@@ -153,19 +153,6 @@
             <el-input v-model="editProblemData.name"></el-input>
           </el-form-item>
         </el-col>
-        <!-- <el-col :span="6" :offset="1">
-          <el-form-item label="題目類型">
-            <el-select v-model="editProblemData.type" placeholder="請選擇類型" style="width: 100%;">
-              <el-option label="作業" value="作業"></el-option>
-              <el-option label="練習題" value="練習題"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6" :offset="1">
-          <el-form-item label="題目期限">
-            <el-date-picker type="date" placeholder="選擇繳交期限" v-model="editProblemData.deadline" style="width: 100%;"></el-date-picker>
-          </el-form-item>
-        </el-col> -->
       </el-row>
       <el-row>
         <el-col :span="20" :offset="2">
@@ -223,6 +210,7 @@
 
 <script>
 import axios from 'axios'
+import problemStateMixin from '@/mixins/problemState.mixin.js'
 
 import NavHeaderQues from '@/components/Ques/NavHeaderQues'
 import SideNavQues from '@/components/Ques/SideNavQues'
@@ -234,6 +222,7 @@ export default {
     SideNavQues,
     VueMarkdown
   },
+  mixins: [problemStateMixin],
   data() {
     return {
       tableLoading: false,
@@ -264,33 +253,14 @@ export default {
       inputVisible: false,
       inputValue: '',
       autoCompleteTags: [],
-      // FIXME: tag selector
-      problemTagOptions: [{
-        label: '程式語言',
-        options: [{
-          value: 'Java',
-          label: 'Java'
-        }, {
-          value: 'Python',
-          label: 'Python'
-        }]
-      }, {
-        label: '題目類型',
-        options: [{
-          value: '條件',
-          label: '條件'
-        }, {
-          value: '迴圈',
-          label: '迴圈'
-        }]
-      }],
+      // tag selector
       problemTagValue: []
     }
   },
   mounted() {
     this.checkLogin();
     this.getAllProblem();
-    this.autoCompleteTags = this.loadAll();
+    this.autoCompleteTags = this.problemTag;
   },
   computed: {
     tableFiltered() {
@@ -450,7 +420,6 @@ export default {
         this.$message.error('請至少填寫兩組題目輸入範例！');
       } else {
         this.editProblemLoading = true;
-        console.log(this.editProblemData);
         axios.post('/api/problemBank/editProblem', {
           id: this.editProblemData.id,
           name: this.editProblemData.name,
@@ -517,14 +486,6 @@ export default {
       return (tag) => {
         return (tag.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
-    },
-    loadAll() {
-      return [
-        {'value': 'Java'},
-        {'value': 'Python'},
-        {'value': '條件'},
-        {'value': '迴圈'}
-      ]
     },
     handleSelect(item) {
       let inputValue = this.inputValue;

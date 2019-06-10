@@ -51,22 +51,6 @@
                     </el-form-item>
                   </el-col>
                 </el-row>
-                <!-- <el-row>
-                  <el-col :span="12">
-                    <el-form-item label="題目類型">
-                      <el-select v-model="problemData.type" placeholder="請選擇類型" style="width: 70%;">
-                        <el-option label="作業" value="作業"></el-option>
-                        <el-option label="練習題" value="練習題"></el-option>
-                        <el-option label="討論題" value="討論題"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="12">
-                    <el-form-item label="繳交期限">
-                      <el-date-picker type="date" placeholder="選擇繳交期限" v-model="problemData.deadline" style="width: 70%;"></el-date-picker>
-                    </el-form-item>
-                  </el-col>
-                </el-row> -->
                 <el-form-item>
                   <label slot="label">
                     題目描述 (Description)
@@ -125,6 +109,7 @@
       </el-container>
     </el-container>
   </el-container>
+
   <!-- 確認題目 dialog start -->
   <el-dialog id="confirmProblemDialog" title="確認題目" :visible.sync="dialogFormVisible" v-loading="loading">
     <el-form :model="form">
@@ -162,17 +147,6 @@
             <el-input v-model="problemData.name" readonly></el-input>
           </el-form-item>
         </el-col>
-        <!-- FIXME: 可以不用 -->
-        <!-- <el-col :span="6" :offset="1">
-          <el-form-item label="題目類型">
-            <el-input v-model="problemData.type" readonly></el-input>
-          </el-form-item>
-        </el-col> -->
-        <!-- <el-col :span="6" :offset="1">
-          <el-form-item label="題目期限">
-            <el-input v-model="formatedDeadline" readonly></el-input>
-          </el-form-item>
-        </el-col> -->
       </el-row>
       <el-row>
         <el-col :span="20" :offset="2">
@@ -226,6 +200,7 @@
 import axios from 'axios'
 import VueMarkdown from 'vue-markdown'
 import DateUtil from '@/utils/DateUtil.js'
+import problemStateMixin from '@/mixins/problemState.mixin.js'
 
 import NavHeaderQues from '@/components/Ques/NavHeaderQues'
 import SideNavQues from '@/components/Ques/SideNavQues'
@@ -242,12 +217,13 @@ export default {
     SideNavQues,
     VueMarkdown
   },
+  mixins: [problemStateMixin],
   data() {
     return {
       dialogFormVisible: false,
       problemData: {
         'name': '',
-        'category': '', // TODO: 輸入輸出、...
+        'category': '',
         'tag': [],
         'description': '',
         'inputDesc': '',
@@ -267,7 +243,7 @@ export default {
   },
   mounted() {
     this.checkLogin();
-    this.autoCompleteTags = this.loadAll();
+    this.autoCompleteTags = this.problemTag;
   },
   methods: {
     //markdown
@@ -301,7 +277,7 @@ export default {
         this.$message.error('請選定題目作答類型！');
       } else if (this.problemData.tag.length == 0) {
         this.$message.error('請至少選擇一個標籤！');
-      } // TODO: 至少要有java, py的tag
+      } // 至少要有java, py的tag
         else if (!(this.problemData.tag.includes('Java')||this.problemData.tag.includes('Python'))) {
         this.$message.error('請選擇一種程式語言標籤！');
       } else if (this.problemData.description == '') {
@@ -333,7 +309,7 @@ export default {
             });
             this.problemData = {
               'name': '',
-              'category': '', // TODO: 輸入輸出、...
+              'category': '',
               'tag': [],
               'description': '',
               'inputDesc': '',
@@ -381,14 +357,6 @@ export default {
       return (tag) => {
         return (tag.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
-    },
-    loadAll() {
-      return [
-        {'value': 'Java'},
-        {'value': 'Python'},
-        {'value': '條件'},
-        {'value': '迴圈'}
-      ]
     },
     handleSelect(item) {
       // this.inputValue = item;

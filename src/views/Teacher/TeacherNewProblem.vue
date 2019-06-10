@@ -64,9 +64,7 @@
                   <el-col :span="12">
                     <el-form-item label="題目類型">
                       <el-select v-model="problemData.type" placeholder="請選擇類型" style="width: 70%;">
-                        <el-option label="作業" value="作業"></el-option>
-                        <el-option label="練習題" value="練習題"></el-option>
-                        <el-option label="討論題" value="討論題"></el-option>
+                        <el-option  v-for="item in problemType" :key="item.value" :label="item.label" :value="item.value"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
@@ -232,13 +230,13 @@
   </el-dialog>
   <!-- 確認題目 dialog end -->
 
-  <!-- FIXME: 題庫 dialog start -->
-  <el-dialog id="problemBankDialog" title="題庫列表" :visible.sync="problemBankDialogVisible" @close="viewProblemActive=false;problemTagValue = [];">
-    <!-- FIXME: search select -->
+  <!-- 題庫 dialog start -->
+  <el-dialog id="problemBankDialog" title="題庫列表" :visible.sync="problemBankDialogVisible" @close="viewProblemActive=false;problemTagValue=[];">
+    <!-- search select -->
     <div v-if="viewProblemActive==false">
       <el-select id="problemTagSelector" v-model="problemTagValue" multiple filterable allow-create default-first-option placeholder="請選擇題目標籤">
         <el-option-group
-          v-for="group in problemTagOptions"
+          v-for="group in quesTagOptions"
           :key="group.label"
           :label="group.label">
           <el-option
@@ -333,6 +331,7 @@
 import axios from 'axios'
 import VueMarkdown from 'vue-markdown'
 import DateUtil from '@/utils/DateUtil.js'
+import problemStateMixin from '@/mixins/problemState.mixin.js'
 
 import NavHeaderTeacher from '@/components/Teacher/NavHeaderTeacher'
 import SideNavCourseIndexTeacher from '@/components/Teacher/SideNavCourseIndexTeacher'
@@ -351,6 +350,7 @@ export default {
     NavFooterAdmin,
     VueMarkdown
   },
+  mixins: [problemStateMixin],
   data() {
     return {
       courseInfo: {
@@ -379,7 +379,7 @@ export default {
       autoCompleteTags: [],
       // loading
       loading: false,
-      // FIXME: problemBank Dialog
+      // problemBank Dialog
       problemBankDialogVisible: false,
       quesList: [],
       viewProblemActive: false,
@@ -388,26 +388,7 @@ export default {
       total: 0,
       pagesize: 10,
       currentPage: 1,
-      // FIXME: tag selector
-      problemTagOptions: [{
-        label: '程式語言',
-        options: [{
-          value: 'Java',
-          label: 'Java'
-        }, {
-          value: 'Python',
-          label: 'Python'
-        }]
-      }, {
-        label: '題目類型',
-        options: [{
-          value: '條件',
-          label: '條件'
-        }, {
-          value: '迴圈',
-          label: '迴圈'
-        }]
-      }],
+      // tag selector
       problemTagValue: []
     }
   },
@@ -423,7 +404,8 @@ export default {
   mounted() {
     this.checkLogin();
     this.getCourses();
-    this.autoCompleteTags = this.loadAll();
+    
+    this.autoCompleteTags = this.problemTag;
   },
   computed: {
     tableFiltered() {
@@ -590,14 +572,6 @@ export default {
         return (tag.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
     },
-    loadAll() {
-      return [
-        {'value': 'Java'},
-        {'value': 'Python'},
-        {'value': '條件'},
-        {'value': '迴圈'}
-      ]
-    },
     handleSelect(item) {
       // this.inputValue = item;
       let inputValue = this.inputValue;
@@ -618,7 +592,7 @@ export default {
     delSample() {
       this.problemData.testCases.pop();
     },
-    // FIXME: problemBank Dialog
+    // problemBank Dialog
     currentChange(currentPage) {
       this.currentPage = currentPage;
     },

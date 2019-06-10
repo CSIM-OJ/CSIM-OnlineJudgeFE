@@ -204,8 +204,7 @@
         <el-col :span="6" :offset="1">
           <el-form-item label="題目類型">
             <el-select v-model="editProblemData.type" placeholder="請選擇類型" style="width: 100%;">
-              <el-option label="作業" value="作業"></el-option>
-              <el-option label="練習題" value="練習題"></el-option>
+              <el-option  v-for="item in problemType" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -312,6 +311,7 @@ import VueMarkdown from 'vue-markdown'
 import { codemirror } from 'vue-codemirror-lite'
 import DateUtil from '@/utils/DateUtil.js'
 import GeneralUtil from '@/utils/GeneralUtil.js'
+import problemStateMixin from '@/mixins/problemState.mixin.js'
 
 import NavHeaderTeacher from '@/components/Teacher/NavHeaderTeacher'
 import SideNavCourseIndexTeacher from '@/components/Teacher/SideNavCourseIndexTeacher'
@@ -327,6 +327,7 @@ export default {
     VueMarkdown,
     codemirror
   },
+  mixins: [problemStateMixin],
   data() {
     return {
       courseInfo: {
@@ -480,9 +481,8 @@ export default {
   mounted() {
     this.checkLogin();
     this.getCourses();
-    // this.getProblemsData();
-    // this.getStudentsData();
-    this.autoCompleteTags = this.loadAll(); // tags
+    
+    this.autoCompleteTags = this.problemTag; // tags
   },
   methods: {
     currentChange(currentPage) {
@@ -687,7 +687,7 @@ export default {
         this.$message.error('請選定題目作答類型！');
       } else if (this.editProblemData.tag.length == 0) {
         this.$message.error('請至少選擇一個標籤！');
-      } // TODO: 至少要有java, py的tag
+      } // 至少要有java, py的tag
         else if (!(this.editProblemData.tag.includes('Java')||this.editProblemData.tag.includes('Python'))) {
         this.$message.error('請選擇一種程式語言標籤！');
       } else if (this.editProblemData.deadline == '') {
@@ -782,14 +782,6 @@ export default {
       return (tag) => {
         return (tag.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
-    },
-    loadAll() {
-      return [
-        {'value': 'Java'},
-        {'value': 'Python'},
-        {'value': '條件'},
-        {'value': '迴圈'}
-      ]
     },
     handleSelect(item) {
       let inputValue = this.inputValue;
