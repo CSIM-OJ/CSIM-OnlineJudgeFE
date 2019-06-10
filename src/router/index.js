@@ -6,8 +6,6 @@ import StudentIndex from '@/views/Student/StudentIndex'
 import StudentScorePanel from '@/views/Student/StudentScorePanel'
 import StudentMypage from '@/views/Student/StudentMypage'
 import StudentCoding from '@/views/Student/StudentCoding'
-// import StudentRepository from '@/views/StudentRepository'
-// import StudentRepositoryProject from '@/views/StudentRepositoryProject'
 
 import AdminIndex from '@/views/Admin/AdminIndex'
 import AdminProblemsData from '@/views/Admin/AdminProblemsData'
@@ -30,8 +28,6 @@ import QuesIndex from '@/views/Ques/QuesIndex'
 import QuesNewProblem from '@/views/Ques/QuesNewProblem'
 
 import ErrorPage404 from '@/components/ErrorPage404.vue'
-// import Forum from '@/views/Forum'
-// import VueChatTest from '@/views/VueChatTest'
 
 Vue.use(Router)
 
@@ -72,16 +68,6 @@ export default new Router({
       name: 'StudentCoding',
       component: StudentCoding
     },
-    // {
-    //   path: '/student/studentRepository',
-    //   name: 'StudentRepository',
-    //   component: StudentRepository
-    // },
-    // {
-    //   path: '/student/repository/project',
-    //   name: 'StudentRepositoryProject',
-    //   component: StudentRepositoryProject
-    // },
     {
       path: '/admin/index',
       name: 'AdminIndex',
