@@ -359,7 +359,9 @@ export default {
         'description': '',
         'inputDesc': '',
         'outputDesc': '',
-        'testCases': []
+        'testCases': [],
+        'keyword': [], // FIXME: 為了活動題
+        'pattern': [] // FIXME: 為了活動題
       },
       // problem dialog
       problemDialogVisible: false,
@@ -714,7 +716,9 @@ export default {
           description: this.editProblemData.description,
           inputDesc: this.editProblemData.inputDesc,
           outputDesc: this.editProblemData.outputDesc,
-          testCases: this.editProblemData.testCases
+          testCases: this.editProblemData.testCases,
+          keyword: this.editProblemData.keyword, // FIXME: 為了活動題
+          pattern: this.editProblemData.pattern // FIXME: 為了活動題
         }).then((response) => {
           let res = response.data;
           if (res.status == '200') {
@@ -732,7 +736,9 @@ export default {
               'description': '',
               'inputDesc': '',
               'outputDesc': '',
-              'testCases': []
+              'testCases': [],
+              'keyword': [], // FIXME: 為了活動題
+              'pattern': [] // FIXME: 為了活動題
             }
             this.editProblemDialogVisible = false;
             this.editProblemLoading = false;
