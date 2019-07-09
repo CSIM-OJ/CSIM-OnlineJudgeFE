@@ -13,6 +13,14 @@ let problemType = [
   {'value': '活動題', 'label': '活動題'}
 ]
 
+let studIndexProblemType = [
+  {'value': '全部', 'label': '全部'},
+  {'value': '作業', 'label': '作業'},
+  {'value': '練習題', 'label': '練習題'},
+  {'value': '討論題', 'label': '討論題'},
+  {'value': '活動題', 'label': '活動題'}
+]
+
 let quesTagOptions = [{
   label: '程式語言',
   options: [{
@@ -40,6 +48,7 @@ export default {
   data: () => ({
     problemTag,
     problemType,
+    studIndexProblemType,
     quesTagOptions
   }),
   methods: {

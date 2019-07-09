@@ -21,25 +21,31 @@
           </div>
           <el-row>
             <el-col class="undoCol" :span="24" v-loading="undoLoading">
-              <transition-group name="slide-fade">
-                <el-col v-for="problem in undoProblemsFiltered" :xs="24" :sm="12" :md="8" :lg="6" :key="problem.problemId" style="padding-right: 23px;">
-                  <a href="javascript:void(0);" @click="doProblem(problem.problemId)">
-                    <el-card :body-style="{ padding: '5px' }" shadow="hover">
-                      <div style="padding: 14px;">
-                        <span class="title ellipsis">{{ problem.name }}
-                          <el-tooltip class="item" effect="dark" :content="'繳交期限: '+problem.deadline" placement="top"><i class="el-icon-time time"></i></el-tooltip>
-                        </span>
-                        <div class="bottom clearfix">
-                          <el-rate disabled :value="parseInt(problem.rate)"></el-rate>
-                          <Countdown v-if="dateDiff(todayDate, problem.deadline)<1" :deadline="deadlineParse(problem.deadline)"></Countdown>
-                          <el-button v-if="dateDiff(todayDate, problem.deadline)>=1" type="text" class="button"><a href="javascript:void(0);" @click="doProblem(problem.problemId)">來去做題</a></el-button>
-                        </div>
-                        <div class="type">{{ problem.type }}</div>
-                      </div>
-                    </el-card>
-                  </a>
-                </el-col>
-              </transition-group>
+              <!-- FIXME: test carousel start -->
+              <el-carousel :autoplay="false" :loop="false" :height="undoCarHeight" ref="undoCarousel" @change="undoCarChange">
+                <el-carousel-item v-for="index in undoCarItemNum" :key="index" :name="'car'+index">
+                  <transition-group name="slide-fade">
+                    <el-col v-for="problem in undoProblemsFiltered.slice((index-1)*20, (index-1)*20+20)" :xs="24" :sm="12" :md="8" :lg="6" :key="problem.problemId" style="padding-right: 23px;">
+                      <a href="javascript:void(0);" @click="doProblem(problem.problemId)">
+                        <el-card :body-style="{ padding: '5px' }" shadow="hover">
+                          <div style="padding: 14px;">
+                            <span class="title ellipsis">{{ problem.name }}
+                              <el-tooltip class="item" effect="dark" :content="'繳交期限: '+problem.deadline" placement="top"><i class="el-icon-time time"></i></el-tooltip>
+                            </span>
+                            <div class="bottom clearfix">
+                              <el-rate disabled :value="parseInt(problem.rate)"></el-rate>
+                              <Countdown v-if="dateDiff(todayDate, problem.deadline)<1" :deadline="deadlineParse(problem.deadline)"></Countdown>
+                              <el-button v-if="dateDiff(todayDate, problem.deadline)>=1" type="text" class="button"><a href="javascript:void(0);" @click="doProblem(problem.problemId)">來去做題</a></el-button>
+                            </div>
+                            <div class="type">{{ problem.type }}</div>
+                          </div>
+                        </el-card>
+                      </a>
+                    </el-col>
+                  </transition-group>
+                </el-carousel-item>
+              </el-carousel>
+              <!-- test carouesl end -->
             </el-col>
           </el-row>
         </div>
@@ -57,7 +63,36 @@
           </div>
           <el-row>
             <el-col class="doneCol" :span="24" v-loading="doneLoading">
-              <transition-group name="slide-fade">
+              <!-- FIXME: test carousel start -->
+              <el-carousel :autoplay="false" :loop="false" :height="doneCarHeight" ref="doneCarousel" @change="doneCarChange">
+                <el-carousel-item v-for="index in doneCarItemNum" :key="index" :name="'car'+index">
+                  <transition-group name="slide-fade">
+                    <el-col v-for="problem in doneProblemsFiltered.slice((index-1)*20, (index-1)*20+20)" :xs="24" :sm="12" :md="8" :lg="6" :key="problem.problemId" style="padding-right: 23px;">
+                      <a href="javascript:void(0);" @click="doProblem(problem.problemId)">
+                        <el-card :body-style="{ padding: '5px' }" shadow="hover">
+                          <div style="padding: 14px;">
+                            <span class="title ellipsis">{{ problem.name }}
+                              <el-tooltip class="item" effect="dark" :content="'繳交期限: '+problem.deadline" placement="top"><i class="el-icon-time time"></i></el-tooltip>
+                            </span>
+                            <div class="bottom clearfix">
+                              <el-rate disabled :value="parseInt(problem.rate)"></el-rate>
+                              <Countdown v-if="dateDiff(todayDate, problem.deadline)<1" :deadline="deadlineParse(problem.deadline)"></Countdown>
+                              <el-button v-if="dateDiff(todayDate, problem.deadline)>=1" type="text" class="button"><a href="javascript:void(0);" @click="doProblem(problem.problemId)">來去做題</a></el-button>
+                            </div>
+                            <div class="type">{{ problem.type }}</div>
+                          </div>
+                        </el-card>
+                      </a>
+                    </el-col>
+                  </transition-group>
+                </el-carousel-item>
+              </el-carousel>
+              <!-- test carouesl end -->
+
+
+
+              
+              <!-- <transition-group name="slide-fade">
                 <el-col v-for="problem in doneProblemsFiltered" :xs="24" :sm="12" :md="8" :lg="6" :key="problem.problemId" style="padding-right: 23px;">
                   <a href="javascript:void(0);" @click="doProblem(problem.problemId)">
                     <el-card :body-style="{ padding: '5px' }" shadow="hover">
@@ -74,7 +109,7 @@
                     </el-card>
                   </a>
                 </el-col>
-              </transition-group>
+              </transition-group> -->
             </el-col>
           </el-row>
         </div>
@@ -129,7 +164,10 @@ export default {
       doneProblems: [],
       // loading
       undoLoading: false,
-      doneLoading: false
+      doneLoading: false,
+      // FIXME: carousel
+      undoCarShowIndex: 0,
+      doneCarShowIndex: 0
     }
   },
   computed: {
@@ -185,6 +223,37 @@ export default {
     },
     todayDate() {
       return DateUtil.getTodayDate()
+    },
+    // FIXME: carousel
+    undoCarItemNum() {
+      return Math.ceil(this.undoProblems.length/20);
+    },
+    undoCarHeight() {
+      let page = this.undoCarShowIndex+1;
+      let carItemNum = Math.ceil(this.undoProblems.length/20);
+
+      if (page<carItemNum) {
+        return '920px';
+      } else {
+        let last = this.undoProblems.length%20;
+        let h = Math.ceil(last/4);
+        return h*184+'px';
+      }
+    },
+    doneCarItemNum() {
+      return Math.ceil(this.doneProblems.length/20);
+    },
+    doneCarHeight() {
+      let page = this.doneCarShowIndex+1;
+      let carItemNum = Math.ceil(this.doneProblems.length/20);
+
+      if (page<carItemNum) {
+        return '920px';
+      } else {
+        let last = this.doneProblems.length%20;
+        let h = Math.ceil(last/4);
+        return h*184+'px';
+      }
     }
   },
   mounted() {
@@ -364,6 +433,13 @@ export default {
     // 把deadline+1天
     deadlineParse(deadline) {
       return DateUtil.nextDayDate(deadline)
+    },
+    // FIXME: carousel
+    undoCarChange(index) {
+      this.undoCarShowIndex = index;
+    },
+    doneCarChange(index) {
+      this.doneCarShowIndex = index;
     }
   }
 }

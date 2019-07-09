@@ -63,14 +63,14 @@
                 <el-row>
                   <el-col :span="12">
                     <el-form-item label="題目類型">
-                      <el-select v-model="problemData.type" placeholder="請選擇類型" style="width: 70%;">
+                      <el-select v-model="problemData.type" placeholder="請選擇類型" style="width: 70%;" @change="changeProblemType">
                         <el-option  v-for="item in problemType" :key="item.value" :label="item.label" :value="item.value"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
                   <el-col :span="12">
                     <el-form-item label="繳交期限">
-                      <el-date-picker type="date" placeholder="選擇繳交期限" v-model="problemData.deadline" style="width: 70%;"></el-date-picker>
+                      <el-date-picker type="date" placeholder="選擇繳交期限" v-model="problemData.deadline" @change="selectDeadline" style="width: 70%;"></el-date-picker>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -122,6 +122,14 @@
                 <el-button size="small" type="primary" plain @click="addSample">+ 新增範本</el-button>
                 <el-button size="small" type="danger" plain @click="delSample">- 移除範本</el-button>
                 <!-- 題目範本 -->
+                <!-- FIXME: 討論題：選取批改配對 start-->
+                <el-row v-if="problemData.type=='討論題'">
+                  <el-col :span="24" style="margin-bottom: 15px;">
+                    <el-divider content-position="center">討論題：選取批改配對</el-divider>
+                    <el-cascader-panel @change="ch" v-model="discussValue" :options="discussOptions" :props="discussProps" style="height:500px;"></el-cascader-panel>
+                  </el-col>
+                </el-row>
+                <!-- 討論題：選取批改配對 end -->
                 <el-row>
                   <el-button type="primary" @click="dialogFormVisible=true" style="float: right;">確定</el-button>
                 </el-row>
@@ -180,7 +188,7 @@
         </el-col>
         <el-col :span="6" :offset="1">
           <el-form-item label="題目期限">
-            <el-input v-model="formatedDeadline" readonly></el-input>
+            <el-input v-model="previewDate" readonly></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -343,6 +351,8 @@ import '@/assets/markdownParser/lodash.js'
 import '@/assets/markdownParser/katex.min.css'
 import '@/assets/css/transition.css'
 
+import GeneralUtil from '@/utils/GeneralUtil.js'
+
 export default {
   components: {
     NavHeaderTeacher,
@@ -373,6 +383,7 @@ export default {
           'outputSample': ''
         }]
       },
+      previewDate: '', // 確認題目的日期部分
       // tags
       inputVisible: false,
       inputValue: '',
@@ -389,13 +400,19 @@ export default {
       pagesize: 10,
       currentPage: 1,
       // tag selector
-      problemTagValue: []
+      problemTagValue: [],
+      // FIXME: 討論題：指定批改者
+      discussValue: [],
+      discussProps: { multiple: true },
+      discussOptions: []
     }
   },
   computed: {
-    formatedDeadline() {
-      return DateUtil.formatDate(this.problemData.deadline);
-    },
+    // formatedDeadline() {
+    //   console.log(this.problemData.deadline);
+    //   if (this.problemData.deadline) return DateUtil.formatDate(this.problemData.deadline);
+    //   else return ''
+    // },
     // markdown
     // compiledMarkdown() {
     //   return marked(this.problemData.description, { sanitize: true })
@@ -443,6 +460,46 @@ export default {
       this.problemData.description = e;
       // this.problemData.description = e.target.value
     }, 300),
+    selectDeadline() {
+      this.previewDate = DateUtil.formatDate(this.problemData.deadline);
+    },
+    // FIXME: 討論題
+    changeProblemType() {
+      // 如果是討論題，就載入學生學號，去做討論題的批改配對
+      if (this.problemData.type == '討論題') {
+        let fakeStudentList = ['04156147', '04156148', '04156211', '04156140', '04156270', '06156111', '06156177'];
+
+        // 載入指定者學號進discussOptions
+        fakeStudentList.forEach((element) => {
+          let obj = {
+            value: element,
+            label: element
+          }
+          this.discussOptions.push(obj);
+        });
+
+        // 載入被指定者到discussOptions的各obj內，且不包含自己
+        this.discussOptions.forEach((ele, idx) => {
+          let [...tempStuList] = fakeStudentList;
+          // tempStuList.push(ele.value);
+          let noMyselfList = GeneralUtil.removeInArray(tempStuList, ele);
+          
+          let children = [];
+          this.discussOptions[idx].children = [];
+
+          noMyselfList.forEach((ele) => {
+            let obj = {
+              value: ele,
+              label: ele
+            }
+            this.discussOptions[idx].children.push(obj);
+          });
+        });
+      }
+    },
+    ch() {
+      console.log(this.discussValue);
+    },
     checkLogin() {
       axios.get('/api/checkLogin').then((response) => {
         let res = response.data;
@@ -540,6 +597,11 @@ export default {
             this.$message.error(res.msg);
           }
         });
+
+        // FIXME: 討論題
+        if (this.problemData.type == '討論題') {
+          // post createTeam
+        }
       }
     },
     // tags control methods
@@ -729,5 +791,10 @@ export default {
 /* problem Bank Dialog */
 #problemTagSelector {
   width: 20vw;
+}
+
+/* discuss cascader */
+.el-cascader-menu__wrap {
+  height: 500px !important;
 }
 </style>

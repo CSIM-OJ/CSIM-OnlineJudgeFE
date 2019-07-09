@@ -1,6 +1,16 @@
 <template>
 <div>
   <nav-header-student></nav-header-student>
+  <el-row>
+    <el-col :span="20" :offset="2">
+      <el-alert style="margin-bottom: 15px;" effect="dark" v-if="problem.type=='討論題'"
+        title="討論題 - 學生互評"
+        type="success"
+        description="送出此題程式碼後，需要批改同學的程式碼並給分！">
+      </el-alert>
+    </el-col>
+  </el-row>
+  
   <section id="problem-section">
     <el-row>
       <el-col :span="20" :offset="2" class="box">
@@ -133,6 +143,76 @@
     </el-row>
   </section>
 
+  <!-- FIXME: dicuss correct start -->
+  <section id="discuss-correct-section" v-if="dicussShowFlag">
+    <el-row>
+      <el-col :span="20" :offset="2" class="box">
+        <span class="title">討論題 - 程式互評</span>
+        <el-tabs type="card" @tab-click="clickCorrectTab">
+          <el-tab-pane v-for="(stud, index) in correctedList" :key="stud.studentId" :label="stud.studentId" >
+            <!-- 1. 程式碼 -->
+            <codemirror :options="options" :ref="'discussCodeMirror'+index" :style="{'font-size': fontSize+'px', 'padding-bottom': '20px'}"></codemirror>
+            <!-- 2. 給分 -->
+            <el-row class="block">
+              <el-col :span="3">
+                <span class="small-title">分數</span>
+              </el-col>
+              <el-col :span="21">
+                <el-slider class="correct-slider" v-model="stud.score" show-input style="" :disabled="correctStatus"></el-slider>
+              </el-col>
+            </el-row>
+            <el-row class="block">
+              <el-col :span="3">
+                <span class="small-title">程式正確性</span>
+              </el-col>
+              <el-col :span="21">
+                <el-slider v-model="stud.correctValue" show-input :step="1" :max="5" show-stops class="correct-slider" :disabled="correctStatus"></el-slider>
+              </el-col>
+            </el-row>
+            <el-row class="block">
+              <el-col :span="3">
+                <span class="small-title">程式可讀性</span>
+              </el-col>
+              <el-col :span="21">
+                <el-slider v-model="stud.readValue" show-input :step="1" :max="5" show-stops class="correct-slider" :disabled="correctStatus"></el-slider>
+              </el-col>
+            </el-row>
+            <el-row class="block">
+              <el-col :span="3">
+                <span class="small-title">技巧運用</span>
+              </el-col>
+              <el-col :span="21">
+                <el-slider v-model="stud.skillValue" show-input :step="1" :max="5" show-stops class="correct-slider" :disabled="correctStatus"></el-slider>
+              </el-col>
+            </el-row>
+            <el-row class="block">
+              <el-col :span="3">
+                <span class="small-title">程式完整性</span>
+              </el-col>
+              <el-col :span="21">
+                <el-slider v-model="stud.completeValue" show-input :step="1" :max="5" show-stops class="correct-slider" :disabled="correctStatus"></el-slider>
+              </el-col>
+            </el-row>
+            <el-row class="block">
+              <el-col :span="3">
+                <span class="small-title">綜合評分</span>
+              </el-col>
+              <el-col :span="21">
+                <el-slider v-model="stud.wholeValue" show-input :step="1" :max="5" show-stops class="correct-slider" :disabled="correctStatus"></el-slider>
+              </el-col>
+            </el-row>
+            <!-- 3. 送出評分 -->
+            <el-row v-if="!correctStatus">
+              <el-divider content-position="center" style="font-size: 16px; padding-top: 20px !important;">評分完所有學生後送出評分</el-divider>
+              <el-button type="primary" style="float: right;" @click="submitDisCorrect">送出評分</el-button>
+            </el-row>
+          </el-tab-pane>
+        </el-tabs>
+      </el-col>
+    </el-row>
+  </section>
+  <!-- FIXME: dicuss correct end -->
+
   <!-- commitDialog start -->
   <el-dialog id="commitDialog" :title="problem.name+' commits 紀錄'" :visible.sync="commitDialogVisible" @close="commitDialogActive=false">
     <el-row class="commit-table" v-if="commitDialogActive==false">
@@ -168,6 +248,7 @@ import {
 } from 'vue-codemirror-lite'
 import GeneralUtil from '@/utils/GeneralUtil.js'
 import DateUtil from '@/utils/DateUtil.js'
+import {toKeys} from '@/utils/KeywordTrans.js'
 import VueMarkdown from 'vue-markdown'
 import vueCodeDiff from 'vue-code-diff'
 
@@ -282,7 +363,20 @@ public class Main {
       commitDialogActive: false, // 是否顯示code diff
       commitIndex: '',
       oldCode: '',
-      newCode: ''
+      newCode: '',
+      // FIXME: dicuss correct
+      dicussShowFlag: false,
+      correctedList: [{ 
+        studentId: '04156126',
+        code: 'zzz'
+      }, { 
+        studentId: '04162314',
+        code: 'bbb'
+      }, { 
+        studentId: '06156123',
+        code: 'zOOOzz'
+      }],
+      correctStatus: false
     }
   },
   created() {
@@ -417,6 +511,21 @@ public class Main {
           this.problem.judged = res.result.judged;
           if (res.result.judged == true) {
             this.problem.judged = true;
+
+            // FIXME: show discuss section
+            if (this.problem.type == '討論題') {
+              this.getCorrectList();
+              this.dicussShowFlag = true;
+              this.options.readOnly = true;
+              this.$nextTick(() => {
+                this.$refs.discussCodeMirror0[0].value = this.correctedList[0].code;
+                var self = this;
+                setTimeout(function() {
+                  self.$refs.discussCodeMirror0[0].editor.refresh();
+                },1);
+              });
+            }
+
             this.getJudgedInfo();
           } else {
             this.notify1();
@@ -471,6 +580,11 @@ public class Main {
           // this.problem.outputSample2 = res.result.outputSample2.replace(new RegExp(" /n ", "g"), '\n');
           this.problem.correctNum = parseInt(res.result.correctNum);
           this.problem.incorrectNum = parseInt(res.result.incorrectNum);
+
+          // FIXME: 如果是討論題，查看correctStatus
+          if (this.problem.type == '討論題') {
+            this.checkCorrectStatus();
+          }
         }
       });
     },
@@ -566,10 +680,26 @@ public class Main {
           type: 'info',
           center: true
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '提交成功!'
+          // FIXME: keyword檢查
+          let keywords = toKeys(this.problem.tag);
+          console.log(keywords);
+
+          // 看code是否有包含keyword
+          let includeKeyFlag = false;
+          keywords.forEach((key) => {
+            if(this.code.indexOf(key)>=0) includeKeyFlag=true;
           });
+
+          if(includeKeyFlag) {
+            // pass
+          } else {
+            this.$message.error('程式邏輯錯誤！');
+            return;
+          }
+
+          // FIXME: pattern檢查
+
+
           this.judging = true;
           axios.post('/api/judge/judgeCode', {
             problemId: this.problem.id,
@@ -578,6 +708,11 @@ public class Main {
           }).then((response) => {
             let res = response.data;
             if (res.status == '200') {
+              this.$message({
+                type: 'success',
+                message: '提交成功!'
+              });
+
               this.problem.judged = true;
               this.getJudgedInfo();
               this.getHistoryScore();
@@ -604,12 +739,26 @@ public class Main {
     }
 }`;
               }
+
+              // FIXME: 如果是討論題，顯示出批改學生的區域
+              this.getCorrectList();
+              if (this.problem.type == '討論題') {
+                this.dicussShowFlag = true;
+                this.options.readOnly = true;
+                this.$nextTick(() => {
+                  this.$refs.discussCodeMirror0[0].value = this.correctedList[0].code;
+                  var self = this;
+                  setTimeout(function() {
+                    self.$refs.discussCodeMirror0[0].editor.refresh();
+                  },1);
+                });
+              }
             } else {
               console.log('judgedErrorMsg:' + res.msg);
             }
           }).catch((error) => {
             console.log(error);
-          });;
+          });
         }).catch((err) => {
           this.$message({
             type: 'info',
@@ -662,6 +811,54 @@ public class Main {
         this.newCode = data.code;
       }
       this.commitDialogActive = true;
+    },
+    // FIXME: discuss section
+    getCorrectList() {
+      this.correctedList.forEach((ele)=> {
+        ele.score = 0; // 分數
+        ele.correctValue = 0; // 程式正確性
+        ele.readValue = 0; // 程式可讀性
+        ele.skillValue = 0; // 技巧運用
+        ele.completeValue = 0; // 程式完整性
+        ele.wholeValue = 0; // 綜合評分
+      });
+    },
+    clickCorrectTab(tab) {
+      this.$nextTick(() => {
+        tab.$children[0].value = this.correctedList[tab.index].code;
+        var self = this;
+        setTimeout(function() {
+          tab.$children[0].editor.refresh();
+        },1);
+      });
+    },
+    submitDisCorrect() {
+      this.$confirm('確定已經評分完所有同學，要送出評分結果嗎？', '提示', {
+        confirmButtonText: '確定',
+        cancelButtonText: '取消',
+        type: 'info'
+      }).then(() => {
+        // FIXME: 送出評分
+        this.correctStatus = true;
+
+        
+        
+
+        this.$message({
+          type: 'success',
+          message: '送出評分成功!'
+        });
+      })
+      // .catch(() => {
+      //   this.$message({
+      //     type: 'info',
+      //     message: '已取消送出評分'
+      //   });          
+      // });
+    },
+    checkCorrectStatus() {
+      // axios確認
+      // this.correctStatus = 
     }
   }
 }
@@ -697,4 +894,54 @@ public class Main {
   .back2commit-hyperlink:hover {
     color: #409EFF;
   }
+
+  /* code mirror */
+  #discuss-correct-section .CodeMirror-gutters {
+    height: 50vh !important;
+  }
+
+  #discuss-correct-section .CodeMirror-scroll {
+    min-height: 50vh !important;
+    height: auto;
+  }
+
+  #discuss-correct-section .CodeMirror {
+    min-height: 50vh !important;
+    height: auto;
+  }
+
+  #discuss-correct-section .CodeMirror-sizer {
+    margin-left: 41px !important;
+  }
+
+  #discuss-correct-section .CodeMirror-linenumbers {
+    width: 29px !important;
+  }
+
+  #discuss-correct-section .title {
+    display: block;
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  #discuss-correct-section .block {
+    padding: 20px 24px;
+    overflow: hidden;
+  }
+
+  #discuss-correct-section .small-title {
+    display: inline-block;
+    font-size: 16px;
+    text-align: center;
+    margin-top: 7px;
+    color: rgb(132, 146, 166);
+  }
+
+
+  #discuss-correct-section .correct-slider {
+    padding-left: 10px;
+  }
+
+
 </style>

@@ -6,6 +6,7 @@ import StudentIndex from '@/views/Student/StudentIndex'
 import StudentScorePanel from '@/views/Student/StudentScorePanel'
 import StudentMypage from '@/views/Student/StudentMypage'
 import StudentCoding from '@/views/Student/StudentCoding'
+import Test from '@/views/Student/Test'
 // import StudentRepository from '@/views/StudentRepository'
 // import StudentRepositoryProject from '@/views/StudentRepositoryProject'
 
@@ -161,6 +162,10 @@ export default new Router({
     {
       path: '*',
       component: ErrorPage404
+    },
+    {
+      path: '/student/:courseName/test',
+      component: Test
     }
   ]
 })

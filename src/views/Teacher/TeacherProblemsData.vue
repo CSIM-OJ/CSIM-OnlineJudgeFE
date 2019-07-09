@@ -93,7 +93,7 @@
               </el-table-column>
             </el-table>
           </div>
-          <div style="text-align: center;margin-top: 30px;">
+          <div style="text-align:center; margin-top:30px;">
             <el-pagination background layout="prev, pager, next" :total="total" @current-change="currentChange"></el-pagination>
           </div>
         </el-main>
