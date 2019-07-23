@@ -62,7 +62,7 @@
                 </el-row>
                 <el-row>
                   <el-col :span="12">
-                    <el-form-item label="題目類型">
+                    <el-form-item label="題目類型" style="margin-bottom:0px;">
                       <el-select v-model="problemData.type" placeholder="請選擇類型" style="width: 70%;" @change="changeProblemType">
                         <el-option  v-for="item in problemType" :key="item.value" :label="item.label" :value="item.value"></el-option>
                       </el-select>
@@ -74,6 +74,17 @@
                     </el-form-item>
                   </el-col>
                 </el-row>
+                <!-- TODO: pattern -->
+                <el-row v-if="problemData.type=='活動題'">
+                  <el-col :span="24" style="margin-bottom: 20px;">
+                    <el-form-item label="指定程式片段 (Pattern)" style="margin-bottom: 5px;">
+                      <el-input v-model="pattern.pat" maxlength="15" placeholder="請輸入一段指定的程式碼" style="width: 80%; margin-bottom: 10px;" v-for="(pattern, index) in problemData.pattern" :key="index"></el-input>
+                    </el-form-item>
+                    <el-button size="small" type="primary" plain @click="addPattern">+ 新增pattern</el-button>
+                    <el-button size="small" type="danger" plain @click="delPattern">- 移除pattern</el-button>
+                  </el-col>
+                </el-row>
+                <!-- TODO: pattern -->
                 <el-form-item>
                   <label slot="label">
                     題目描述 (Description)
@@ -81,7 +92,7 @@
                     <img src="/static/katex-icon.png" alt="md-icon" style="width: 40px; margin-left: 3px;">
                   </label>
                   <div id="markdown-editor">
-                    <el-input type="textarea" rows="5" resize="vertical" placeholder="請輸入題目的描述內容" :value="problemData.description" style="width: 100%;" @input="update"></el-input>
+                    <el-input type="textarea" rows="5" resize="vertical" placeholder="請輸入題目的描述內容" v-model="problemData.description" style="width: 100%;" @input="update"></el-input>
                     <vue-markdown class="md-preview" :source="problemData.description"></vue-markdown>
                   </div>
                 </el-form-item>
@@ -126,7 +137,12 @@
                 <el-row v-if="problemData.type=='討論題'">
                   <el-col :span="24" style="margin-bottom: 15px;">
                     <el-divider content-position="center">討論題：選取批改配對</el-divider>
-                    <el-cascader-panel @change="ch" v-model="discussValue" :options="discussOptions" :props="discussProps" style="height:500px;"></el-cascader-panel>
+                    <p>指定一人須批改幾位同學：
+                      <el-input-number v-model="discussNum" controls-position="right" @change="discussNumChange" :min="1" :max="10" size="small" :disabled="discussIsLock"></el-input-number>
+                      <el-button size="mini" style="margin-left: 20px;" type="primary" @click="discussNumLock">確定</el-button>
+                      <el-button size="mini" type="danger" @click="discussNumUnlock">更改</el-button>
+                    </p>
+                    <el-cascader-panel ref="discussCascader" @change="discussValueActionChange" @expand-change="discussExpand" v-model="discussValue" :options="discussOptions" :props="discussProps" style="height:500px;"></el-cascader-panel>
                   </el-col>
                 </el-row>
                 <!-- 討論題：選取批改配對 end -->
@@ -146,15 +162,15 @@
 
   <!-- 確認題目 dialog start -->
   <el-dialog id="confirmProblemDialog" title="確認題目" :visible.sync="dialogFormVisible" v-loading="loading">
-    <el-form :model="form">
+    <el-form>
       <el-row>
         <el-col :span="20" :offset="2">
           <el-form-item label="題目作答類型">
             <el-radio-group v-model="problemData.category" disabled>
-              <el-radio label="輸入輸出" border>輸入輸出</el-radio>
-              <el-radio label="輸入寫檔" border>輸入寫檔</el-radio>
-              <el-radio label="讀檔輸出" border>讀檔輸出</el-radio>
-              <el-radio label="讀檔寫檔" border>讀檔寫檔</el-radio>
+              <el-radio label="輸入輸出" border style="margin-right: 5px;">輸入輸出</el-radio>
+              <el-radio label="輸入寫檔" border style="margin-right: 5px;">輸入寫檔</el-radio>
+              <el-radio label="讀檔輸出" border style="margin-right: 5px;">讀檔輸出</el-radio>
+              <el-radio label="讀檔寫檔" border style="margin-right: 5px;">讀檔寫檔</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
@@ -189,6 +205,14 @@
         <el-col :span="6" :offset="1">
           <el-form-item label="題目期限">
             <el-input v-model="previewDate" readonly></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <!-- TODO: pattern -->
+      <el-row>
+        <el-col :span="20" :offset="2">
+          <el-form-item label="指定程式片段 (Pattern)">
+            <el-input v-model="pattern.pat" readonly maxlength="15" style="width: 100%; margin-bottom: 10px;" v-for="(pattern, index) in problemData.pattern" :key="index"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -381,6 +405,9 @@ export default {
         'testCases': [{
           'inputSample': '',
           'outputSample': ''
+        }],
+        'pattern': [{
+          'pat': ''
         }]
       },
       previewDate: '', // 確認題目的日期部分
@@ -402,8 +429,15 @@ export default {
       // tag selector
       problemTagValue: [],
       // FIXME: 討論題：指定批改者
-      discussValue: [],
-      discussProps: { multiple: true },
+      discussStudsList: [], // 學生學號名單
+      discussNum: 0,
+      discussNowFocus: '', // 目前正在選的學號
+      discussNumControl: {}, // {學號:count}
+      discussIsLock: false,
+      discussValue: [], // 選取配對的名單(pairs)
+      discussProps: { 
+        multiple: true
+      },
       discussOptions: []
     }
   },
@@ -421,6 +455,7 @@ export default {
   mounted() {
     this.checkLogin();
     this.getCourses();
+    // this.getStudsList();
     
     this.autoCompleteTags = this.problemTag;
   },
@@ -464,41 +499,121 @@ export default {
       this.previewDate = DateUtil.formatDate(this.problemData.deadline);
     },
     // FIXME: 討論題
+    getStudsList() {
+      axios.get('/api/student/allStud', {
+        params: {
+          courseId: this.courseInfo.courseId
+        }
+      }).then((response) => {
+        let res = response.data;
+        if (res.status == '200') {
+          this.discussStudsList = res.result;
+        }
+      });
+
+      return new Promise(function (resolve, reject) {
+        setTimeout(function () {
+          resolve(true);
+        }, 1000);
+      });
+    },
+    discussNumLock() {
+      this.discussIsLock = true;
+    },
+    discussNumUnlock() {
+      this.discussIsLock = false;
+      this.discussOptions.forEach((element) => {
+        element['disabled'] = false;
+      });
+    },
+    discussNumChange() {
+
+    },
     changeProblemType() {
       // 如果是討論題，就載入學生學號，去做討論題的批改配對
       if (this.problemData.type == '討論題') {
-        let fakeStudentList = ['04156147', '04156148', '04156211', '04156140', '04156270', '06156111', '06156177'];
+        this.getStudsList().then((value) => {
+          if(value==true) {
+            // 載入指定者學號進discussOptions
+            this.discussStudsList.forEach((element) => {
+              let obj = {
+                value: element,
+                label: element
+              }
+              this.discussOptions.push(obj);
 
-        // 載入指定者學號進discussOptions
-        fakeStudentList.forEach((element) => {
-          let obj = {
-            value: element,
-            label: element
+              // 載入每個人的學號進discussNumControl, 做每個人選取數量的控制
+              this.discussNumControl[element] = 0;
+            });
+
+            // 載入被指定者到discussOptions的各obj內，且不包含自己
+            this.discussOptions.forEach((ele, idx) => {
+              let [...tempStuList] = this.discussStudsList;
+              // tempStuList.push(ele.value);
+              let noMyselfList = GeneralUtil.removeInArray(tempStuList, ele);
+              
+              let children = [];
+              this.discussOptions[idx].children = [];
+
+              noMyselfList.forEach((ele) => {
+                let obj = {
+                  value: ele,
+                  label: ele
+                }
+                this.discussOptions[idx].children.push(obj);
+              });
+            });
           }
-          this.discussOptions.push(obj);
-        });
-
-        // 載入被指定者到discussOptions的各obj內，且不包含自己
-        this.discussOptions.forEach((ele, idx) => {
-          let [...tempStuList] = fakeStudentList;
-          // tempStuList.push(ele.value);
-          let noMyselfList = GeneralUtil.removeInArray(tempStuList, ele);
-          
-          let children = [];
-          this.discussOptions[idx].children = [];
-
-          noMyselfList.forEach((ele) => {
-            let obj = {
-              value: ele,
-              label: ele
-            }
-            this.discussOptions[idx].children.push(obj);
-          });
+        }).catch(function (error) {
+          console.log(error);
         });
       }
     },
-    ch() {
+    discussValueActionChange() {
       console.log(this.discussValue);
+
+      
+
+      // console.log(this.discussNumControl);
+
+      // 先計算目前控制的(this.discussNumControl), 已經選定幾個人
+      let count = 0;
+      this.discussValue.forEach((element) => {
+        if (element[0] == this.discussNowFocus) {
+          count++;
+        }
+      });
+      console.log('count:'+count);
+
+      // 更改this.discussNumControl, 紀錄已選定人數
+      this.discussNumControl[this.discussNowFocus] = count;
+      console.log(this.discussNumControl);
+
+      // 如果已選定等於this.discussNum, 此學號就不能再選擇人(disabled=true)
+      console.log(this.discussNumControl[this.discussNowFocus]);
+      if (this.discussNumControl[this.discussNowFocus] == this.discussNum) {
+        this.discussOptions.forEach((element, index) => {
+          if (element.value == this.discussNowFocus) {
+            console.log('yes');
+            element['disabled'] = true;
+            // this.discussOptions[index]['disabled'] = true;
+          }
+        });
+      } else if (this.discussNumControl[this.discussNowFocus] > this.discussNum) {
+        this.$message.error('只能指定'+this.discussNum+'個！');
+        this.discussOptions.forEach((element, index) => {
+          if (element.value == this.discussNowFocus) {
+            console.log('no');
+            element['disabled'] = false;
+            // this.discussOptions[index]['disabled'] = true;
+          }
+        });
+      }
+    },
+    discussExpand(e) {
+      let discussNowFocus = e[0];
+      this.discussNowFocus = discussNowFocus
+      console.log(this.discussNowFocus);
     },
     checkLogin() {
       axios.get('/api/checkLogin').then((response) => {
@@ -556,6 +671,13 @@ export default {
         this.$message.error('請至少填寫兩組題目輸入範例！');
       } else {
         this.loading = true;
+
+        // 取出pattern
+        let patternArray = [];
+        this.problemData.pattern.forEach((element) => {
+          patternArray.push(element.pat);
+        });
+
         axios.post('/api/problem/addProblem', {
           courseId: this.courseInfo.courseId,
           name: this.problemData.name,
@@ -568,7 +690,7 @@ export default {
           outputDesc: this.problemData.outputDesc,
           testCases: this.problemData.testCases,
           keyword: [], // FIXME: 為了活動題
-          pattern: [] // FIXME: 為了活動題
+          pattern: patternArray // FIXME: 為了活動題
         }).then((response) => {
           let res = response.data;
           if (res.status == '200') {
@@ -576,6 +698,34 @@ export default {
               type: 'success',
               message: '新增題目成功!'
             });
+            
+            // console.log(res.result.problemId);
+            // console.log(this.dicussValue);
+
+            // [[correctAccount, correctedAccount]]轉成[{correctAccount, correctedAccount}]
+            let discussValueObject = []; // [{correctAccount, correctedAccount}]
+            this.discussValue.forEach((element) => {
+              let object = {
+                correctAccount: element[0],
+                correctedAccount: element[1]
+              }
+              discussValueObject.push(object);
+            });
+            console.log(discussValueObject);
+
+            // FIXME: 討論題
+            if (this.problemData.type == '討論題') {
+              axios.post('/api/team/createTeam', {
+                problemId: res.result.problemId,
+                pairs: discussValueObject
+              }).then((response) => {
+                let res = response.data;
+                if (res.status == 200) {
+                  console.log('建立team成功！');
+                }
+              });
+            }
+
             this.problemData = {
               'name': '',
               'type': '',
@@ -588,6 +738,9 @@ export default {
               'testCases': [{
                 'inputSample': '',
                 'outputSample': ''
+              }],
+              'pattern': [{
+                'pat': ''
               }]
             }
             this.dialogFormVisible = false;
@@ -596,12 +749,11 @@ export default {
             this.loading = false;
             this.$message.error(res.msg);
           }
+        }).catch((error) => {
+          this.loading = false;
+          this.$message.error('新增題目失敗！');
+          console.log(error);
         });
-
-        // FIXME: 討論題
-        if (this.problemData.type == '討論題') {
-          // post createTeam
-        }
       }
     },
     // tags control methods
@@ -642,6 +794,13 @@ export default {
       }
       this.inputVisible = false;
       this.inputValue = '';
+    },
+    addPattern() {
+      let obj = { 'pat': '' };
+      this.problemData.pattern.push(obj);
+    },
+    delPattern() {
+      this.problemData.pattern.pop();
     },
     addSample() {
       let obj = {

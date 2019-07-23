@@ -87,7 +87,7 @@ import NavHeaderStudent from '@/components/NavHeaderStudent.vue'
 import NavFooter from '@/components/NavFooter.vue'
 import FabRank from '@/components/FabRank.vue'
 
-import '@/assets/css/ta-index.css'
+import '@/assets/css/table.css'
 
 export default {
   components: {

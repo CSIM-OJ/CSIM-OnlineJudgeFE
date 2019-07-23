@@ -66,8 +66,8 @@
                 </el-form>
               </template>
               </el-table-column>
-              <el-table-column label="題目 ID" prop="problemId"></el-table-column>
-              <el-table-column label="題目名稱">
+              <el-table-column label="題目 ID" prop="problemId" width="100"></el-table-column>
+              <el-table-column label="題目名稱" width="230">
                 <template slot-scope="scope">
                   <a class="id-hyperlink" href="javascript:void(0)" @click="getProblemInfo(scope.row)">{{ scope.row.name }}</a>
                   <span v-if="scope.row.status=='可作答'" style="color: #67C23A; font-size: 25px;">&bull;</span>
@@ -317,7 +317,7 @@ import NavHeaderTeacher from '@/components/Teacher/NavHeaderTeacher'
 import SideNavCourseIndexTeacher from '@/components/Teacher/SideNavCourseIndexTeacher'
 import NavFooterAdmin from '@/components/NavFooterAdmin'
 
-import '@/assets/css/ta-index.css'
+import '@/assets/css/table.css'
 
 export default {
   components: {
@@ -339,8 +339,6 @@ export default {
       total: 0,
       pagesize: 10,
       currentPage: 1,
-      // manageClassGroup
-      manageClassGroup: '106資一A',
       // table
       detectCopyLoading: false,
       tableData: [],
@@ -802,6 +800,10 @@ export default {
 </script>
 
 <style>
+#detectCopyFormItem .el-form-item__content {
+  width: 80%;
+}
+
 /* tag style */
 .el-tag + .el-tag {
   margin-left: 10px;

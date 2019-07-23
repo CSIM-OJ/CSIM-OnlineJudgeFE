@@ -58,7 +58,7 @@
                     <img src="/static/katex-icon.png" alt="md-icon" style="width: 40px; margin-left: 3px;">
                   </label>
                   <div id="markdown-editor">
-                    <el-input type="textarea" rows="5" resize="vertical" placeholder="請輸入題目的描述內容" :value="problemData.description" style="width: 100%;" @input="update"></el-input>
+                    <el-input type="textarea" rows="5" resize="vertical" placeholder="請輸入題目的描述內容" v-model="problemData.description" style="width: 100%;" @input="update"></el-input>
                     <vue-markdown class="md-preview" :source="problemData.description"></vue-markdown>
                   </div>
                 </el-form-item>

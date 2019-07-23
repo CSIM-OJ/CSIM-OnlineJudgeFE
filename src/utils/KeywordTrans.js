@@ -1,5 +1,3 @@
-import GeneralUtil from './GeneralUtil';
-
 let tagToLogicTable = {
   'Java': {
     '條件': ['if', 'if else'],

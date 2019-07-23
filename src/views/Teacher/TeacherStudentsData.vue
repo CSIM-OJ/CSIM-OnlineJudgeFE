@@ -123,8 +123,6 @@ export default {
       tableHeight: null,
       pagesize: 10,
       currentPage:1,
-      // manageClassGroup
-      manageClassGroup: '106資一A',
       // table
       loading: false,
       tableData: [],
@@ -255,10 +253,6 @@ export default {
           this.countTableHeight();
         }
       });
-    },
-    // TODO:
-    getManageClassGroup() {
-      // this.manageClassGroup =
     },
     getStudentsData() {
       this.loading = true;

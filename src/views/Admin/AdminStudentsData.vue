@@ -114,8 +114,6 @@ export default {
       total: 0,
       pagesize:10,
       currentPage:1,
-      // manageClassGroup
-      manageClassGroup: '106資一A',
       // table
       loading: false,
       tableData: [],
@@ -216,10 +214,6 @@ export default {
           this.$router.push('/login');
         }
       });
-    },
-    // TODO
-    getManageClassGroup() {
-      // this.manageClassGroup =
     },
     getStudentsData() {
       this.loading = true;

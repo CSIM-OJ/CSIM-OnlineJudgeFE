@@ -8,6 +8,11 @@
         type="success"
         description="送出此題程式碼後，需要批改同學的程式碼並給分！">
       </el-alert>
+      <el-alert style="margin-bottom: 15px;" effect="dark" v-if="problem.type=='活動題'"
+        title="活動題 - 程式須包含指定片段"
+        type="warning"
+        description="題目說明欄中的Pattern，指定了同學在寫程式碼時，必須包含的程式片段(Pattern)，否則將會無法送出成績！">
+      </el-alert>
     </el-col>
   </el-row>
   
@@ -38,7 +43,6 @@
           <div class="title">Output</div>
           <div class="content change-line" v-text="problem.output"></div>
         </div>
-        <!-- TODO: new -->
         <el-row v-for="(item, index) in problem.testCases.slice(0, problem.testCases.length-1)" :key="index">
           <el-col :xs="24" :sm="12">
             <div class="problem-info">
@@ -46,7 +50,7 @@
                 <a style="cursor: pointer" @click="copy(item.inputSample)"><i class="el-icon-document"></i></a>
               </div>
               <div class="content">
-                <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="item.inputSample" resize="none">
+                <el-input type="textarea" readonly autosize v-model="item.inputSample"  placeholder="請輸入內容" resize="none">
                 </el-input>
               </div>
             </div>
@@ -55,8 +59,19 @@
             <div class="problem-info">
               <div class="title">Sample Output {{index+1}}</div>
               <div class="content">
-                <el-input type="textarea" readonly autosize placeholder="請輸入内容" v-model="item.outputSample" resize="none">
+                <el-input type="textarea" readonly autosize v-model="item.outputSample" placeholder="請輸入內容" resize="none">
                 </el-input>
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row v-for="(pat, index) in problem.pattern" :key="index" v-if="problem.type=='活動題'">
+          <el-col>
+            <div class="problem-info">
+              <div class="title" style="color: #E6A23C;">Pattern (注意！程式碼必須包含這些程式片段！)</div>
+              <div class="content">
+                <el-input type="textarea" readonly autosize :value="pat" resize="none"></el-input>
+                <!-- <div class="content change-line" v-text="pat"></div> -->
               </div>
             </div>
           </el-col>
@@ -148,8 +163,9 @@
     <el-row>
       <el-col :span="20" :offset="2" class="box">
         <span class="title">討論題 - 程式互評</span>
-        <el-tabs type="card" @tab-click="clickCorrectTab">
-          <el-tab-pane v-for="(stud, index) in correctedList" :key="stud.studentId" :label="stud.studentId" >
+        <span v-if="correctedStudsDone==false">學生還沒做完程式，再稍等一下！</span>
+        <el-tabs type="card" @tab-click="clickCorrectTab" v-if="correctedStudsDone">
+          <el-tab-pane v-for="(stud, index) in correctedList" :key="stud.studentAccount" :label="stud.studentAccount" >
             <!-- 1. 程式碼 -->
             <codemirror :options="options" :ref="'discussCodeMirror'+index" :style="{'font-size': fontSize+'px', 'padding-bottom': '20px'}"></codemirror>
             <!-- 2. 給分 -->
@@ -204,7 +220,7 @@
             <!-- 3. 送出評分 -->
             <el-row v-if="!correctStatus">
               <el-divider content-position="center" style="font-size: 16px; padding-top: 20px !important;">評分完所有學生後送出評分</el-divider>
-              <el-button type="primary" style="float: right;" @click="submitDisCorrect">送出評分</el-button>
+              <el-button type="primary" style="float: right;" @click="submitCorrect">送出評分</el-button>
             </el-row>
           </el-tab-pane>
         </el-tabs>
@@ -248,6 +264,7 @@ import {
 } from 'vue-codemirror-lite'
 import GeneralUtil from '@/utils/GeneralUtil.js'
 import DateUtil from '@/utils/DateUtil.js'
+import KeyPatUtil from '@/utils/KeyPatUtil.js'
 import {toKeys} from '@/utils/KeywordTrans.js'
 import VueMarkdown from 'vue-markdown'
 import vueCodeDiff from 'vue-code-diff'
@@ -312,12 +329,9 @@ export default {
         'input': '',
         'output': '',
         'testCases': [],
-        'inputSample1': '',
-        'outputSample1': '',
-        'inputSample2': '',
-        'outputSample2': '',
         'correctNum': null,
-        'incorrectNum': null
+        'incorrectNum': null,
+        'pattern': []
       },
       mode: "text/x-java",
       nowLang: 'Java',
@@ -366,16 +380,8 @@ public class Main {
       newCode: '',
       // FIXME: dicuss correct
       dicussShowFlag: false,
-      correctedList: [{ 
-        studentId: '04156126',
-        code: 'zzz'
-      }, { 
-        studentId: '04162314',
-        code: 'bbb'
-      }, { 
-        studentId: '06156123',
-        code: 'zOOOzz'
-      }],
+      correctedStudsDone: false, // TODO: 需要被批改的學生, 是否已經送出code
+      correctedList: [],
       correctStatus: false
     }
   },
@@ -443,7 +449,7 @@ public class Main {
       if(today.valueOf() > deadline.valueOf()) { // 過期
         return false
       } else { // 沒過期
-        if(this.problem.judged==false || this.problem.type=='練習題' || this.problem.type=='作業') {
+        if(this.problem.judged==false || this.problem.type=='練習題' || this.problem.type=='作業' || this.problem.type=='活動題') {
           return true
         }
       }
@@ -512,21 +518,26 @@ public class Main {
           if (res.result.judged == true) {
             this.problem.judged = true;
 
+            this.getJudgedInfo();
+
             // FIXME: show discuss section
+            console.log(this.problem.type);
             if (this.problem.type == '討論題') {
-              this.getCorrectList();
-              this.dicussShowFlag = true;
-              this.options.readOnly = true;
-              this.$nextTick(() => {
-                this.$refs.discussCodeMirror0[0].value = this.correctedList[0].code;
-                var self = this;
-                setTimeout(function() {
-                  self.$refs.discussCodeMirror0[0].editor.refresh();
-                },1);
-              });
+              this.checkCorrectStatus();
+
+              // this.getCorrectStuds();
+              // this.dicussShowFlag = true;
+              // this.options.readOnly = true;
+              // this.$nextTick(() => {
+              //   this.$refs.discussCodeMirror0[0].value = this.correctedList[0].code;
+              //   var self = this;
+              //   setTimeout(function() {
+              //     self.$refs.discussCodeMirror0[0].editor.refresh();
+              //   },1);
+              // });
             }
 
-            this.getJudgedInfo();
+            
           } else {
             this.notify1();
             let self = this;
@@ -552,7 +563,7 @@ public class Main {
           this.judgedResultForm.symbol = res.result.symbol;
           this.judgedResultForm.errorInfo = res.result.errorInfo;
           this.judgedResultForm.output = res.result.output;
-          this.judgedResultForm.bestCode = res.result.best; // FIXME: 等後端
+          this.judgedResultForm.bestCode = res.result.best;
         }
       });
     },
@@ -574,16 +585,14 @@ public class Main {
           this.problem.input = res.result.inputDesc;
           this.problem.output = res.result.outputDesc;
           this.problem.testCases = res.result.testCases;
-          // this.problem.inputSample1 = res.result.inputSample1.replace(new RegExp(" /n ", "g"), '\n');
-          // this.problem.outputSample1 = res.result.outputSample1.replace(new RegExp(" /n ", "g"), '\n');
-          // this.problem.inputSample2 = res.result.inputSample2.replace(new RegExp(" /n ", "g"), '\n');;
-          // this.problem.outputSample2 = res.result.outputSample2.replace(new RegExp(" /n ", "g"), '\n');
           this.problem.correctNum = parseInt(res.result.correctNum);
           this.problem.incorrectNum = parseInt(res.result.incorrectNum);
+          this.problem.pattern = res.result.pattern;
 
           // FIXME: 如果是討論題，查看correctStatus
           if (this.problem.type == '討論題') {
-            this.checkCorrectStatus();
+
+            // this.checkCorrectStatus();
           }
         }
       });
@@ -681,23 +690,22 @@ public class Main {
           center: true
         }).then(() => {
           // FIXME: keyword檢查
-          let keywords = toKeys(this.problem.tag);
+          let keywords = KeyPatUtil.toKeys(this.problem.tag);
+          // let keywords = toKeys(this.problem.tag);
           console.log(keywords);
 
           // 看code是否有包含keyword
-          let includeKeyFlag = false;
-          keywords.forEach((key) => {
-            if(this.code.indexOf(key)>=0) includeKeyFlag=true;
-          });
-
-          if(includeKeyFlag) {
-            // pass
-          } else {
+          if (KeyPatUtil.isInRule(keywords, this.code) == false) {
             this.$message.error('程式邏輯錯誤！');
             return;
           }
 
           // FIXME: pattern檢查
+          console.log(this.problem.pattern);
+          if (KeyPatUtil.isInRule(this.problem.pattern, this.code) == false) {
+            this.$message.error('程式不包含指定程式用法！');
+            return;
+          }
 
 
           this.judging = true;
@@ -729,7 +737,7 @@ public class Main {
                 }
               });
               // 練習題與作業無限送出更改judging狀態及清空code
-              if (this.problem.type == '練習題' || this.problem.type == '作業') {
+              if (this.problem.type == '練習題' || this.problem.type == '作業' || this.problem.type == '活動題') {
                 this.judging = false;
                 this.code = `import java.util.*;
 
@@ -741,17 +749,18 @@ public class Main {
               }
 
               // FIXME: 如果是討論題，顯示出批改學生的區域
-              this.getCorrectList();
               if (this.problem.type == '討論題') {
-                this.dicussShowFlag = true;
-                this.options.readOnly = true;
-                this.$nextTick(() => {
-                  this.$refs.discussCodeMirror0[0].value = this.correctedList[0].code;
-                  var self = this;
-                  setTimeout(function() {
-                    self.$refs.discussCodeMirror0[0].editor.refresh();
-                  },1);
-                });
+                this.getCorrectStuds();
+
+                // this.dicussShowFlag = true;
+                // this.options.readOnly = true;
+                // this.$nextTick(() => {
+                //   this.$refs.discussCodeMirror0[0].value = this.correctedList[0].code;
+                //   var self = this;
+                //   setTimeout(function() {
+                //     self.$refs.discussCodeMirror0[0].editor.refresh();
+                //   },1);
+                // });
               }
             } else {
               console.log('judgedErrorMsg:' + res.msg);
@@ -813,7 +822,45 @@ public class Main {
       this.commitDialogActive = true;
     },
     // FIXME: discuss section
-    getCorrectList() {
+    getCorrectStuds() {
+      axios.get('/api/team/correctStuds', {
+        params: {
+          problemId: this.problem.id
+        }
+      }).then((response) => {
+        let res = response.data;
+        if (res.status == '200') {
+          this.correctedList = res.result;
+
+          // 沒有學生已經完成題目(=沒有學生有code)
+          if (this.correctedList.length == 0) {
+            this.correctedStudsDone = false;
+            this.dicussShowFlag = true;
+            return;
+          } else {
+            // TODO:
+            // console.log(res.result);
+             // console.log(this.correctedList);
+            this.correctedStudsDone = true;
+
+            this.dicussShowFlag = true;
+            this.options.readOnly = true;
+            this.$nextTick(() => {
+              this.$refs.discussCodeMirror0[0].value = this.correctedList[0].code;
+              var self = this;
+              setTimeout(function() {
+                self.$refs.discussCodeMirror0[0].editor.refresh();
+              },1);
+            });
+          }
+
+          
+
+          
+          
+        }
+      });
+      
       this.correctedList.forEach((ele)=> {
         ele.score = 0; // 分數
         ele.correctValue = 0; // 程式正確性
@@ -832,7 +879,7 @@ public class Main {
         },1);
       });
     },
-    submitDisCorrect() {
+    submitCorrect() {
       this.$confirm('確定已經評分完所有同學，要送出評分結果嗎？', '提示', {
         confirmButtonText: '確定',
         cancelButtonText: '取消',
@@ -841,24 +888,81 @@ public class Main {
         // FIXME: 送出評分
         this.correctStatus = true;
 
-        
-        
-
-        this.$message({
-          type: 'success',
-          message: '送出評分成功!'
+        let resultList = [];
+        this.correctedList.forEach((ele) => {
+          let obj = {
+            correctedAccount: ele.studentAccount,
+            score: ele.score,
+            correctValue: ele.correctValue,
+            readValue: ele.readValue,
+            skillValue: ele.skillValue,
+            completeValue: ele.completeValue,
+            wholeValue: ele.wholeValue
+          }
+          resultList.push(obj);
         });
-      })
-      // .catch(() => {
-      //   this.$message({
-      //     type: 'info',
-      //     message: '已取消送出評分'
-      //   });          
-      // });
+
+        console.log(resultList);
+        axios.post('/api/team/submitCorrect', {
+          problemId: this.problem.id,
+          correctedList: resultList
+        }).then((response) => {
+          let res = response.data;
+          if (res.status == '200') {
+            this.$message({
+              type: 'success',
+              message: '送出評分成功!'
+            });
+          }
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消送出評分'
+        });          
+      });
     },
     checkCorrectStatus() {
-      // axios確認
-      // this.correctStatus = 
+      // FIXME: correctStatus
+      axios.get('/api/team/checkCorrectStatus', {
+        params: {
+          problemId: this.problem.id
+        }
+      }).then((response) => {
+        let res = response.data;
+        if (res.status == '200') {
+          this.correctStatus = res.result.status;
+          console.log(this.correctStatus);
+
+          if (this.correctStatus == true) {
+            this.correctedStudsDone = true;
+            this.getCorrectedInfo();
+          } else {
+            this.getCorrectStuds();
+          }
+        }
+      });
+    },
+    getCorrectedInfo() {
+      axios.get('/api/team/correctedInfo', {
+        params: {
+          problemId: this.problem.id
+        }
+      }).then((response) => {
+        let res = response.data;
+        if (res.status == '200') {
+          this.correctedList = res.result;
+          this.dicussShowFlag = true;
+          this.options.readOnly = true;
+          this.$nextTick(() => {
+            this.$refs.discussCodeMirror0[0].value = this.correctedList[0].code;
+            var self = this;
+            setTimeout(function() {
+              self.$refs.discussCodeMirror0[0].editor.refresh();
+            },1);
+          });
+        }
+      })
     }
   }
 }

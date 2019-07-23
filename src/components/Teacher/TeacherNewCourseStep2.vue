@@ -60,7 +60,11 @@ export default {
       this.$emit('goLast2To1', this.step);
     },
     nextStep() {
-      this.$emit('goNext2To3', this.value, this.step);
+      if (this.value.length == 0) {
+        this.$message.error('請選擇至少一個班級！');
+      } else {
+        this.$emit('goNext2To3', this.value, this.step);
+      }
     }
   }
 }

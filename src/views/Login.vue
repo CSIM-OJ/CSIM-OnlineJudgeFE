@@ -26,7 +26,7 @@
                   <el-input v-model="loginForm.account"></el-input>
                 </el-form-item>
                 <el-form-item label="密碼" prop="password">
-                  <el-input type="password" v-model="loginForm.password" auto-complete="off"></el-input>
+                  <el-input type="password" v-model="loginForm.password" auto-complete="off" show-password></el-input>
                 </el-form-item>
                 <el-row style="padding-bottom: 30px;">
                   <el-col :span="24">

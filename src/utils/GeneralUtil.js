@@ -51,7 +51,8 @@ export default class GeneralUtil {
 
   /**
    * @desc 移除array中指定元素
-   * @param {array, string} arr.item
+   * @param {array} arr
+   * @param {string} item
    * @return {array} 
    */
   static removeInArray(arr, item) {
@@ -61,7 +62,6 @@ export default class GeneralUtil {
         temp.splice(i, 1);
       }
     }
-    console.log(temp);
     return temp
   }
 }
