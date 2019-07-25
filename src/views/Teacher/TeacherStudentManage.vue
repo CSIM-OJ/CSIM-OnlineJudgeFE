@@ -198,14 +198,16 @@ export default {
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
+          let temp = [];
           for (let i = 0; i < res.result.length; i++) {
             let obj = {
               studentId: res.result[i].studentId,
               name: res.result[i].studentName,
               class: res.result[i].studentClass
             }
-            this.studentData.push(obj);
+            temp.push(obj);
           }
+           this.studentData = temp;
         }
         this.dataLoading = false;
       });
@@ -244,6 +246,7 @@ export default {
               type: 'success',
               message: '刪除成功!'
             });
+            this.getStudentsData();
           } else {
             this.$message.error('刪除失敗！');
           }

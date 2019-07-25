@@ -8,8 +8,8 @@
         type="success"
         description="送出此題程式碼後，需要批改同學的程式碼並給分！">
       </el-alert>
-      <el-alert style="margin-bottom: 15px;" effect="dark" v-if="problem.type=='活動題'"
-        title="活動題 - 程式須包含指定片段"
+      <el-alert style="margin-bottom: 15px;" effect="dark" v-if="problem.pattern.length>0"
+        title="Pattern - 程式須包含指定片段"
         type="warning"
         description="題目說明欄中的Pattern，指定了同學在寫程式碼時，必須包含的程式片段(Pattern)，否則將會無法送出成績！">
       </el-alert>
@@ -65,7 +65,7 @@
             </div>
           </el-col>
         </el-row>
-        <el-row v-for="(pat, index) in problem.pattern" :key="index" v-if="problem.type=='活動題'">
+        <el-row v-for="(pat, index) in problem.pattern" :key="index" v-if="problem.pattern.length>0">
           <el-col>
             <div class="problem-info">
               <div class="title" style="color: #E6A23C;">Pattern (注意！程式碼必須包含這些程式片段！)</div>
@@ -79,6 +79,7 @@
       </el-col>
     </el-row>
   </section>
+
   <section id="judged-section" v-if="problem.judged==true" class="animated fadeInUp">
     <el-row>
       <el-col :span="20" :offset="2" class="box">
@@ -589,6 +590,9 @@ public class Main {
           this.problem.incorrectNum = parseInt(res.result.incorrectNum);
           this.problem.pattern = res.result.pattern;
 
+          console.log(this.problem.pattern);
+          console.log(this.problem.pattern.length);
+
           // FIXME: 如果是討論題，查看correctStatus
           if (this.problem.type == '討論題') {
 
@@ -690,23 +694,22 @@ public class Main {
           center: true
         }).then(() => {
           // FIXME: keyword檢查
-          let keywords = KeyPatUtil.toKeys(this.problem.tag);
-          // let keywords = toKeys(this.problem.tag);
-          console.log(keywords);
+          // NOTE: 190725 取消keyword
+          // let keywords = KeyPatUtil.toKeys(this.problem.tag);
+          // console.log(keywords);
 
           // 看code是否有包含keyword
-          if (KeyPatUtil.isInRule(keywords, this.code) == false) {
-            this.$message.error('程式邏輯錯誤！');
-            return;
-          }
+          // if (KeyPatUtil.isInRule(keywords, this.code) == false) {
+          //   this.$message.error('程式邏輯錯誤！');
+          //   return;
+          // }
 
           // FIXME: pattern檢查
           console.log(this.problem.pattern);
           if (KeyPatUtil.isInRule(this.problem.pattern, this.code) == false) {
-            this.$message.error('程式不包含指定程式用法！');
+            this.$message.error('程式碼內沒有包含pattern');
             return;
           }
-
 
           this.judging = true;
           axios.post('/api/judge/judgeCode', {
@@ -853,11 +856,6 @@ public class Main {
               },1);
             });
           }
-
-          
-
-          
-          
         }
       });
       
