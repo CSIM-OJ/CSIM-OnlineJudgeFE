@@ -490,7 +490,6 @@ public class Main {
           });
 
           this.getProblemData();
-          this.checkJudged();
           this.getHistoryScore();
         }
       });
@@ -590,14 +589,7 @@ public class Main {
           this.problem.incorrectNum = parseInt(res.result.incorrectNum);
           this.problem.pattern = res.result.pattern;
 
-          console.log(this.problem.pattern);
-          console.log(this.problem.pattern.length);
-
-          // FIXME: 如果是討論題，查看correctStatus
-          if (this.problem.type == '討論題') {
-
-            // this.checkCorrectStatus();
-          }
+          this.checkJudged();
         }
       });
     },
@@ -930,7 +922,6 @@ public class Main {
         let res = response.data;
         if (res.status == '200') {
           this.correctStatus = res.result.status;
-          console.log(this.correctStatus);
 
           if (this.correctStatus == true) {
             this.correctedStudsDone = true;
