@@ -205,13 +205,15 @@ export default {
     undoCarHeight() {
       let page = this.undoCarShowIndex+1;
       let carItemNum = Math.ceil(this.undoProblems.length/20);
+      let vh = window.screen.width*12/100; // 每個格子的高度
 
       if (page<carItemNum) {
-        return '920px';
+        console.log(5*(vh+28)+'px');
+        return 5*(vh+28)+'px';
       } else {
         let last = this.undoProblems.length%20;
         let h = Math.ceil(last/4);
-        return h*184+'px';
+        return h*(vh+28)+'px';
       }
     },
     doneCarItemNum() {
@@ -220,13 +222,15 @@ export default {
     doneCarHeight() {
       let page = this.doneCarShowIndex+1;
       let carItemNum = Math.ceil(this.doneProblems.length/20);
+      let vh = window.screen.width*12/100; // 每個格子的高度
 
       if (page<carItemNum) {
-        return '920px';
+        console.log(5*(vh+28)+'px');
+        return 5*(vh+28)+'px';
       } else {
         let last = this.doneProblems.length%20;
         let h = Math.ceil(last/4);
-        return h*184+'px';
+        return h*(vh+28)+'px';
       }
     }
   },
