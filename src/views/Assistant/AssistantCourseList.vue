@@ -86,7 +86,7 @@ export default {
       });
     },
     getCourses() {
-      axios.get("/api/teacher/courseList").then((response)=> {
+      axios.get("/api/assistant/courseList").then((response)=> {
         let res = response.data;
         if(res.status=="200") {
           this.courseList = res.result;

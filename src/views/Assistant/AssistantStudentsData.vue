@@ -14,7 +14,7 @@
             <span class="title">學生資訊</span>
             <div class="breadcrumb">
               <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/teacher/'+ this.$store.state.course.courseInfo.courseName +'/index' }">{{this.$store.state.course.courseInfo.courseName}}</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/assistant/'+ this.$store.state.course.courseInfo.courseName +'/index' }">{{this.$store.state.course.courseInfo.courseName}}</el-breadcrumb-item>
                 <el-breadcrumb-item>學生資訊</el-breadcrumb-item>
               </el-breadcrumb>
             </div>

@@ -221,7 +221,7 @@ export default {
           delID.push(this.deleteSelection[i].studentId);
         }
 
-        axios.post('/api/teacher/deleteStudentList', {
+        axios.post('/api/assistant/deleteStudentList', {
           courseId: this.$store.state.course.courseInfo.courseId,
           accountList: delID
         }).then((response)=> {
@@ -278,7 +278,7 @@ export default {
     addNewOneStudent() {
       let tempList = [this.newOneStudentForm.account];
 
-      axios.post('/api/teacher/addStudentList', {
+      axios.post('/api/assistant/addStudentList', {
         courseId: this.$store.state.course.courseInfo.courseId,
         accountList: tempList
       }).then((response) => {
