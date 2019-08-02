@@ -105,3 +105,18 @@ export default {
   }
 }
 </script>
+
+<style>
+.code .code-copy {
+  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  float: right;
+  color: #303133;
+  transition: all .3s ease;
+}
+
+.code .code-copy:hover {
+  color: #409EFF;
+}
+</style>

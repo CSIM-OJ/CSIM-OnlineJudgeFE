@@ -118,7 +118,6 @@ export default {
     doStatusData() {
       // TODO 使用PID判別
       let data = this.studentData;
-      // console.log(data);
       let flag = this.doInfoDialogStatus;
       let tempTableData = [];
       for (let i = 0; i < data.length; i++) {
@@ -259,51 +258,3 @@ export default {
   }
 }
 </script>
-
-<style>
-#detectCopyFormItem .el-form-item__content {
-  width: 80%;
-}
-
-/* tag style */
-.el-tag + .el-tag {
-  margin-left: 10px;
-}
-
-.button-new-tag {
-  margin-left: 10px;
-  height: 32px;
-  line-height: 30px;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
-.input-new-tag {
-  width: 90px;
-  margin-left: 10px;
-  vertical-align: bottom;
-}
-
-.overview {
-  transition: all .3s ease;
-}
-
-.overview:hover {
-  color: #409EFF;
-  cursor: pointer;
-}
-
-/* doInfoDialog copy */
-.code .code-copy {
-  cursor: pointer;
-  margin-top: 10px;
-  margin-bottom: 20px;
-  float: right;
-  color: #303133;
-  transition: all .3s ease;
-}
-
-.code .code-copy:hover {
-  color: #409EFF;
-}
-</style>

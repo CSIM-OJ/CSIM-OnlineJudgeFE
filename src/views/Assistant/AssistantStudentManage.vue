@@ -14,7 +14,7 @@
             <span class="title">學生管理</span>
             <div class="breadcrumb">
               <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/assistant/'+ courseInfo.courseName +'/index' }">{{courseInfo.courseName}}</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/assistant/'+ this.$store.state.course.courseInfo.courseName +'/index' }">{{this.$store.state.course.courseInfo.courseName}}</el-breadcrumb-item>
                 <el-breadcrumb-item>學生管理</el-breadcrumb-item>
               </el-breadcrumb>
             </div>
@@ -121,11 +121,6 @@ export default {
   },
   data() {
     return {
-      courseInfo: {
-        'courseId': '',
-        'courseName': '',
-        'semester': ''
-      },
       studentData: [],
       dataLoading: false,
       deleteSelection: [],

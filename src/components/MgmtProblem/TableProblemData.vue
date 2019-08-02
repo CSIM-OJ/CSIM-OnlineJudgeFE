@@ -259,3 +259,9 @@ export default {
   }
 }
 </script>
+
+<style>
+#detectCopyFormItem .el-form-item__content {
+  width: 80%;
+}
+</style>
