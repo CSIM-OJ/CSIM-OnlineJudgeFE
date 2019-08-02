@@ -15,33 +15,37 @@
             <span class="title">編輯課程</span>
           </el-row>
           <el-row class="box-square" id="teacherEditCourse-section">
-            <el-col :span="12" style="padding-right: 23px; padding-bottom: 30px;">
+            <el-col :span="12" :key="item.courseId" style="padding-right: 23px; padding-bottom: 30px;" v-for="item in courseList">
               <el-card class="box-card" shadow="hover">
                 <div slot="header" class="clearfix">
-                  <span class="title">物件導向程式設計</span>
+                  <span class="title">{{ item.courseName }}</span>
                   <span class="courseId">
-                    <span class="id">課程ID</span>13
+                    <span class="id">課程ID</span>{{ item.courseId }}
                   </span>
-                  <el-button type="text" class="edit-button" @click="editCourseDialogVisible=true">
+                  <el-button type="text" class="edit-button" @click="editCourse(item)">
                     編輯課程<i class="el-icon-edit"></i>
                   </el-button>
-                  <el-button type="text" class="del-button" @click="delCourse">
+                  <el-button type="text" class="del-button" @click="delCourse(item.courseId)">
                     刪除課程<i class="el-icon-close"></i>
                   </el-button>
                 </div>
                 <div class="text item marbtm">
                   <span class="item-title">課程學期(semester)</span>
-                  <span class="item-content">107上</span>
+                  <span class="item-content">{{ item.semester }}</span>
                 </div>
                 <div class="text item marbtm">
-                  <span class="item-title">班級(class)</span>
-                  <span class="item-content">
-                    <el-tag style="height: 25px; line-height: 25px;">資三A</el-tag>
-                  </span>
+                  <el-row>
+                    <el-col :md="5">
+                      <span class="item-title">班級(class)</span>
+                    </el-col>
+                    <el-col :md="15" style="overflow: scroll;">
+                      <el-tag v-for="clas in item.class" :key="clas" style="height: 25px; line-height: 25px; margin-bottom:8px; z-index:1px;">{{ clas }}</el-tag>
+                    </el-col>
+                  </el-row>
                 </div>
                 <div class="text item">
                   <span class="item-title">助教(TA)</span>
-                  <span class="item-content">蘇靖軒</span>
+                  <span class="item-content" v-for="ta in item.taList" :key="ta" style="margin-right:10px;">{{ ta.assistantName }}</span>
                 </div>
               </el-card>
             </el-col>
@@ -98,23 +102,21 @@ export default {
   },
   data() {
     return {
+      courseList: [], // 所有課程
+      // editCourse Dialog
       editCourseDialogVisible: false,
       editCourseForm: {
-        courseName: '物件導向程式設計',
-        semester: '107上',
-        taList: ['04156147']
+        courseId: '',
+        courseName: '',
+        semester: '',
+        taList: []
       },
-      allTaList: [{
-        label: '蘇靖軒',
-        key: '04156147'
-      }, {
-        label: '陳冠毅',
-        key: '06156213'
-      }]
+      allTaList: []
     }
   },
   mounted() {
     this.checkLogin();
+    this.getCourseList();
   },
   methods: {
     checkLogin() {
@@ -135,21 +137,65 @@ export default {
         }
       });
     },
-    delCourse() {
-      this.$confirm('確認是否要刪除課程', '提示', {
-        confirmButtonText: '確定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '刪除成功!'
-        });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });          
+    getCourseList() {
+      axios.get('/api/teacher/courseList').then((response) => {
+        let res = response.data;
+        if (res.status == '200') {
+          this.courseList = res.result;
+          console.log(this.courseList);
+        }
+      });
+    },
+    getAllTaList() { // 取得未被指派的助教名單
+      axios.get('/api/teacher/assistantList').then((response) => {
+        let res = response.data;
+        if (res.status=='200') {
+          res.result.forEach((ta) => {
+            let obj = {
+              label: ta.assistantName,
+              key: ta.assistantId
+            }
+            this.allTaList.push(obj);
+          });
+          
+          console.log(this.allTaList);
+        }
+      });
+    },
+    // TODO: editCourse
+    editCourse(item) {
+      this.getAllTaList();
+
+      let taListJustId = [];
+      item.taList.forEach((ta) => {
+        taListJustId.push(ta.assistantId);
+      });
+
+      this.editCourseForm = {
+        courseId: item.courseId,
+        courseName: item.courseName,
+        semester: item.semester,
+        taList: taListJustId
+      }
+
+      this.editCourseDialogVisible = true;
+    },
+    summitEdit() {
+      axios.post('/api/course/editCourse', {
+        courseId: this.editCourseForm.courseId,
+        courseName: this.editCourseForm.courseName,
+        semester: this.editCourseForm.semester,
+        taList: this.editCourseForm.taList
+      }).then((response) => {
+        let res = response.data;
+        if (res.status == '200') {
+          this.$message({
+            type: 'success',
+            message: '編輯成功!'
+          });
+          this.editCourseDialogVisible = false;
+          this.getCourseList();
+        }
       });
     },
     handleChange() {
@@ -159,13 +205,38 @@ export default {
       this.editCourseDialogVisible = false;
 
       this.editCourseForm = {
+        courseId: '',
         courseName: '',
         semester: '',
         taList: []
       }
+      this.allTaList = [];
     },
-    summitEdit() {
-      // TODO: axios
+    // TODO: delCourse
+    delCourse(courseId) {
+      this.$confirm('確認是否要刪除課程', '提示', {
+        confirmButtonText: '確定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        axios.post('/api/course/delCourse', {
+          courseId: courseId
+        }).then((response) => {
+          let res = response.data;
+          if (res.status == '200') {
+            this.getCourseList();
+            this.$message({
+              type: 'success',
+              message: '刪除成功!'
+            });
+          }
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });          
+      });
     }
   }
 }
@@ -203,6 +274,7 @@ export default {
   position: absolute;
   bottom: 43px;
   right: 15px;
+  z-index: 100;
 }
 
 #teacherEditCourse-section .el-card .del-button {
@@ -221,6 +293,11 @@ export default {
 
 #teacherEditCourse-section .el-card .item .item-content {
   color: #303133;
+  overflow: scroll;
+}
+
+#teacherEditCourse-section .el-card .el-tag {
+  display: inline;
 }
 
 /* editCourseDialog */
@@ -237,4 +314,6 @@ export default {
   float: right;
   margin-right: 43px;
 }
+
+
 </style>

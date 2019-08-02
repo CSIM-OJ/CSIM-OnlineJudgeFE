@@ -74,9 +74,9 @@ export default {
           if (res.result.authority == 'student') {
             this.$router.push('/student/courseList')
           } else if (res.result.authority == 'teacher') {
-            // pass
+            this.$router.push('/teacher/courseList');
           } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/index');
+            // pass
           } else if (res.result.authority == 'admin') {
             this.$router.push('/admin/index');
           }  
@@ -94,6 +94,12 @@ export default {
       });
     },
     goCourse(courseName) {
+      this.courseList.forEach((element) => {
+        if(element.courseName == courseName) {
+          this.$store.commit('initCourseInfo', element);
+        }
+      });
+      
       this.$router.push('/assistant/'+ courseName +'/index');
     }
   }

@@ -94,6 +94,12 @@ export default {
       });
     },
     goCourse(courseName) {
+      this.courseList.forEach((element) => {
+        if(element.courseName == courseName) {
+          this.$store.commit('initCourseInfo', element);
+        }
+      });
+      
       this.$router.push('/teacher/'+ courseName +'/index');
     }
   }

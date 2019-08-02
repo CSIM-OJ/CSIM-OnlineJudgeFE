@@ -14,7 +14,7 @@
             <span class="title">學生管理</span>
             <div class="breadcrumb">
               <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/teacher/'+ courseInfo.courseName +'/index' }">{{courseInfo.courseName}}</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/teacher/'+ this.$store.state.course.courseInfo.courseName +'/index' }">{{this.$store.state.course.courseInfo.courseName}}</el-breadcrumb-item>
                 <el-breadcrumb-item>學生管理</el-breadcrumb-item>
               </el-breadcrumb>
             </div>
@@ -121,11 +121,6 @@ export default {
   },
   data() {
     return {
-      courseInfo: {
-        'courseId': '',
-        'courseName': '',
-        'semester': ''
-      },
       studentData: [],
       dataLoading: false,
       deleteSelection: [],
@@ -153,8 +148,7 @@ export default {
   },
   mounted() {
     this.checkLogin();
-    this.getCourses();
-    // this.getStudentsData();
+    this.getStudentsData();
   },
   methods: {
     checkLogin() {
@@ -175,25 +169,11 @@ export default {
         }
       });
     },
-    getCourses() {
-      axios.get("/api/teacher/courseList").then((response)=> {
-        let res = response.data;
-        if(res.status=="200") {
-          res.result.forEach((element) => {
-            if(element.courseName == this.$route.params.courseName) {
-              this.courseInfo = element;
-            }
-          });
-
-          this.getStudentsData();
-        }
-      });
-    },
     getStudentsData() {
       this.dataLoading = true;
       axios.get('/api/course/getStudentsData', {
         params: {
-          courseId: this.courseInfo.courseId
+          courseId: this.$store.state.course.courseInfo.courseId
         }
       }).then((response) => {
         let res = response.data;
@@ -237,7 +217,7 @@ export default {
         }
 
         axios.post('/api/teacher/deleteStudentList', {
-          courseId: this.courseInfo.courseId,
+          courseId: this.$store.state.course.courseInfo.courseId,
           accountList: delID
         }).then((response)=> {
           let res = response.data;
@@ -294,7 +274,7 @@ export default {
       let tempList = [this.newOneStudentForm.account];
 
       axios.post('/api/teacher/addStudentList', {
-        courseId: this.courseInfo.courseId,
+        courseId: this.$store.state.course.courseInfo.courseId,
         accountList: tempList
       }).then((response) => {
         let res = response.data;

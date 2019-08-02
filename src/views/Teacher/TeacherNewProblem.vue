@@ -14,7 +14,7 @@
             <span class="title">新增題目</span>
             <div class="breadcrumb">
               <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/teacher/'+ courseInfo.courseName +'/index' }">{{ courseInfo.courseName }}</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/teacher/'+ this.$store.state.course.courseInfo.courseName +'/index' }">{{ this.$store.state.course.courseInfo.courseName }}</el-breadcrumb-item>
                 <el-breadcrumb-item>新增題目</el-breadcrumb-item>
               </el-breadcrumb>
             </div>
@@ -395,11 +395,6 @@ export default {
   mixins: [problemStateMixin],
   data() {
     return {
-      courseInfo: {
-        'courseId': '',
-        'courseName': '',
-        'semester': ''
-      },
       dialogFormVisible: false, // 題目預覽dialog
       problemData: {
         'name': '',
@@ -467,7 +462,6 @@ export default {
   },
   mounted() {
     this.checkLogin();
-    this.getCourses();
     // this.getStudsList();
     
     this.autoCompleteTags = this.problemTag;
@@ -515,7 +509,7 @@ export default {
     getStudsList() {
       axios.get('/api/student/allStud', {
         params: {
-          courseId: this.courseInfo.courseId
+          courseId: this.$store.state.course.courseInfo.courseId
         }
       }).then((response) => {
         let res = response.data;
@@ -649,18 +643,6 @@ export default {
         }
       });
     },
-    getCourses() {
-      axios.get("/api/teacher/courseList").then((response)=> {
-        let res = response.data;
-        if(res.status=="200") {
-          res.result.forEach((element) => {
-            if(element.courseName == this.$route.params.courseName) {
-              this.courseInfo = element;
-            }
-          });
-        }
-      });
-    },
     // NOTE: preview
     previewProblem() {
       // discussValue轉成tree格式，供使用者預覽
@@ -728,7 +710,7 @@ export default {
         }
         
         axios.post('/api/problem/addProblem', {
-          courseId: this.courseInfo.courseId,
+          courseId: this.$store.state.course.courseInfo.courseId,
           name: this.problemData.name,
           type: this.problemData.type,
           category: this.problemData.category,

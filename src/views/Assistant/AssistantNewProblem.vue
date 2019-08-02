@@ -14,7 +14,7 @@
             <span class="title">新增題目</span>
             <div class="breadcrumb">
               <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/assistant/'+ courseInfo.courseName +'/index' }">{{ courseInfo.courseName }}</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/teacher/'+ this.$store.state.course.courseInfo.courseName +'/index' }">{{ this.$store.state.course.courseInfo.courseName }}</el-breadcrumb-item>
                 <el-breadcrumb-item>新增題目</el-breadcrumb-item>
               </el-breadcrumb>
             </div>
@@ -75,7 +75,7 @@
                   </el-col>
                 </el-row>
                 <!-- TODO: pattern -->
-                <el-row >
+                <el-row>
                   <el-col :span="24" style="margin-bottom: 20px;">
                     <el-form-item label="指定程式片段 (Pattern)" style="margin-bottom: 5px;">
                       <el-input v-model="pattern.pat" maxlength="15" placeholder="請輸入一段指定的程式碼" style="width: 80%; margin-bottom: 10px;" v-for="(pattern, index) in problemData.pattern" :key="index"></el-input>
@@ -137,17 +137,18 @@
                 <el-row v-if="problemData.type=='討論題'">
                   <el-col :span="24" style="margin-bottom: 15px;">
                     <el-divider content-position="center">討論題：選取批改配對</el-divider>
-                    <p>指定一人須批改幾位同學：
+                    <!-- NOTE: 190724 不需用 -->
+                    <!-- <p>指定一人須批改幾位同學：
                       <el-input-number v-model="discussNum" controls-position="right" @change="discussNumChange" :min="1" :max="10" size="small" :disabled="discussIsLock"></el-input-number>
                       <el-button size="mini" style="margin-left: 20px;" type="primary" @click="discussNumLock">確定</el-button>
                       <el-button size="mini" type="danger" @click="discussNumUnlock">更改</el-button>
-                    </p>
-                    <el-cascader-panel ref="discussCascader" @change="discussValueActionChange" @expand-change="discussExpand" v-model="discussValue" :options="discussOptions" :props="discussProps" style="height:500px;"></el-cascader-panel>
+                    </p> -->
+                    <el-cascader-panel v-loading="discussLoading" @change="discussValueActionChange" @expand-change="discussExpand" v-model="discussValue" :options="discussOptions" :props="discussProps" style="height:500px;"></el-cascader-panel>
                   </el-col>
                 </el-row>
                 <!-- 討論題：選取批改配對 end -->
                 <el-row>
-                  <el-button type="primary" @click="dialogFormVisible=true" style="float: right;">確定</el-button>
+                  <el-button type="primary" @click="previewProblem" style="float: right;">確定</el-button>
                 </el-row>
               </el-form>
             </el-col>
@@ -253,6 +254,13 @@
         <el-col :span="22" :offset="2">
           <p style="color: #F56C6C; margin-top: 0px;">注意！ 最後一項範例會作為隱藏範例，學生題目中看不見！</p>
         </el-col> 
+      </el-row>
+      <el-row v-if="problemData.type=='討論題'">
+        <el-col :span="20" :offset="2">
+          <!-- NOTE: Tree -->
+          <p>討論題：選取批改配對</p>
+          <el-tree class="discussTree" :data="previewDiscussTreeData"></el-tree>
+        </el-col>
       </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -387,12 +395,7 @@ export default {
   mixins: [problemStateMixin],
   data() {
     return {
-      courseInfo: {
-        'courseId': '',
-        'courseName': '',
-        'semester': ''
-      },
-      dialogFormVisible: false,
+      dialogFormVisible: false, // 題目預覽dialog
       problemData: {
         'name': '',
         'type': '',
@@ -405,12 +408,16 @@ export default {
         'testCases': [{
           'inputSample': '',
           'outputSample': ''
+        }, {
+          'inputSample': '',
+          'outputSample': ''
         }],
         'pattern': [{
           'pat': ''
         }]
       },
       previewDate: '', // 確認題目的日期部分
+      previewDiscussTreeData: [], // 確認題目的選學生配對部分
       // tags
       inputVisible: false,
       inputValue: '',
@@ -429,6 +436,7 @@ export default {
       // tag selector
       problemTagValue: [],
       // FIXME: 討論題：指定批改者
+      discussLoading: false,
       discussStudsList: [], // 學生學號名單
       discussNum: 0,
       discussNowFocus: '', // 目前正在選的學號
@@ -454,7 +462,6 @@ export default {
   },
   mounted() {
     this.checkLogin();
-    this.getCourses();
     // this.getStudsList();
     
     this.autoCompleteTags = this.problemTag;
@@ -489,6 +496,24 @@ export default {
     },
   },
   methods: {
+    checkLogin() {
+      axios.get('/api/checkLogin').then((response) => {
+        let res = response.data;
+        if (res.status == "200") {
+          if (res.result.authority == 'student') {
+            this.$router.push('/student/courseList')
+          } else if (res.result.authority == 'teacher') {
+            this.$router.push('/teacher/courseList');
+          } else if (res.result.authority == 'assistant') {
+            // pass
+          } else if (res.result.authority == 'admin') {
+            this.$router.push('/admin/index');
+          }  
+        } else {
+          this.$router.push('/login');
+        }
+      });
+    },
     //markdown
     update: _.debounce(function(e) {
       // console.log(e.target.value);
@@ -502,13 +527,19 @@ export default {
     getStudsList() {
       axios.get('/api/student/allStud', {
         params: {
-          courseId: this.courseInfo.courseId
+          courseId: this.$store.state.course.courseInfo.courseId
         }
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
           this.discussStudsList = res.result;
         }
+      });
+
+      return new Promise(function (resolve, reject) {
+        setTimeout(function () {
+          resolve(true);
+        }, 1000);
       });
     },
     discussNumLock() {
@@ -526,112 +557,120 @@ export default {
     changeProblemType() {
       // 如果是討論題，就載入學生學號，去做討論題的批改配對
       if (this.problemData.type == '討論題') {
-        // fakeStudentList => 之後改用getStudsList
-        let fakeStudentList = ['04156147', '04156148', '04156211', '04156140', '04156270', '06156111', '06156177'];
+        this.discussLoading = true;
+        this.getStudsList().then((value) => {
+          if(value == true) {
+            // 載入指定者學號進discussOptions
+            this.discussStudsList.forEach((element) => {
+              let obj = {
+                value: element,
+                label: element
+              }
+              this.discussOptions.push(obj);
 
-        // 載入指定者學號進discussOptions
-        fakeStudentList.forEach((element) => {
-          let obj = {
-            value: element,
-            label: element
+              // 載入每個人的學號進discussNumControl, 做每個人選取數量的控制
+              this.discussNumControl[element] = 0;
+            });
+
+            // 載入被指定者到discussOptions的各obj內，且不包含自己
+            this.discussOptions.forEach((ele, idx) => {
+              let [...tempStuList] = this.discussStudsList;
+              // tempStuList.push(ele.value);
+              let noMyselfList = GeneralUtil.removeInArray(tempStuList, ele);
+              
+              let children = [];
+              this.discussOptions[idx].children = [];
+
+              noMyselfList.forEach((ele) => {
+                let obj = {
+                  value: ele,
+                  label: ele
+                }
+                this.discussOptions[idx].children.push(obj);
+              });
+            });
+            this.discussLoading = false;
           }
-          this.discussOptions.push(obj);
-
-          // 載入每個人的學號進discussNumControl, 做每個人選取數量的控制
-          this.discussNumControl[element] = 0;
+        }).catch(function (error) {
+          console.log(error);
         });
-
-        // 載入被指定者到discussOptions的各obj內，且不包含自己
-        this.discussOptions.forEach((ele, idx) => {
-          let [...tempStuList] = fakeStudentList;
-          // tempStuList.push(ele.value);
-          let noMyselfList = GeneralUtil.removeInArray(tempStuList, ele);
-          
-          let children = [];
-          this.discussOptions[idx].children = [];
-
-          noMyselfList.forEach((ele) => {
-            let obj = {
-              value: ele,
-              label: ele
-            }
-            this.discussOptions[idx].children.push(obj);
-          });
-        });
+      } else { // 不是討論題
+        this.discussOptions = [];
       }
     },
     discussValueActionChange() {
-      console.log(this.discussValue);
+      // NOTE: 190724 不須用
+
       // console.log(this.discussNumControl);
 
       // 先計算目前控制的(this.discussNumControl), 已經選定幾個人
-      let count = 0;
-      this.discussValue.forEach((element) => {
-        if (element[0] == this.discussNowFocus) {
-          count++;
-        }
-      });
-      console.log('count:'+count);
+      // let count = 0;
+      // this.discussValue.forEach((element) => {
+      //   if (element[0] == this.discussNowFocus) {
+      //     count++;
+      //   }
+      // });
+      // console.log('count:'+count);
 
       // 更改this.discussNumControl, 紀錄已選定人數
-      this.discussNumControl[this.discussNowFocus] = count;
-      console.log(this.discussNumControl);
+      // this.discussNumControl[this.discussNowFocus] = count;
+      // console.log(this.discussNumControl);
 
       // 如果已選定等於this.discussNum, 此學號就不能再選擇人(disabled=true)
-      console.log(this.discussNumControl[this.discussNowFocus]);
-      if (this.discussNumControl[this.discussNowFocus] == this.discussNum) {
-        this.discussOptions.forEach((element, index) => {
-          if (element.value == this.discussNowFocus) {
-            console.log('yes');
-            element['disabled'] = true;
-            // this.discussOptions[index]['disabled'] = true;
-          }
-        });
-      } else if (this.discussNumControl[this.discussNowFocus] > this.discussNum) {
-        this.$message.error('只能指定'+this.discussNum+'個！');
-        this.discussOptions.forEach((element, index) => {
-          if (element.value == this.discussNowFocus) {
-            console.log('no');
-            element['disabled'] = false;
-            // this.discussOptions[index]['disabled'] = true;
-          }
-        });
-      }
+      // console.log(this.discussNumControl[this.discussNowFocus]);
+      // if (this.discussNumControl[this.discussNowFocus] == this.discussNum) {
+      //   this.discussOptions.forEach((element, index) => {
+      //     if (element.value == this.discussNowFocus) {
+      //       console.log('yes');
+      //       element['disabled'] = true;
+      //       // this.discussOptions[index]['disabled'] = true;
+      //     }
+      //   });
+      // } else if (this.discussNumControl[this.discussNowFocus] > this.discussNum) {
+      //   this.$message.error('只能指定'+this.discussNum+'個！');
+      //   this.discussOptions.forEach((element, index) => {
+      //     if (element.value == this.discussNowFocus) {
+      //       console.log('no');
+      //       element['disabled'] = false;
+      //       // this.discussOptions[index]['disabled'] = true;
+      //     }
+      //   });
+      // }
     },
     discussExpand(e) {
-      let discussNowFocus = e[0];
-      this.discussNowFocus = discussNowFocus
-      console.log(this.discussNowFocus);
+      // NOTE: 190724 不需用
+      // let discussNowFocus = e[0];
+      // this.discussNowFocus = discussNowFocus
+      // console.log(this.discussNowFocus);
     },
-    checkLogin() {
-      axios.get('/api/checkLogin').then((response) => {
-        let res = response.data;
-        if (res.status == "200") {
-          if (res.result.authority == 'student') {
-            this.$router.push('/student/courseList')
-          } else if (res.result.authority == 'teacher') {
-            // pass
-          } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/index');
-          } else if (res.result.authority == 'admin') {
-            this.$router.push('/admin/index');
-          }  
-        } else {
-          this.$router.push('/login');
+    // NOTE: preview
+    previewProblem() {
+      // discussValue轉成tree格式，供使用者預覽
+      let treeData = [];
+      this.discussOptions.forEach((element) => {
+        let obj = {
+          label: element.label,
+          children: []
         }
+        treeData.push(obj);
       });
-    },
-    getCourses() {
-      axios.get("/api/teacher/courseList").then((response)=> {
-        let res = response.data;
-        if(res.status=="200") {
-          res.result.forEach((element) => {
-            if(element.courseName == this.$route.params.courseName) {
-              this.courseInfo = element;
+
+      this.discussValue.forEach((element) => {
+        let cor = element[0]; // 批改者
+        let cored = element[1]; // 被批改
+        
+        treeData.forEach((ele) => {
+          if (cor == ele.label) {
+            let obj = {
+              label: cored
             }
-          });
-        }
-      });
+            ele.children.push(obj);
+          }
+        });
+      })
+      this.previewDiscussTreeData = treeData;
+
+      this.dialogFormVisible=true;
     },
     newProblem() {
       if (this.problemData.name == '') {
@@ -662,12 +701,16 @@ export default {
 
         // 取出pattern
         let patternArray = [];
-        this.problemData.pattern.forEach((element) => {
-          patternArray.push(element.pat);
-        });
-
+        if (this.problemData.pattern.length==1 && this.problemData.pattern[0].pat=='') {
+          patternArray = [];
+        } else {
+          this.problemData.pattern.forEach((element) => {
+            patternArray.push(element.pat);
+          });
+        }
+        
         axios.post('/api/problem/addProblem', {
-          courseId: this.courseInfo.courseId,
+          courseId: this.$store.state.course.courseInfo.courseId,
           name: this.problemData.name,
           type: this.problemData.type,
           category: this.problemData.category,
@@ -686,12 +729,22 @@ export default {
               type: 'success',
               message: '新增題目成功!'
             });
-
+            
             // FIXME: 討論題
             if (this.problemData.type == '討論題') {
+              // [[correctAccount, correctedAccount]]轉成[{correctAccount, correctedAccount}]
+              let discussValueObject = []; // [{correctAccount, correctedAccount}]
+              this.discussValue.forEach((element) => {
+                let object = {
+                  correctAccount: element[0],
+                  correctedAccount: element[1]
+                }
+                discussValueObject.push(object);
+              });
+
               axios.post('/api/team/createTeam', {
                 problemId: res.result.problemId,
-                pairs: this.discussValue
+                pairs: discussValueObject
               }).then((response) => {
                 let res = response.data;
                 if (res.status == 200) {
@@ -710,6 +763,9 @@ export default {
               'input': '',
               'output': '',
               'testCases': [{
+                'inputSample': '',
+                'outputSample': ''
+              }, {
                 'inputSample': '',
                 'outputSample': ''
               }],
@@ -929,5 +985,13 @@ export default {
 /* discuss cascader */
 .el-cascader-menu__wrap {
   height: 500px !important;
+}
+
+#confirmProblemDialog .discussTree {
+  border: 1px solid #DCDFE6;
+  border-radius: 4px;
+  height: 200px;
+  overflow-y: scroll;
+  margin-bottom: 15px;
 }
 </style>

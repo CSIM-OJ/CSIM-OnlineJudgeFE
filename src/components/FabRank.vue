@@ -56,11 +56,6 @@ export default {
   },
   data() {
     return {
-      courseInfo: {
-        'courseId': '',
-        'courseName': '',
-        'semester': ''
-      },
       // fabActions
       bgColor: '#E6A23C',
       position: 'bottom-right',
@@ -86,26 +81,10 @@ export default {
     }
   },
   mounted() {
-    this.getCourses();
-    // this.getCorrectRank();
-    // this.getBestCodeRank();
+    this.getCorrectRank();
+    this.getBestCodeRank();
   },
   methods: {
-    getCourses() {
-      axios.get("/api/student/courseList").then((response)=> {
-        let res = response.data;
-        if(res.status=="200") {
-          res.result.forEach((element) => {
-            if(element.courseName == this.$route.params.courseName) {
-              this.courseInfo = element;
-            }
-          });
-
-          this.getCorrectRank();
-          this.getBestCodeRank();
-        }
-      });
-    },
     // fabActions
     rank() {
       this.getCorrectRank();
@@ -121,7 +100,7 @@ export default {
         value
       }) => {
         axios.post('/api/feedback/addFeedback', {
-          courseId: this.courseInfo.courseId,
+          courseId: this.$store.state.course.courseInfo.courseId,
           content: value
         }).then((response) => {
           let res = response.data;
@@ -161,7 +140,7 @@ export default {
     getCorrectRank() {
       axios.get('/api/rank/getCorrectRank', {
         params: {
-          courseId: this.courseInfo.courseId
+          courseId: this.$store.state.course.courseInfo.courseId
         }
       }).then((response)=> {
         let res = response.data;
@@ -173,7 +152,7 @@ export default {
     getBestCodeRank() {
       axios.get('/api/rank/getBestCodeRank', {
         params: {
-          courseId: this.courseInfo.courseId
+          courseId: this.$store.state.course.courseInfo.courseId
         }
       }).then((response)=> {
         let res = response.data;

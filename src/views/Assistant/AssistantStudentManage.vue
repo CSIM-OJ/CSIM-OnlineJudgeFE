@@ -153,8 +153,7 @@ export default {
   },
   mounted() {
     this.checkLogin();
-    this.getCourses();
-    // this.getStudentsData();
+    this.getStudentsData();
   },
   methods: {
     checkLogin() {
@@ -164,9 +163,9 @@ export default {
           if (res.result.authority == 'student') {
             this.$router.push('/student/courseList')
           } else if (res.result.authority == 'teacher') {
-            // pass
+            this.$router.push('/teacher/courseList');
           } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/index');
+            // pass
           } else if (res.result.authority == 'admin') {
             this.$router.push('/admin/index');
           }  
@@ -175,37 +174,25 @@ export default {
         }
       });
     },
-    getCourses() {
-      axios.get("/api/teacher/courseList").then((response)=> {
-        let res = response.data;
-        if(res.status=="200") {
-          res.result.forEach((element) => {
-            if(element.courseName == this.$route.params.courseName) {
-              this.courseInfo = element;
-            }
-          });
-
-          this.getStudentsData();
-        }
-      });
-    },
     getStudentsData() {
       this.dataLoading = true;
       axios.get('/api/course/getStudentsData', {
         params: {
-          courseId: this.courseInfo.courseId
+          courseId: this.$store.state.course.courseInfo.courseId
         }
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
+          let temp = [];
           for (let i = 0; i < res.result.length; i++) {
             let obj = {
               studentId: res.result[i].studentId,
               name: res.result[i].studentName,
               class: res.result[i].studentClass
             }
-            this.studentData.push(obj);
+            temp.push(obj);
           }
+           this.studentData = temp;
         }
         this.dataLoading = false;
       });
@@ -235,7 +222,7 @@ export default {
         }
 
         axios.post('/api/teacher/deleteStudentList', {
-          courseId: this.courseInfo.courseId,
+          courseId: this.$store.state.course.courseInfo.courseId,
           accountList: delID
         }).then((response)=> {
           let res = response.data;
@@ -244,6 +231,7 @@ export default {
               type: 'success',
               message: '刪除成功!'
             });
+            this.getStudentsData();
           } else {
             this.$message.error('刪除失敗！');
           }
@@ -291,7 +279,7 @@ export default {
       let tempList = [this.newOneStudentForm.account];
 
       axios.post('/api/teacher/addStudentList', {
-        courseId: this.courseInfo.courseId,
+        courseId: this.$store.state.course.courseInfo.courseId,
         accountList: tempList
       }).then((response) => {
         let res = response.data;

@@ -14,7 +14,7 @@
             <span class="title">學生資訊</span>
             <div class="breadcrumb">
               <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/assistant/'+ courseInfo.courseName +'/index' }">{{courseInfo.courseName}}</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/teacher/'+ this.$store.state.course.courseInfo.courseName +'/index' }">{{this.$store.state.course.courseInfo.courseName}}</el-breadcrumb-item>
                 <el-breadcrumb-item>學生資訊</el-breadcrumb-item>
               </el-breadcrumb>
             </div>
@@ -22,7 +22,8 @@
           <div class="box-square">
             <el-input class='filterInput' v-model='filterQuery' placeholder='請輸入學號或姓名' clearable><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
             <!-- <el-button plain size="mini" @click="changeTableWidth" class="ctbtn hidden-xs-only"><i class="fas fa-arrows-alt"></i></el-button> -->
-            <el-table :data="tableFiltered.slice((currentPage-1)*pagesize, currentPage*pagesize)" border style="width: 100%" ref="studentsTable" v-loading="loading" height="80vh">
+            <el-table :data="tableFiltered.slice((currentPage-1)*pagesize, currentPage*pagesize)" border style="width: 100%" ref="studentsTable" v-loading="loading">
+              <!-- TODO: -->
               <el-table-column fixed prop="studentId" label="學號" width="120"></el-table-column>
               <el-table-column fixed label="姓名" width="120">
                 <template slot-scope="scope">
@@ -111,11 +112,6 @@ export default {
   },
   data() {
     return {
-      courseInfo: {
-        'courseId': '',
-        'courseName': '',
-        'semester': ''
-      },
       // formThead
       formThead: '',
       // pagination
@@ -140,8 +136,8 @@ export default {
   },
   mounted() {
     this.checkLogin();
-    this.getCourses();
-    // this.getStudentsData();
+    this.getStudentsData();
+    this.countTableHeight();
   },
   computed: {
     tableFiltered() {
@@ -215,13 +211,6 @@ export default {
     }
   },
   methods: {
-    countTableHeight() {
-      this.tableHeight = parseInt(this.$refs.studentsTable.bodyHeight.height.replace('px', ''));
-      this.pagesize = this.tableHeight/47;
-    },
-    currentChange(currentPage) {
-      this.currentPage = currentPage;
-    },
     checkLogin() {
       axios.get('/api/checkLogin').then((response) => {
         let res = response.data;
@@ -229,9 +218,9 @@ export default {
           if (res.result.authority == 'student') {
             this.$router.push('/student/courseList')
           } else if (res.result.authority == 'teacher') {
-            // pass
+            this.$router.push('/teacher/courseList');
           } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/index');
+            // pass
           } else if (res.result.authority == 'admin') {
             this.$router.push('/admin/index');
           }  
@@ -240,32 +229,37 @@ export default {
         }
       });
     },
-    getCourses() {
-      axios.get("/api/teacher/courseList").then((response)=> {
-        let res = response.data;
-        if(res.status=="200") {
-          res.result.forEach((element) => {
-            if(element.courseName == this.$route.params.courseName) {
-              this.courseInfo = element;
-            }
-          });
-          this.getStudentsData();
-          this.countTableHeight();
-        }
-      });
+    countTableHeight() {
+      // let screenWidth = window.screen.width;
+      // let screenHeight = window.screen.height;
+      // console.log(window.screen.height);
+      // console.log(this.$refs.studentsTable);
+      // console.log(this.$refs.studentsTable.bodyHeight.height);
+      // this.tableHeight = parseInt(this.$refs.studentsTable.bodyHeight.height.replace('px', ''));
+      // this.pagesize = this.tableHeight/47;
+
+      let screenHeight = window.screen.height;
+      
+      if (screenHeight>=800 && screenHeight<1200) this.pagesize=10;
+      else if (screenHeight>=1200 && screenHeight<1600) this.pagesize=15;
+    },
+    currentChange(currentPage) {
+      this.currentPage = currentPage;
     },
     getStudentsData() {
       this.loading = true;
 
       axios.get('/api/course/getStudentsData', {
         params: {
-          courseId: this.courseInfo.courseId
+          courseId: this.$store.state.course.courseInfo.courseId
         }
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
           this.tableData = res.result;
           this.loading = false;
+
+
           
           // formThead
           this.formThead = this.tableData[0].problems.map(v => {
@@ -307,21 +301,21 @@ export default {
       let filename = Today.getFullYear() + "-" + (Today.getMonth()+1) + "-" + Today.getDate();
       CsvExport(fields, data, filename);
     },
-    changeTableWidth() {
-      this.tableFlag++;
-      var box = document.getElementsByClassName("box-square")[0];
-      var ctbtn = document.getElementsByClassName("ctbtn")[0];
+    // changeTableWidth() {
+    //   this.tableFlag++;
+    //   var box = document.getElementsByClassName("box-square")[0];
+    //   var ctbtn = document.getElementsByClassName("ctbtn")[0];
 
-      if (this.tableFlag % 2 == 0) {
-        box.style.marginLeft = '0px';
-        box.style.width = '100%';
-        ctbtn.style.color = '#409EFF';
-      } else {
-        box.style.marginLeft = '8.33%';
-        box.style.width = '83%';
-        ctbtn.style.color = '#303133';
-      }
-    },
+    //   if (this.tableFlag % 2 == 0) {
+    //     box.style.marginLeft = '0px';
+    //     box.style.width = '100%';
+    //     ctbtn.style.color = '#409EFF';
+    //   } else {
+    //     box.style.marginLeft = '8.33%';
+    //     box.style.width = '83%';
+    //     ctbtn.style.color = '#303133';
+    //   }
+    // },
     studentInfo(studentId, studentName) {
       this.dialogStudentId = studentId;
       this.dialogStudentName = studentName;

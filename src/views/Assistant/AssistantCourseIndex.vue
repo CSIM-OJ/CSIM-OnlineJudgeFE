@@ -11,7 +11,7 @@
       <el-container>
         <el-main>
           <el-row class="admin-page">
-            <span class="title">{{ this.courseInfo.courseName }}</span>
+            <span class="title">{{ this.$store.state.course.courseInfo.courseName }}</span>
           </el-row>
           <el-row class="box-square">
             <el-row :gutter="25">
@@ -47,17 +47,11 @@ export default {
   },
   data() {
     return {
-      courseInfo: {
-        'courseId': '',
-        'courseName': '',
-        'semester': ''
-      },
       oprateList: ['題目列表', '新增題目', '學生管理', '學生資訊', '意見回饋']
     }
   },
   mounted() {
     this.checkLogin();
-    this.getCourses();
   },
   methods: {
     checkLogin() {
@@ -67,9 +61,9 @@ export default {
           if (res.result.authority == 'student') {
             this.$router.push('/student/courseList')
           } else if (res.result.authority == 'teacher') {
-            // pass
+            this.$router.push('/teacher/courseList');
           } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/index');
+            // pass
           } else if (res.result.authority == 'admin') {
             this.$router.push('/admin/index');
           }  
@@ -78,20 +72,8 @@ export default {
         }
       });
     },
-    getCourses() {
-      axios.get("/api/teacher/courseList").then((response)=> {
-        let res = response.data;
-        if(res.status=="200") {
-          res.result.forEach((element) => {
-            if(element.courseName == this.$route.params.courseName) {
-              this.courseInfo = element;
-            }
-          });
-        }
-      });
-    },
     toProblemsData(item) {
-      let baseLink = '/assistant/'+this.courseInfo.courseName+'/';
+      let baseLink = '/assistant/'+this.$store.state.course.courseInfo.courseName+'/';
 
       if(item=='題目列表') {
         this.$router.push(baseLink+'problemsData');

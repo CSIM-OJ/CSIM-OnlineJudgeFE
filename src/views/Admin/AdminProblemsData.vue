@@ -590,7 +590,7 @@ export default {
     },
     detectCopy(problemID) {
       this.detectCopyLoading = true;
-      axios.post('/api/ta/judgeCopy', {
+      axios.post('/api/judge/judgeCopy', {
         problemID: problemID
       }).then((response) => {
         let res = response.data;

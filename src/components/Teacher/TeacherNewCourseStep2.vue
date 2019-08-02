@@ -47,7 +47,6 @@ export default {
             });
           });
         }
-        // this.value.push("108資一A");
       });
     },
     handleChange() {

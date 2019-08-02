@@ -14,7 +14,7 @@
             <span class="title">意見回饋</span>
             <div class="breadcrumb">
               <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/assistant/'+ courseInfo.courseName +'/index' }">{{courseInfo.courseName}}</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/assistant/'+ this.$store.state.course.courseInfo.courseName +'/index' }">{{this.$store.state.course.courseInfo.courseName}}</el-breadcrumb-item>
                 <el-breadcrumb-item>意見回饋</el-breadcrumb-item>
               </el-breadcrumb>
             </div>
@@ -56,17 +56,12 @@ export default {
   },
   data() {
     return {
-      courseInfo: {
-        'courseId': '',
-        'courseName': '',
-        'semester': ''
-      },
       feedbackTableData: []
     }
   },
   mounted() {
     this.checkLogin();
-    this.getCourses();
+    this.getStudentFeedback();
   },
   methods: {
     checkLogin() {
@@ -76,9 +71,9 @@ export default {
           if (res.result.authority == 'student') {
             this.$router.push('/student/courseList')
           } else if (res.result.authority == 'teacher') {
-            // pass
+            this.$router.push('/teacher/courseList');
           } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/index');
+            // pass
           } else if (res.result.authority == 'admin') {
             this.$router.push('/admin/index');
           }  
@@ -87,24 +82,10 @@ export default {
         }
       });
     },
-    getCourses() {
-      axios.get("/api/teacher/courseList").then((response)=> {
-        let res = response.data;
-        if(res.status=="200") {
-          res.result.forEach((element) => {
-            if(element.courseName == this.$route.params.courseName) {
-              this.courseInfo = element;
-            }
-          });
-
-          this.getStudentFeedback();
-        }
-      });
-    },
     getStudentFeedback() {
       axios.get('/api/feedback/getCourseFeedbacks', {
         params: {
-          courseId: this.courseInfo.courseId
+          courseId: this.$store.state.course.courseInfo.courseId
         }
       }).then((response)=> {
         let res = response.data;

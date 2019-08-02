@@ -14,7 +14,7 @@
             <span class="title">題目列表</span>
             <div class="breadcrumb">
               <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/teacher/'+ courseInfo.courseName +'/index' }">{{ courseInfo.courseName }}</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/teacher/'+ this.$store.state.course.courseInfo.courseName +'/index' }">{{ this.$store.state.course.courseInfo.courseName }}</el-breadcrumb-item>
                 <el-breadcrumb-item>題目列表</el-breadcrumb-item>
               </el-breadcrumb>
             </div>
@@ -51,6 +51,11 @@
                     <el-form-item label="最佳解答">
                         <span>{{ props.row.bestStudentId }}&nbsp;{{ props.row.bestStudentName }}&nbsp;({{ props.row.bestRunTime }} ms)</span>
                     </el-form-item>
+                    <!-- TODO: 討論題:匯出互評成績 -->
+                    <el-form-item label="匯出互評" v-if="props.row.type=='討論題'">
+                        <span><el-button type="success" size="small" @click="discussScore2Csv(props.row.problemId, props.row.name)">匯出</el-button></span>
+                    </el-form-item>
+                    <!-- TODO: 討論題:匯出互評成績 -->
                     <el-form-item label="抄襲偵測" style="width: 100%;" id="detectCopyFormItem" v-loading="detectCopyLoading">
                         <span><el-button type="primary" size="small" @click="detectCopy(props.row.problemId)">偵測</el-button></span>
                         <div class="detectCopyTable">
@@ -309,6 +314,7 @@
 import axios from 'axios'
 import VueMarkdown from 'vue-markdown'
 import { codemirror } from 'vue-codemirror-lite'
+import { json2csv } from '@/utils/json2csv.js'
 import DateUtil from '@/utils/DateUtil.js'
 import GeneralUtil from '@/utils/GeneralUtil.js'
 import problemStateMixin from '@/mixins/problemState.mixin.js'
@@ -330,11 +336,6 @@ export default {
   mixins: [problemStateMixin],
   data() {
     return {
-      courseInfo: {
-        'courseId': '',
-        'courseName': '',
-        'semester': ''
-      },
       // pagination
       total: 0,
       pagesize: 10,
@@ -480,7 +481,8 @@ export default {
   },
   mounted() {
     this.checkLogin();
-    this.getCourses();
+    this.getProblemsData();
+    this.getStudentsData();
     
     this.autoCompleteTags = this.problemTag; // tags
   },
@@ -506,31 +508,16 @@ export default {
         }
       });
     },
-    getCourses() {
-      axios.get("/api/teacher/courseList").then((response)=> {
-        let res = response.data;
-        if(res.status=="200") {
-          res.result.forEach((element) => {
-            if(element.courseName == this.$route.params.courseName) {
-              this.courseInfo = element;
-            }
-          });
-
-          this.getProblemsData();
-          this.getStudentsData();
-        }
-      });
-    },
     getProblemsData() {
       this.loading = true;
       axios.get('/api/problem/getProblems', {
         params: {
-          courseId: this.courseInfo.courseId
+          courseId: this.$store.state.course.courseInfo.courseId
         }
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
-          // console.log(res.result);
+          console.log(res.result);
           this.tableData = res.result;
           this.loading = false;
         }
@@ -539,7 +526,7 @@ export default {
     getStudentsData() {
       axios.get('/api/course/getStudentsData', {
         params: {
-          courseId: this.courseInfo.courseId
+          courseId: this.$store.state.course.courseInfo.courseId
         }
       }).then((response) => {
         let res = response.data;
@@ -614,7 +601,7 @@ export default {
     },
     detectCopy(problemId) {
       this.detectCopyLoading = true;
-      axios.post('/api/ta/judgeCopy', {
+      axios.post('/api/judge/judgeCopy', {
         problemId: problemId
       }).then((response) => {
         let res = response.data;
@@ -639,7 +626,6 @@ export default {
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
-          console.log(res.result);
           this.problemData.id = data.problemId;
           this.problemData.name = res.result.name;
           this.problemData.type = res.result.type;
@@ -794,6 +780,27 @@ export default {
       }
       this.inputVisible = false;
       this.inputValue = '';
+    },
+    // TODO: discussScore2Csv
+    discussScore2Csv(problemId, problemName) {
+      axios.get('/api/team/discussScore', {
+        params: {
+          problemId: problemId
+        }
+      }).then((response) => {
+        let res = response.data;
+        if (res.status == '200') {
+          let result = res.result;
+
+          let options = {
+            headers: ['account', 'name', 'studentClass', 'courseName', 'score', 'discussedScore.studentAccount', 'discussedScore.correctValue', 'discussedScore.readValue', 'discussedScore.skillValue', 'discussedScore.completeValue', 'discussedScore.wholeValue'],
+            rename: ['學號', '姓名', '班級', '課程', '系統批改的成績', '批改者學號', '程式正確性', '程式可讀性', '技巧運用', '程式完整性', '綜合評分']
+          }
+          
+          let csvName = problemName+'互評成績';
+          json2csv(result, csvName, options);
+        }
+      });
     }
   }
 }

@@ -8,7 +8,7 @@
         type="success"
         description="送出此題程式碼後，需要批改同學的程式碼並給分！">
       </el-alert>
-      <el-alert style="margin-bottom: 15px;" effect="dark" v-if="problem.pattern.length>0"
+      <el-alert style="margin-bottom: 15px;" effect="dark" v-if="showPatternFlag"
         title="Pattern - 程式須包含指定片段"
         type="warning"
         description="題目說明欄中的Pattern，指定了同學在寫程式碼時，必須包含的程式片段(Pattern)，否則將會無法送出成績！">
@@ -65,12 +65,12 @@
             </div>
           </el-col>
         </el-row>
-        <el-row v-for="(pat, index) in problem.pattern" :key="index" v-if="problem.pattern.length>0">
+        <el-row v-if="problem.pattern.length>0">
           <el-col>
             <div class="problem-info">
               <div class="title" style="color: #E6A23C;">Pattern (注意！程式碼必須包含這些程式片段！)</div>
               <div class="content">
-                <el-input type="textarea" readonly autosize :value="pat" resize="none"></el-input>
+                <el-input type="textarea" readonly autosize :value="pat" resize="none" v-for="(pat, index) in problem.pattern" :key="index" style="margin-bottom: 12px;"></el-input>
                 <!-- <div class="content change-line" v-text="pat"></div> -->
               </div>
             </div>
@@ -164,9 +164,9 @@
     <el-row>
       <el-col :span="20" :offset="2" class="box">
         <span class="title">討論題 - 程式互評</span>
-        <span v-if="correctedStudsDone==false">學生還沒做完程式，再稍等一下！</span>
-        <el-tabs type="card" @tab-click="clickCorrectTab" v-if="correctedStudsDone">
-          <el-tab-pane v-for="(stud, index) in correctedList" :key="stud.studentAccount" :label="stud.studentAccount" >
+        <span v-if="correctStudsDone==false">學生還沒做完程式，再稍等一下！</span>
+        <el-tabs type="card" @tab-click="clickCorrectTab" v-if="correctStudsDone">
+          <el-tab-pane v-for="(stud, index) in correctList" :key="stud.studentAccount" :label="stud.studentAccount" >
             <!-- 1. 程式碼 -->
             <codemirror :options="options" :ref="'discussCodeMirror'+index" :style="{'font-size': fontSize+'px', 'padding-bottom': '20px'}"></codemirror>
             <!-- 2. 給分 -->
@@ -229,6 +229,92 @@
     </el-row>
   </section>
   <!-- FIXME: dicuss correct end -->
+
+
+  <!-- FIXME: dicuss corrected start 被批改的成績 -->
+  <section id="discuss-corrected-section" v-if="dicussCorrectedShowFlag">
+    <el-row>
+      <el-col :span="20" :offset="2" class="box">
+        <span class="title">討論題 - 被批改的成績</span>
+        <span v-if="correctedStudsDone==false">還未有批改的成績，再稍等一下</span>
+        <el-row v-if="correctedStudsDone">
+          <el-col :span="11" v-for="stud in correctedList" :key="stud.studentAccount" style="margin: 10px;">
+            <el-card class="box-card" style="margin-top: 15px; " shadow="hover">
+              <div class="text item">
+                <el-row class="block">
+                  <el-col :span="6">
+                    <span class="small-title">分數</span>
+                  </el-col>
+                  <el-col :span="14">
+                    <el-slider class="correct-slider" v-model="stud.score" :disabled="true"></el-slider>
+                  </el-col>
+                  <el-col :span="4">
+                    <p class="score">{{stud.score}}</p>
+                  </el-col>
+                </el-row>
+                <el-row class="block">
+                  <el-col :span="6">
+                    <span class="small-title">程式正確性</span>
+                  </el-col>
+                  <el-col :span="14">
+                    <el-slider v-model="stud.correctValue" :step="1" :max="5" show-stops class="correct-slider" :disabled="true"></el-slider>
+                  </el-col>
+                  <el-col :span="4">
+                    <p class="score">{{stud.correctValue}}</p>
+                  </el-col>
+                </el-row>
+                <el-row class="block">
+                  <el-col :span="6">
+                    <span class="small-title">程式可讀性</span>
+                  </el-col>
+                  <el-col :span="14">
+                    <el-slider v-model="stud.readValue" :step="1" :max="5" show-stops class="correct-slider" :disabled="true"></el-slider>
+                  </el-col>
+                  <el-col :span="4">
+                    <p class="score">{{stud.readValue}}</p>
+                  </el-col>
+                </el-row>
+                <el-row class="block">
+                  <el-col :span="6">
+                    <span class="small-title">技巧運用</span>
+                  </el-col>
+                  <el-col :span="14">
+                    <el-slider v-model="stud.skillValue" :step="1" :max="5" show-stops class="correct-slider" :disabled="true"></el-slider>
+                  </el-col>
+                  <el-col :span="4">
+                    <p class="score">{{stud.skillValue}}</p>
+                  </el-col>
+                </el-row>
+                <el-row class="block">
+                  <el-col :span="6">
+                    <span class="small-title">程式完整性</span>
+                  </el-col>
+                  <el-col :span="14">
+                    <el-slider v-model="stud.completeValue" :step="1" :max="5" show-stops class="correct-slider" :disabled="true"></el-slider>
+                  </el-col>
+                  <el-col :span="4">
+                    <p class="score">{{stud.completeValue}}</p>
+                  </el-col>
+                </el-row>
+                <el-row class="block">
+                  <el-col :span="6">
+                    <span class="small-title">綜合評分</span>
+                  </el-col>
+                  <el-col :span="14">
+                    <el-slider v-model="stud.wholeValue" :step="1" :max="5" show-stops class="correct-slider" :disabled="true"></el-slider>
+                  </el-col>
+                  <el-col :span="4">
+                    <p class="score">{{stud.wholeValue}}</p>
+                  </el-col>
+                </el-row>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+      </el-col>
+    </el-row>
+  </section>
+  <!-- FIXME: dicuss corrected end 被批改的成績 -->
 
   <!-- commitDialog start -->
   <el-dialog id="commitDialog" :title="problem.name+' commits 紀錄'" :visible.sync="commitDialogVisible" @close="commitDialogActive=false">
@@ -311,11 +397,6 @@ export default {
   },
   data() {
     return {
-      courseInfo: {
-        'courseId': '',
-        'courseName': '',
-        'semester': ''
-      },
       // problem
       problem: {
         'id': this.$route.query.problemId,
@@ -379,11 +460,16 @@ public class Main {
       commitIndex: '',
       oldCode: '',
       newCode: '',
-      // FIXME: dicuss correct
+      // FIXME: discuss correct
       dicussShowFlag: false,
-      correctedStudsDone: false, // TODO: 需要被批改的學生, 是否已經送出code
-      correctedList: [],
-      correctStatus: false
+      correctStudsDone: false, // TODO: 需要被批改的學生, 是否已經送出code
+      correctStatus: false,
+      correctList: [],
+      correctedStatus: false,
+      // FIXME: discuss corrected
+      dicussCorrectedShowFlag: true,
+      correctedStudsDone: false, // 是否已經被批改
+      correctedList: []
     }
   },
   created() {
@@ -454,11 +540,16 @@ public class Main {
           return true
         }
       }
+    },
+    showPatternFlag() {
+      if (this.problem.pattern.length>0) return true;
+      else false;
     }
   },
   mounted() {
     this.checkLogin();
-    this.getCourses();
+    this.getProblemData();
+    this.getHistoryScore();
   },
   methods: {
     checkLogin() {
@@ -476,21 +567,6 @@ public class Main {
           }  
         } else {
           this.$router.push('/login');
-        }
-      });
-    },
-    getCourses() {
-      axios.get("/api/student/courseList").then((response)=> {
-        let res = response.data;
-        if(res.status=="200") {
-          res.result.forEach((element) => {
-            if(element.courseName == this.$route.params.courseName) {
-              this.courseInfo = element;
-            }
-          });
-
-          this.getProblemData();
-          this.getHistoryScore();
         }
       });
     },
@@ -524,12 +600,13 @@ public class Main {
             console.log(this.problem.type);
             if (this.problem.type == '討論題') {
               this.checkCorrectStatus();
+              this.checkCorrectedStatus();
 
               // this.getCorrectStuds();
               // this.dicussShowFlag = true;
               // this.options.readOnly = true;
               // this.$nextTick(() => {
-              //   this.$refs.discussCodeMirror0[0].value = this.correctedList[0].code;
+              //   this.$refs.discussCodeMirror0[0].value = this.correctList[0].code;
               //   var self = this;
               //   setTimeout(function() {
               //     self.$refs.discussCodeMirror0[0].editor.refresh();
@@ -596,7 +673,7 @@ public class Main {
     getHistoryScore() {
       axios.get('/api/student/historyScore', {
         params: {
-          courseId: this.courseInfo.courseId
+          courseId: this.$store.state.course.courseInfo.courseId
         }
       }).then((response) => {
         let res = response.data;
@@ -750,7 +827,7 @@ public class Main {
                 // this.dicussShowFlag = true;
                 // this.options.readOnly = true;
                 // this.$nextTick(() => {
-                //   this.$refs.discussCodeMirror0[0].value = this.correctedList[0].code;
+                //   this.$refs.discussCodeMirror0[0].value = this.correctList[0].code;
                 //   var self = this;
                 //   setTimeout(function() {
                 //     self.$refs.discussCodeMirror0[0].editor.refresh();
@@ -825,23 +902,23 @@ public class Main {
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
-          this.correctedList = res.result;
+          this.correctList = res.result;
 
           // 沒有學生已經完成題目(=沒有學生有code)
-          if (this.correctedList.length == 0) {
-            this.correctedStudsDone = false;
+          if (this.correctList.length == 0) {
+            this.correctStudsDone = false;
             this.dicussShowFlag = true;
             return;
           } else {
             // TODO:
             // console.log(res.result);
-             // console.log(this.correctedList);
-            this.correctedStudsDone = true;
+            // console.log(this.correctList);
+            this.correctStudsDone = true;
 
             this.dicussShowFlag = true;
             this.options.readOnly = true;
             this.$nextTick(() => {
-              this.$refs.discussCodeMirror0[0].value = this.correctedList[0].code;
+              this.$refs.discussCodeMirror0[0].value = this.correctList[0].code;
               var self = this;
               setTimeout(function() {
                 self.$refs.discussCodeMirror0[0].editor.refresh();
@@ -851,7 +928,7 @@ public class Main {
         }
       });
       
-      this.correctedList.forEach((ele)=> {
+      this.correctList.forEach((ele)=> {
         ele.score = 0; // 分數
         ele.correctValue = 0; // 程式正確性
         ele.readValue = 0; // 程式可讀性
@@ -862,7 +939,7 @@ public class Main {
     },
     clickCorrectTab(tab) {
       this.$nextTick(() => {
-        tab.$children[0].value = this.correctedList[tab.index].code;
+        tab.$children[0].value = this.correctList[tab.index].code;
         var self = this;
         setTimeout(function() {
           tab.$children[0].editor.refresh();
@@ -879,7 +956,7 @@ public class Main {
         this.correctStatus = true;
 
         let resultList = [];
-        this.correctedList.forEach((ele) => {
+        this.correctList.forEach((ele) => {
           let obj = {
             correctedAccount: ele.studentAccount,
             score: ele.score,
@@ -892,7 +969,6 @@ public class Main {
           resultList.push(obj);
         });
 
-        console.log(resultList);
         axios.post('/api/team/submitCorrect', {
           problemId: this.problem.id,
           correctedList: resultList
@@ -924,15 +1000,54 @@ public class Main {
           this.correctStatus = res.result.status;
 
           if (this.correctStatus == true) {
-            this.correctedStudsDone = true;
-            this.getCorrectedInfo();
+            this.correctStudsDone = true;
+            this.getCorrectInfo();
           } else {
             this.getCorrectStuds();
           }
         }
       });
     },
-    getCorrectedInfo() {
+    getCorrectInfo() {
+      axios.get('/api/team/correctInfo', {
+        params: {
+          problemId: this.problem.id
+        }
+      }).then((response) => {
+        let res = response.data;
+        if (res.status == '200') {
+          this.correctList = res.result;
+          this.dicussShowFlag = true;
+          this.options.readOnly = true;
+          this.$nextTick(() => {
+            this.$refs.discussCodeMirror0[0].value = this.correctList[0].code;
+            var self = this;
+            setTimeout(function() {
+              self.$refs.discussCodeMirror0[0].editor.refresh();
+            },1);
+          });
+        }
+      })
+    },
+    // NOTE: new
+    checkCorrectedStatus() {
+      axios.get('/api/team/checkCorrectedStatus', {
+        params: {
+          problemId: this.problem.id
+        }
+      }).then((response) => {
+        let res = response.data;
+        if (res.status == '200') {
+          this.correctedStudsDone = res.result.status;
+          console.log('correctedStudsDone:'+this.correctedStudsDone);
+
+          if (this.correctedStudsDone == true) {
+            this.getCorrectedInfo();
+          }
+        }
+      })
+    },
+    getCorrectedInfo() { // 取得被別人批改的成績
       axios.get('/api/team/correctedInfo', {
         params: {
           problemId: this.problem.id
@@ -941,17 +1056,10 @@ public class Main {
         let res = response.data;
         if (res.status == '200') {
           this.correctedList = res.result;
-          this.dicussShowFlag = true;
-          this.options.readOnly = true;
-          this.$nextTick(() => {
-            this.$refs.discussCodeMirror0[0].value = this.correctedList[0].code;
-            var self = this;
-            setTimeout(function() {
-              self.$refs.discussCodeMirror0[0].editor.refresh();
-            },1);
-          });
+          console.log(this.correctedList);
         }
-      })
+      });
+
     }
   }
 }
@@ -1036,5 +1144,32 @@ public class Main {
     padding-left: 10px;
   }
 
+  /* discuss corrected 被批改的資料 */
 
+  #discuss-corrected-section .title {
+    display: block;
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  #discuss-corrected-section .small-title {
+    display: inline-block;
+    font-size: 16px;
+    text-align: center;
+    margin-top: 6px;
+    color: #303133;
+  }
+
+  #discuss-corrected-section .score {
+    color: #303133;
+    text-align: center;
+    width:80%;
+    margin-top: 4px;
+    margin-bottom: 0px;
+    margin-left: 15px;
+    font-size: 18px;
+    border: 1px #DCDFE6 solid;
+    border-radius: 10px;
+  }
 </style>

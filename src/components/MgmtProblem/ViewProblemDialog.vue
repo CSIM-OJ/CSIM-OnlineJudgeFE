@@ -1,6 +1,6 @@
 <template>
 <div>
-  <el-dialog id="viewProblemDialog" :visible.sync="viewProblemDialogVisible" v-loading="viewProblemLoading">
+  <el-dialog id="viewProblemDialog" :visible.sync="myViewProblemDialogVisible" v-loading="viewProblemLoading">
     <section id="problem-section">
       <el-row>
         <el-col :span="20" :offset="2">
@@ -53,7 +53,7 @@
       </el-row>
     </section>
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="viewProblemDialogVisible=false">確 定</el-button>
+      <el-button type="primary" @click="myViewProblemDialogVisible=false">確 定</el-button>
     </div>
   </el-dialog>
 </div>
@@ -69,8 +69,22 @@ export default {
   props: ['viewProblemDialogVisible', 'viewProblemLoading', 'problemData'],
   data() {
     return {
-      
+      myViewProblemDialogVisible: this.viewProblemDialogVisible
+    }
+  },
+  watch: {
+    viewProblemDialogVisible(val) {
+      this.myViewProblemDialogVisible = val;
+    },
+    myViewProblemDialogVisible(val) {
+      this.$emit('onChangeViewProblemDialogVisible', val)
     }
   }
 }
 </script>
+
+<style>
+#viewProblemDialog .el-dialog {
+  width: 70vw;
+}
+</style>

@@ -3,8 +3,8 @@
   <nav-header-student></nav-header-student>
   <el-row>
     <el-col :span="20" :offset="2" class="box">
-      <h1 class="course-title">{{ this.courseInfo.courseName }}
-        <span class="course-semester">{{ this.courseInfo.semester }}</span>
+      <h1 class="course-title">{{ this.$store.state.course.courseInfo.courseName }}
+        <span class="course-semester">{{ this.$store.state.course.courseInfo.semester }}</span>
       </h1>
       <section id="mainProblems-section">
         <div class="undo-problems">
@@ -118,11 +118,6 @@ export default {
   mixins: [problemStateMixin],
   data() {
     return {
-      courseInfo: {
-        'courseId': '',
-        'courseName': '',
-        'semester': ''
-      },
       // select
       undoSelectValue: '',
       doneSelectValue: '',
@@ -208,7 +203,6 @@ export default {
       let vh = window.screen.width*12/100; // 每個格子的高度
 
       if (page<carItemNum) {
-        console.log(5*(vh+28)+'px');
         return 5*(vh+28)+'px';
       } else {
         let last = this.undoProblems.length%20;
@@ -236,7 +230,8 @@ export default {
   },
   mounted() {
     this.checkLogin();
-    this.getCourses();
+    this.initUndoProblems();
+    this.initDoneProblems();
   },
   methods: {
     checkLogin() {
@@ -257,27 +252,12 @@ export default {
         }
       });
     },
-    getCourses() {
-      axios.get("/api/student/courseList").then((response)=> {
-        let res = response.data;
-        if(res.status=="200") {
-          res.result.forEach((element) => {
-            if(element.courseName == this.$route.params.courseName) {
-              this.courseInfo = element;
-
-              this.initUndoProblems();
-              this.initDoneProblems();
-            }
-          });
-        }
-      });
-    },
     initUndoProblems() {
       this.undoLoading = true;
 
       axios.get('/api/student/problemInfo', {
         params: {
-          courseId: this.courseInfo.courseId,
+          courseId: this.$store.state.course.courseInfo.courseId,
           type: '全部',
           isJudge: false
         }
@@ -294,7 +274,7 @@ export default {
 
       axios.get('/api/student/problemInfo', {
         params: {
-          courseId: this.courseInfo.courseId,
+          courseId: this.$store.state.course.courseInfo.courseId,
           type: '全部',
           isJudge: true
         }
@@ -315,7 +295,7 @@ export default {
 
         axios.get('/api/student/problemInfo', {
           params: {
-            courseId: this.courseInfo.courseId,
+            courseId: this.$store.state.course.courseInfo.courseId,
             type: val,
             isJudge: false
           }
@@ -336,7 +316,7 @@ export default {
         
         axios.get('/api/student/problemInfo', {
           params: {
-            courseId: this.courseInfo.courseId,
+            courseId: this.$store.state.course.courseInfo.courseId,
             type: val,
             isJudge: true
           }
@@ -402,7 +382,7 @@ export default {
     },
     // go to problem
     doProblem(problemId) {
-      this.$router.push('/student/'+ this.courseInfo.courseName +'/coding?problemId=' + problemId);
+      this.$router.push('/student/'+ this.$store.state.course.courseInfo.courseName +'/coding?problemId=' + problemId);
     },
     // 兩日期天數差
     dateDiff(sDate1, sDate2) {

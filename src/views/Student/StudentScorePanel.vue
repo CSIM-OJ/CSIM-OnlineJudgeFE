@@ -107,11 +107,6 @@ export default {
   },
   data() {
     return {
-      courseInfo: {
-        'courseId': '',
-        'courseName': '',
-        'semester': ''
-      },
       user: {
         'name': '',
         'studentId': '',
@@ -161,8 +156,8 @@ export default {
   },
   mounted() {
     this.checkLogin();
-    this.getCourses();
-    
+    this.getStudentInfo();
+    this.getHistoryScore();
   },
   methods: {
     checkLogin() {
@@ -183,25 +178,10 @@ export default {
         }
       });
     },
-    getCourses() {
-      axios.get("/api/student/courseList").then((response)=> {
-        let res = response.data;
-        if(res.status=="200") {
-          res.result.forEach((element) => {
-            if(element.courseName == this.$route.params.courseName) {
-              this.courseInfo = element;
-
-              this.getStudentInfo();
-              this.getHistoryScore();
-            }
-          });
-        }
-      });
-    },
     getStudentInfo() {
       axios.get('/api/student/info', {
         params: {
-          courseId: this.courseInfo.courseId
+          courseId: this.$store.state.course.courseInfo.courseId
         }
       }).then((response) => {
         let res = response.data;
@@ -220,7 +200,7 @@ export default {
     getHistoryScore() {
       axios.get('/api/student/historyScore', {
         params: {
-          courseId: this.courseInfo.courseId
+          courseId: this.$store.state.course.courseInfo.courseId
         }
       }).then((response) => {
         let res = response.data;
@@ -240,7 +220,7 @@ export default {
       });
     },
     doProblem(data) {
-      this.$router.push('/student/'+ this.courseInfo.courseName +'/coding?problemId=' + data.problemId);
+      this.$router.push('/student/'+ this.$store.state.course.courseInfo.courseName +'/coding?problemId=' + data.problemId);
     }
   }
 }
