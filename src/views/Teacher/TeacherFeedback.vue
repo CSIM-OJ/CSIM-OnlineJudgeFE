@@ -73,7 +73,7 @@ export default {
           } else if (res.result.authority == 'teacher') {
             // pass
           } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/index');
+            this.$router.push('/assistant/courseList');
           } else if (res.result.authority == 'admin') {
             this.$router.push('/admin/index');
           }  

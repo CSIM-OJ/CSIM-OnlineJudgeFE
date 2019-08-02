@@ -10,15 +10,7 @@
       </el-aside>
       <el-container>
         <el-main>
-          <el-row class="admin-page">
-            <span class="title">學生管理</span>
-            <div class="breadcrumb">
-              <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/assistant/'+ this.$store.state.course.courseInfo.courseName +'/index' }">{{this.$store.state.course.courseInfo.courseName}}</el-breadcrumb-item>
-                <el-breadcrumb-item>學生管理</el-breadcrumb-item>
-              </el-breadcrumb>
-            </div>
-          </el-row>
+          <page-name-breadcrumb pageName="學生管理"></page-name-breadcrumb>
           <div class="box-square">
             <el-row :gutter="20">
               <el-col :span="12" style="border-right: 1px #E4E7ED dashed;">
@@ -69,12 +61,6 @@
           <el-form-item label="學生帳號 (學號)" style="margin-bottom: 5px;">
             <el-input v-model="newOneStudentForm.account"></el-input>
           </el-form-item>
-          <!-- <el-form-item label="學生姓名" style="margin-bottom: 5px;">
-            <el-input v-model="newOneStudentForm.name"></el-input>
-          </el-form-item>
-          <el-form-item label="學生系級" style="margin-bottom: 5px;">
-            <el-input v-model="newOneStudentForm.studentClass"></el-input>
-          </el-form-item> -->
           <div class="operating-btns" style="margin-bottom: 20px;">
             <el-button @click="newOneStudentDialogVisible=false">取消</el-button>
             <el-button type="primary" @click="addNewOneStudent">確定</el-button>
@@ -110,12 +96,14 @@ import axios from 'axios'
 import Papa from 'papaparse'
 
 import NavHeaderAssistant from '@/components/Assistant/NavHeaderAssistant'
+import PageNameBreadcrumb from '@/components/MgmtContent/PageNameBreadcrumb'
 import SideNavCourseIndexAssistant from '@/components/Assistant/SideNavCourseIndexAssistant'
 import NavFooterAdmin from '@/components/NavFooterAdmin'
 
 export default {
   components: {
     NavHeaderAssistant,
+    PageNameBreadcrumb,
     SideNavCourseIndexAssistant,
     NavFooterAdmin
   },

@@ -1,10 +1,27 @@
 const course = {
   state: {
-    courseInfo: {},
+    courseInfo: {
+      courseId: '',
+      courseName: '',
+      teacherName: '',
+      semester: '',
+      class: [],
+      taList: []
+    },
   },
   mutations: {
     initCourseInfo(state, courseInfo) {
       state.courseInfo = courseInfo;
+    },
+    cleanCouseInfo(state) {
+      state.courseInfo = {
+        courseId: '',
+        courseName: '',
+        teacherName: '',
+        semester: '',
+        class: [],
+        taList: []
+      }
     }
   },
 }

@@ -10,15 +10,7 @@
       </el-aside>
       <el-container>
         <el-main>
-          <el-row class="admin-page">
-            <span class="title">意見回饋</span>
-            <div class="breadcrumb">
-              <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/assistant/'+ this.$store.state.course.courseInfo.courseName +'/index' }">{{this.$store.state.course.courseInfo.courseName}}</el-breadcrumb-item>
-                <el-breadcrumb-item>意見回饋</el-breadcrumb-item>
-              </el-breadcrumb>
-            </div>
-          </el-row>
+          <page-name-breadcrumb pageName="意見回饋"></page-name-breadcrumb>
           <el-row class="box-square">
             <el-col :span="20" :offset="2">
               <el-table :data="feedbackTableData" height="70vh" style="width: 100%;">
@@ -45,12 +37,14 @@
 import axios from 'axios'
 
 import NavHeaderAssistant from '@/components/Assistant/NavHeaderAssistant'
+import PageNameBreadcrumb from '@/components/MgmtContent/PageNameBreadcrumb'
 import SideNavCourseIndexAssistant from '@/components/Assistant/SideNavCourseIndexAssistant'
 import NavFooterAdmin from '@/components/NavFooterAdmin'
 
 export default {
   components: {
     NavHeaderAssistant,
+    PageNameBreadcrumb,
     SideNavCourseIndexAssistant,
     NavFooterAdmin
   },

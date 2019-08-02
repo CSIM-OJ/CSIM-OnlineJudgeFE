@@ -561,7 +561,7 @@ public class Main {
           } else if (res.result.authority == 'teacher') {
             this.$router.push('/teacher/courseList');
           } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/index');
+            this.$router.push('/assistant/courseList');
           } else if (res.result.authority == 'admin') {
             this.$router.push('/admin/index');
           }  

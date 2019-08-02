@@ -10,15 +10,7 @@
       </el-aside>
       <el-container>
         <el-main>
-          <el-row class="admin-page">
-            <span class="title">題目列表</span>
-            <div class="breadcrumb">
-              <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/assistant/'+ this.$store.state.course.courseInfo.courseName +'/index' }">{{ this.$store.state.course.courseInfo.courseName }}</el-breadcrumb-item>
-                <el-breadcrumb-item>題目列表</el-breadcrumb-item>
-              </el-breadcrumb>
-            </div>
-          </el-row>
+          <page-name-breadcrumb pageName="題目列表"></page-name-breadcrumb>
           <!-- TODO: table problem data -->
           <table-problem-data :problemData="tableData" :tableLoading='loading' @refreshProblemsData="refreshProblemsData" @showViewProblemDialog="showViewProblemDialog" @showEditProblemDialog="showEditProblemDialog" @showDoStatusDialog="showDoStatusDialog" ></table-problem-data>
         </el-main>
@@ -48,6 +40,7 @@ import DateUtil from '@/utils/DateUtil.js'
 import problemStateMixin from '@/mixins/problemState.mixin.js'
 
 import NavHeaderAssistant from '@/components/Assistant/NavHeaderAssistant'
+import PageNameBreadcrumb from '@/components/MgmtContent/PageNameBreadcrumb'
 import SideNavCourseIndexAssistant from '@/components/Assistant/SideNavCourseIndexAssistant'
 import NavFooterAdmin from '@/components/NavFooterAdmin'
 import TableProblemData from '@/components/MgmtProblem/TableProblemData'
@@ -60,6 +53,7 @@ import '@/assets/css/table.css'
 export default {
   components: {
     NavHeaderAssistant,
+    PageNameBreadcrumb,
     SideNavCourseIndexAssistant,
     NavFooterAdmin,
     TableProblemData,

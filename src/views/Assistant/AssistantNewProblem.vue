@@ -10,15 +10,7 @@
       </el-aside>
       <el-container>
         <el-main>
-          <el-row class="admin-page">
-            <span class="title">新增題目</span>
-            <div class="breadcrumb">
-              <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/assistant/'+ this.$store.state.course.courseInfo.courseName +'/index' }">{{ this.$store.state.course.courseInfo.courseName }}</el-breadcrumb-item>
-                <el-breadcrumb-item>新增題目</el-breadcrumb-item>
-              </el-breadcrumb>
-            </div>
-          </el-row>
+          <page-name-breadcrumb pageName="新增題目"></page-name-breadcrumb>
           <el-row class="box-square">
             <el-col :span="20" :offset="2" style="margin-bottom: 10px;">
               <el-button type="warning" icon="fas fa-book" round @click="viewProblemBank"> 從題庫匯入</el-button>
@@ -374,6 +366,7 @@ import DateUtil from '@/utils/DateUtil.js'
 import problemStateMixin from '@/mixins/problemState.mixin.js'
 
 import NavHeaderAssistant from '@/components/Assistant/NavHeaderAssistant'
+import PageNameBreadcrumb from '@/components/MgmtContent/PageNameBreadcrumb'
 import SideNavCourseIndexAssistant from '@/components/Assistant/SideNavCourseIndexAssistant'
 import NavFooterAdmin from '@/components/NavFooterAdmin'
 
@@ -388,6 +381,7 @@ import GeneralUtil from '@/utils/GeneralUtil.js'
 export default {
   components: {
     NavHeaderAssistant,
+    PageNameBreadcrumb,
     SideNavCourseIndexAssistant,
     NavFooterAdmin,
     VueMarkdown

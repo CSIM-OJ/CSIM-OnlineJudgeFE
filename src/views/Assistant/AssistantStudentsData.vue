@@ -10,15 +10,7 @@
       </el-aside>
       <el-container>
         <el-main>
-          <el-row class="admin-page">
-            <span class="title">學生資訊</span>
-            <div class="breadcrumb">
-              <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/assistant/'+ this.$store.state.course.courseInfo.courseName +'/index' }">{{this.$store.state.course.courseInfo.courseName}}</el-breadcrumb-item>
-                <el-breadcrumb-item>學生資訊</el-breadcrumb-item>
-              </el-breadcrumb>
-            </div>
-          </el-row>
+          <page-name-breadcrumb pageName="學生資訊"></page-name-breadcrumb>
           <div class="box-square">
             <el-input class='filterInput' v-model='filterQuery' placeholder='請輸入學號或姓名' clearable><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
             <!-- <el-button plain size="mini" @click="changeTableWidth" class="ctbtn hidden-xs-only"><i class="fas fa-arrows-alt"></i></el-button> -->
@@ -95,6 +87,7 @@
 import axios from 'axios'
 
 import NavHeaderAssistant from '@/components/Assistant/NavHeaderAssistant'
+import PageNameBreadcrumb from '@/components/MgmtContent/PageNameBreadcrumb'
 import SideNavCourseIndexAssistant from '@/components/Assistant/SideNavCourseIndexAssistant'
 import NavFooterAdmin from '@/components/NavFooterAdmin'
 
@@ -107,6 +100,7 @@ import {
 export default {
   components: {
     NavHeaderAssistant,
+    PageNameBreadcrumb,
     SideNavCourseIndexAssistant,
     NavFooterAdmin
   },
