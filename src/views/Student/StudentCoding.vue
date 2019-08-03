@@ -58,10 +58,11 @@
         <div class="coding-block">
           <div class="setting">
             <span>Language:</span>
-            <el-select v-model="nowLang" @change="changeNowLang" style="width: 100px;">
+            <el-select disabled v-model="nowLang" style="width: 100px;"></el-select>
+            <!-- <el-select v-model="nowLang" @change="changeNowLang" style="width: 100px;">
               <el-option v-for="item in languages" :key="item.value" :label="item.label" :value="item.value" :disabled="item.disabled">
               </el-option>
-            </el-select>
+            </el-select> -->
             <span style="margin-left: 10px;">Theme:</span>
             <el-select v-model="nowTheme" @change="changeNowTheme" style="width: 130px;">
               <el-option v-for="item in themes" :key="item" :label="item" :value="item">
@@ -559,7 +560,8 @@ public class Main {
           this.problem.correctNum = parseInt(res.result.correctNum);
           this.problem.incorrectNum = parseInt(res.result.incorrectNum);
           this.problem.pattern = res.result.pattern;
-
+          
+          this.setLanguage(this.problem.tag);
           this.checkJudged();
         }
       });
@@ -604,6 +606,17 @@ public class Main {
       });
     },
     // code mirror
+    setLanguage(tags) {
+      tags.forEach((tag) => {
+        if (tag ==' Java') {
+          this.nowLang = 'Java';
+          this.changeNowLang('Java');
+        } else if (tag == 'Python') {
+          this.nowLang = 'Python';
+          this.changeNowLang('Python');
+        }
+      });
+    },
     changeNowLang(lang) {
       if (lang == 'Java') {
         this.nowLang = 'Java';
