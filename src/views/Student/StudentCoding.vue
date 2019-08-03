@@ -2,7 +2,7 @@
 <div>
   <nav-header-student></nav-header-student>
   <problem-info-section :data="problem"></problem-info-section>
-  
+
   <section id="judged-section" v-if="problem.judged==true" class="animated fadeInUp">
     <el-row>
       <el-col :span="20" :offset="2" class="box">
@@ -155,7 +155,7 @@
 
 
   <!-- FIXME: dicuss corrected start 被批改的成績 -->
-  <section id="discuss-corrected-section" v-if="dicussCorrectedShowFlag">
+  <section id="discuss-corrected-section" v-if="problem.type=='討論題'&&dicussCorrectedShowFlag">
     <el-row>
       <el-col :span="20" :offset="2" class="box">
         <span class="title">討論題 - 被批改的成績</span>
@@ -346,7 +346,6 @@ export default {
       }, {
         value: 'Python',
         label: 'Python',
-        disabled: true
       }],
       fontSize: '16',
       codemirrorFlag: 1,
