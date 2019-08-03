@@ -22,7 +22,7 @@ const vuexLocal = new VuexPersistence({
 });
 
 const store = new Vuex.Store({
-  modules: {  //这里来存放模块中的存储方法
+  modules: {
     course
   },
   plugins: [vuexLocal.plugin]

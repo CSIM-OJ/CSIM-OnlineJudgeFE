@@ -1,85 +1,8 @@
 <template>
 <div>
   <nav-header-student></nav-header-student>
-  <el-row>
-    <el-col :span="20" :offset="2">
-      <el-alert style="margin-bottom: 15px;" effect="dark" v-if="problem.type=='討論題'"
-        title="討論題 - 學生互評"
-        type="success"
-        description="送出此題程式碼後，需要批改同學的程式碼並給分！">
-      </el-alert>
-      <el-alert style="margin-bottom: 15px;" effect="dark" v-if="showPatternFlag"
-        title="Pattern - 程式須包含指定片段"
-        type="warning"
-        description="題目說明欄中的Pattern，指定了同學在寫程式碼時，必須包含的程式片段(Pattern)，否則將會無法送出成績！">
-      </el-alert>
-    </el-col>
-  </el-row>
+  <problem-info-section :data="problem"></problem-info-section>
   
-  <section id="problem-section">
-    <el-row>
-      <el-col :span="20" :offset="2" class="box">
-        <div class="problem-name">
-          <span v-text="problem.name"></span>
-          <el-rate allow-half v-model="problem.rate" @change="changeRate" :disabled="problem.judged!=true"></el-rate>
-          <span class="tags" v-for="tag in problem.tag">
-            <el-tag size="small">{{ tag }}</el-tag>
-          </span>
-          <span class="type" v-text="problem.type"></span>
-          <span class="deadline" v-text="problem.deadline"></span>
-        </div>
-        <hr>
-        <div class="problem-info">
-          <div class="title">Description</div>
-          <div id="markdown-editor">
-            <vue-markdown class="content" :source="problem.description"></vue-markdown>
-          </div>
-        </div>
-        <div class="problem-info">
-          <div class="title">Input</div>
-          <div class="content change-line" v-text="problem.input"></div>
-        </div>
-        <div class="problem-info">
-          <div class="title">Output</div>
-          <div class="content change-line" v-text="problem.output"></div>
-        </div>
-        <el-row v-for="(item, index) in problem.testCases.slice(0, problem.testCases.length-1)" :key="index">
-          <el-col :xs="24" :sm="12">
-            <div class="problem-info">
-              <div class="title">Sample Input {{index+1}}
-                <a style="cursor: pointer" @click="copy(item.inputSample)"><i class="el-icon-document"></i></a>
-              </div>
-              <div class="content">
-                <el-input type="textarea" readonly autosize v-model="item.inputSample"  placeholder="請輸入內容" resize="none">
-                </el-input>
-              </div>
-            </div>
-          </el-col>
-          <el-col :xs="24" :sm="12">
-            <div class="problem-info">
-              <div class="title">Sample Output {{index+1}}</div>
-              <div class="content">
-                <el-input type="textarea" readonly autosize v-model="item.outputSample" placeholder="請輸入內容" resize="none">
-                </el-input>
-              </div>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row v-if="problem.pattern.length>0">
-          <el-col>
-            <div class="problem-info">
-              <div class="title" style="color: #E6A23C;">Pattern (注意！程式碼必須包含這些程式片段！)</div>
-              <div class="content">
-                <el-input type="textarea" readonly autosize :value="pat" resize="none" v-for="(pat, index) in problem.pattern" :key="index" style="margin-bottom: 12px;"></el-input>
-                <!-- <div class="content change-line" v-text="pat"></div> -->
-              </div>
-            </div>
-          </el-col>
-        </el-row>
-      </el-col>
-    </el-row>
-  </section>
-
   <section id="judged-section" v-if="problem.judged==true" class="animated fadeInUp">
     <el-row>
       <el-col :span="20" :offset="2" class="box">
@@ -353,11 +276,11 @@ import GeneralUtil from '@/utils/GeneralUtil.js'
 import DateUtil from '@/utils/DateUtil.js'
 import KeyPatUtil from '@/utils/KeyPatUtil.js'
 import {toKeys} from '@/utils/KeywordTrans.js'
-import VueMarkdown from 'vue-markdown'
 import vueCodeDiff from 'vue-code-diff'
 
 import NavHeaderStudent from '@/components/NavHeaderStudent'
 import NavFooter from '@/components/NavFooter'
+import ProblemInfoSection from '@/components/Student/ProblemInfoSection'
 import FabRank from '@/components/FabRank.vue'
 
 import '@/assets/css/student-coding.css'
@@ -389,9 +312,9 @@ import "@/assets/animated/animate.css"
 export default {
   components: {
     NavHeaderStudent,
+    ProblemInfoSection,
     NavFooter,
     codemirror,
-    VueMarkdown,
     vueCodeDiff,
     FabRank
   },
@@ -540,10 +463,6 @@ public class Main {
           return true
         }
       }
-    },
-    showPatternFlag() {
-      if (this.problem.pattern.length>0) return true;
-      else false;
     }
   },
   mounted() {
@@ -570,17 +489,6 @@ public class Main {
         }
       });
     },
-    changeRate(rateScore) {
-      axios.post('/api/student/updateRate', {
-        problemId: this.problem.id,
-        rate: rateScore
-      }).then((response) => {
-        let res = response.data;
-        if (res.status == '200') {
-          // console.log(rateScore);
-        }
-      });
-    },
     checkJudged() {
       axios.get('/api/judge/checkJudged', {
         params: {
@@ -601,20 +509,7 @@ public class Main {
             if (this.problem.type == '討論題') {
               this.checkCorrectStatus();
               this.checkCorrectedStatus();
-
-              // this.getCorrectStuds();
-              // this.dicussShowFlag = true;
-              // this.options.readOnly = true;
-              // this.$nextTick(() => {
-              //   this.$refs.discussCodeMirror0[0].value = this.correctList[0].code;
-              //   var self = this;
-              //   setTimeout(function() {
-              //     self.$refs.discussCodeMirror0[0].editor.refresh();
-              //   },1);
-              // });
             }
-
-            
           } else {
             this.notify1();
             let self = this;

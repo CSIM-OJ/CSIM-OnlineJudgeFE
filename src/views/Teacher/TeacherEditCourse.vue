@@ -39,7 +39,7 @@
                       <span class="item-title">班級(class)</span>
                     </el-col>
                     <el-col :md="15" style="overflow: scroll;">
-                      <el-tag v-for="clas in item.class" :key="clas" style="height: 25px; line-height: 25px; margin-bottom:8px; z-index:1px;">{{ clas }}</el-tag>
+                      <el-tag v-for="clas in item.class" :key="clas" style="height: 25px; line-height: 25px; margin-bottom:8px; z-index:1px; margin-right: 8px;">{{ clas }}</el-tag>
                     </el-col>
                   </el-row>
                 </div>
@@ -315,5 +315,8 @@ export default {
   margin-right: 43px;
 }
 
+#editCourseDialog .el-form-item__label {
+  margin-right:10px;
+}
 
 </style>
