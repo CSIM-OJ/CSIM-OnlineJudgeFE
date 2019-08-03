@@ -171,7 +171,7 @@
       <el-row>
         <el-col :span="20" :offset="2">
           <!-- TAGs -->
-          <el-form-item label="題目標籤">
+          <el-form-item label="題目標籤" class="tag-form-item">
             <el-tag :key="tag" v-for="tag in problemData.tag">
               {{tag}}
             </el-tag>
@@ -979,6 +979,10 @@ export default {
 /* discuss cascader */
 .el-cascader-menu__wrap {
   height: 500px !important;
+}
+
+#confirmProblemDialog .tag-form-item .el-form-item__label {
+  margin-right: 10px;
 }
 
 #confirmProblemDialog .discussTree {
