@@ -156,7 +156,7 @@
 
 
   <!-- FIXME: dicuss corrected start 被批改的成績 -->
-  <section id="discuss-corrected-section" v-if="problem.type=='討論題'&&dicussCorrectedShowFlag">
+  <section id="discuss-corrected-section" v-if="problem.type=='討論題'&&problem.judged==true&&dicussCorrectedShowFlag">
     <el-row>
       <el-col :span="20" :offset="2" class="box">
         <span class="title">討論題 - 被批改的成績</span>
@@ -766,12 +766,19 @@ public class Main {
       });
     },
     notify2() {
+      let msg = '';
+      if (this.nowLang == 'Java') {
+        msg = `public class name 記得改成 Main 呦 </br>
+        不要有 package! </br>
+        記得 import library`
+      } else if (this.nowLang == 'Python') {
+        msg = `記得 import library`
+      }
+
       this.$notify({
         title: '注意',
         dangerouslyUseHTMLString: true,
-        message: `public class name 記得改成 Main 呦 </br>
-        不要有 package! </br>
-        記得 import library~`,
+        message: msg,
         duration: 7000,
         type: 'warning'
       });

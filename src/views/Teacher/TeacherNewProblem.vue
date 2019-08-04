@@ -143,7 +143,7 @@
                       <el-button size="mini" style="margin-left: 20px;" type="primary" @click="discussNumLock">確定</el-button>
                       <el-button size="mini" type="danger" @click="discussNumUnlock">更改</el-button>
                     </p> -->
-                    <el-cascader-panel v-loading="discussLoading" @change="discussValueActionChange" @expand-change="discussExpand" v-model="discussValue" :options="discussOptions" :props="discussProps" style="height:500px;"></el-cascader-panel>
+                    <el-cascader-panel v-loading="discussLoading" v-model="discussValue" :options="discussOptions" :props="discussProps" style="height:500px;"></el-cascader-panel>
                   </el-col>
                 </el-row>
                 <!-- 討論題：選取批改配對 end -->
@@ -371,6 +371,7 @@
 import axios from 'axios'
 import VueMarkdown from 'vue-markdown'
 import DateUtil from '@/utils/DateUtil.js'
+import GeneralUtil from '@/utils/GeneralUtil.js'
 import problemStateMixin from '@/mixins/problemState.mixin.js'
 
 import NavHeaderTeacher from '@/components/Teacher/NavHeaderTeacher'
@@ -382,8 +383,6 @@ import '@/assets/markdownParser/marked.js'
 import '@/assets/markdownParser/lodash.js'
 import '@/assets/markdownParser/katex.min.css'
 import '@/assets/css/transition.css'
-
-import GeneralUtil from '@/utils/GeneralUtil.js'
 
 export default {
   components: {
@@ -524,18 +523,17 @@ export default {
         }, 1000);
       });
     },
-    discussNumLock() {
-      this.discussIsLock = true;
-    },
-    discussNumUnlock() {
-      this.discussIsLock = false;
-      this.discussOptions.forEach((element) => {
-        element['disabled'] = false;
-      });
-    },
-    discussNumChange() {
-
-    },
+    // discussNumLock() {
+    //   this.discussIsLock = true;
+    // },
+    // discussNumUnlock() {
+    //   this.discussIsLock = false;
+    //   this.discussOptions.forEach((element) => {
+    //     element['disabled'] = false;
+    //   });
+    // },
+    // discussNumChange() {
+    // },
     changeProblemType() {
       // 如果是討論題，就載入學生學號，去做討論題的批改配對
       if (this.problemData.type == '討論題') {
@@ -579,51 +577,6 @@ export default {
       } else { // 不是討論題
         this.discussOptions = [];
       }
-    },
-    discussValueActionChange() {
-      // NOTE: 190724 不須用
-
-      // console.log(this.discussNumControl);
-
-      // 先計算目前控制的(this.discussNumControl), 已經選定幾個人
-      // let count = 0;
-      // this.discussValue.forEach((element) => {
-      //   if (element[0] == this.discussNowFocus) {
-      //     count++;
-      //   }
-      // });
-      // console.log('count:'+count);
-
-      // 更改this.discussNumControl, 紀錄已選定人數
-      // this.discussNumControl[this.discussNowFocus] = count;
-      // console.log(this.discussNumControl);
-
-      // 如果已選定等於this.discussNum, 此學號就不能再選擇人(disabled=true)
-      // console.log(this.discussNumControl[this.discussNowFocus]);
-      // if (this.discussNumControl[this.discussNowFocus] == this.discussNum) {
-      //   this.discussOptions.forEach((element, index) => {
-      //     if (element.value == this.discussNowFocus) {
-      //       console.log('yes');
-      //       element['disabled'] = true;
-      //       // this.discussOptions[index]['disabled'] = true;
-      //     }
-      //   });
-      // } else if (this.discussNumControl[this.discussNowFocus] > this.discussNum) {
-      //   this.$message.error('只能指定'+this.discussNum+'個！');
-      //   this.discussOptions.forEach((element, index) => {
-      //     if (element.value == this.discussNowFocus) {
-      //       console.log('no');
-      //       element['disabled'] = false;
-      //       // this.discussOptions[index]['disabled'] = true;
-      //     }
-      //   });
-      // }
-    },
-    discussExpand(e) {
-      // NOTE: 190724 不需用
-      // let discussNowFocus = e[0];
-      // this.discussNowFocus = discussNowFocus
-      // console.log(this.discussNowFocus);
     },
     checkLogin() {
       axios.get('/api/checkLogin').then((response) => {

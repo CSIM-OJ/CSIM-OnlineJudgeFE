@@ -1,6 +1,6 @@
 <template>
 <div>
-  <el-dialog id="editProblemDialog" :visible.sync="myEditProblemDialogVisible" v-loading="editProblemLoading">
+  <el-dialog id="editProblemDialog" :visible.sync="myEditProblemDialogVisible" v-loading="editProblemLoading" @close="closeEditProblemDialog">
     <el-form>
       <el-row>
         <el-col :span="20" :offset="2">
@@ -39,7 +39,7 @@
         </el-col>
         <el-col :span="6" :offset="1">
           <el-form-item label="題目類型">
-            <el-select v-model="editProblemData.type" placeholder="請選擇類型" style="width: 100%;">
+            <el-select v-model="editProblemData.type" @change="changeProblemType" placeholder="請選擇類型" style="width: 100%;">
               <el-option  v-for="item in problemType" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
           </el-form-item>
@@ -105,9 +105,23 @@
           <el-button size="small" type="danger" plain @click="delSample">- 移除範本</el-button>
         </el-col>
       </el-row>
+      <!-- FIXME: 討論題：選取批改配對 start-->
+      <el-row v-if="editProblemData.type=='討論題'">
+        <el-col :span="20" :offset="2" style="margin-bottom: 15px;">
+          <el-divider content-position="center">討論題：選取批改配對</el-divider>
+          <!-- NOTE: 190724 不需用 -->
+          <!-- <p>指定一人須批改幾位同學：
+            <el-input-number v-model="discussNum" controls-position="right" @change="discussNumChange" :min="1" :max="10" size="small" :disabled="discussIsLock"></el-input-number>
+            <el-button size="mini" style="margin-left: 20px;" type="primary" @click="discussNumLock">確定</el-button>
+            <el-button size="mini" type="danger" @click="discussNumUnlock">更改</el-button>
+          </p> -->
+          <el-cascader-panel v-loading="discussLoading" v-model="discussValue" :options="discussOptions" :props="discussProps" style="height:350px;"></el-cascader-panel>
+        </el-col>
+      </el-row>
+      <!-- 討論題：選取批改配對 end -->
     </el-form>
     <div slot="footer" class="dialog-footer">
-      <el-button @click="myEditProblemDialogVisible=false">取 消</el-button>
+      <el-button @click="closeEditProblemDialog">取 消</el-button>
       <el-button type="primary" @click="editProblem">確 定</el-button>
     </div>
   </el-dialog>
@@ -118,6 +132,7 @@
 import axios from 'axios'
 
 import DateUtil from '@/utils/DateUtil.js'
+import GeneralUtil from '@/utils/GeneralUtil.js'
 import problemStateMixin from '@/mixins/problemState.mixin.js'
 
 export default {
@@ -132,6 +147,18 @@ export default {
       inputVisible: false,
       inputValue: '',
       autoCompleteTags: [],
+      // FIXME: 討論題：指定批改者
+      discussLoading: false,
+      discussStudsList: [], // 學生學號名單
+      discussNum: 0,
+      discussNowFocus: '', // 目前正在選的學號
+      discussNumControl: {}, // {學號:count}
+      discussIsLock: false,
+      discussValue: [], // 選取配對的名單(pairs)
+      discussProps: { 
+        multiple: true
+      },
+      discussOptions: []
     }
   },
   watch: {
@@ -146,6 +173,10 @@ export default {
     this.autoCompleteTags = this.problemTag; // tags
   },
   methods: {
+    closeEditProblemDialog() {
+      this.myEditProblemDialogVisible = false;
+      this.discussOptions = []; // FIXME: 討論題
+    },
     addSample() {
       let obj = {
         'inputSample': '',
@@ -222,6 +253,30 @@ export default {
               message: '編輯題目成功!'
             });
 
+            // FIXME: 討論題
+            if (this.editProblemData.type == '討論題') {
+              // [[correctAccount, correctedAccount]]轉成[{correctAccount, correctedAccount}]
+              let discussValueObject = []; // [{correctAccount, correctedAccount}]
+              this.discussValue.forEach((element) => {
+                let object = {
+                  correctAccount: element[0],
+                  correctedAccount: element[1]
+                }
+                discussValueObject.push(object);
+              });
+
+              axios.post('/api/team/createTeam', {
+                problemId: res.result.problemId,
+                pairs: discussValueObject
+              }).then((response) => {
+                let res = response.data;
+                if (res.status == 200) {
+                  this.discussOptions = [];
+                  console.log('建立team成功！');
+                }
+              });
+            }
+
             this.myEditProblemDialogVisible = false;
             this.editProblemLoading = false;
             this.$emit('refreshProblemsData');
@@ -271,7 +326,70 @@ export default {
       }
       this.inputVisible = false;
       this.inputValue = '';
-    }
+    },
+    // FIXME: 討論題
+    getStudsList() {
+      axios.get('/api/student/allStud', {
+        params: {
+          courseId: this.$store.state.course.courseInfo.courseId
+        }
+      }).then((response) => {
+        let res = response.data;
+        if (res.status == '200') {
+          this.discussStudsList = res.result;
+        }
+      });
+
+      return new Promise(function (resolve, reject) {
+        setTimeout(function () {
+          resolve(true);
+        }, 1000);
+      });
+    },
+    changeProblemType() {
+      // 如果是討論題，就載入學生學號，去做討論題的批改配對
+      if (this.editProblemData.type == '討論題') {
+        this.discussLoading = true;
+        this.getStudsList().then((value) => {
+          if(value == true) {
+            // 載入指定者學號進discussOptions
+            this.discussStudsList.forEach((element) => {
+              let obj = {
+                value: element,
+                label: element
+              }
+              this.discussOptions.push(obj);
+
+              // 載入每個人的學號進discussNumControl, 做每個人選取數量的控制
+              this.discussNumControl[element] = 0;
+            });
+
+            // 載入被指定者到discussOptions的各obj內，且不包含自己
+            this.discussOptions.forEach((ele, idx) => {
+              let [...tempStuList] = this.discussStudsList;
+              // tempStuList.push(ele.value);
+              let noMyselfList = GeneralUtil.removeInArray(tempStuList, ele);
+              
+              let children = [];
+              this.discussOptions[idx].children = [];
+
+              noMyselfList.forEach((ele) => {
+                let obj = {
+                  value: ele,
+                  label: ele
+                }
+                this.discussOptions[idx].children.push(obj);
+              });
+            });
+            this.discussLoading = false;
+          }
+        }).catch(function (error) {
+          console.log(error);
+        });
+      } else { // 不是討論題
+        this.discussOptions = [];
+      }
+    },
   }
 }
 </script>
