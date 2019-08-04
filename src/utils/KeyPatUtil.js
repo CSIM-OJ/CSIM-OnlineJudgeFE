@@ -53,9 +53,9 @@ export default class KeyPatUtil {
    */
   static isInRule(ruleArr, code) {
     if (ruleArr.length != 0) {
-      let includeKeyFlag = false;
+      let includeKeyFlag = true;
       ruleArr.forEach((key) => {
-        if(code.indexOf(key)>=0) includeKeyFlag=true;
+        if(code.indexOf(key)<0) includeKeyFlag=false;
       });
 
       if(includeKeyFlag) {

@@ -171,7 +171,7 @@
       <el-row>
         <el-col :span="20" :offset="2">
           <!-- TAGs -->
-          <el-form-item label="題目標籤" class="tag-form-item">
+          <el-form-item label="題目標籤" class="mr-10-label">
             <el-tag :key="tag" v-for="tag in problemData.tag">
               {{tag}}
             </el-tag>
@@ -981,7 +981,7 @@ export default {
   height: 500px !important;
 }
 
-#confirmProblemDialog .tag-form-item .el-form-item__label {
+#confirmProblemDialog .mr-10-label .el-form-item__label {
   margin-right: 10px;
 }
 
