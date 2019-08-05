@@ -92,22 +92,17 @@
         <el-tabs type="card" @tab-click="clickCorrectTab" v-if="correctStudsDone">
           <el-tab-pane v-for="(stud, index) in correctList" :key="stud.studentAccount" :label="stud.studentAccount" >
             <!-- 1. 程式碼 -->
-            <codemirror :options="options" :ref="'discussCodeMirror'+index" :style="{'font-size': fontSize+'px', 'padding-bottom': '20px'}"></codemirror>
+            <!-- <codemirror :options="options" :ref="'discussCodeMirror'+index" :style="{'font-size': fontSize+'px', 'padding-bottom': '20px'}"></codemirror> -->
             <!-- 2. 給分 -->
-            <el-row class="block">
-              <el-col :span="3">
-                <span class="small-title">分數</span>
-              </el-col>
-              <el-col :span="21">
-                <el-slider class="correct-slider" v-model="stud.score" show-input style="" :disabled="correctStatus"></el-slider>
-              </el-col>
-            </el-row>
-            <el-row class="block">
+            <discuss-correct-form :tabIndex="tabIndex" :data="stud" :index="index" :disabled="correctStatus" :lang="nowLang"></discuss-correct-form>
+            
+
+            <!-- <el-row class="block">
               <el-col :span="3">
                 <span class="small-title">程式正確性</span>
               </el-col>
               <el-col :span="21">
-                <el-slider v-model="stud.correctValue" show-input :step="1" :max="5" show-stops class="correct-slider" :disabled="correctStatus"></el-slider>
+                <el-slider v-model="stud.correctValue.score" show-input :step="1" :max="5" show-stops class="correct-slider" :disabled="correctStatus"></el-slider>
               </el-col>
             </el-row>
             <el-row class="block">
@@ -115,7 +110,7 @@
                 <span class="small-title">程式可讀性</span>
               </el-col>
               <el-col :span="21">
-                <el-slider v-model="stud.readValue" show-input :step="1" :max="5" show-stops class="correct-slider" :disabled="correctStatus"></el-slider>
+                <el-slider v-model="stud.readValue.score" show-input :step="1" :max="5" show-stops class="correct-slider" :disabled="correctStatus"></el-slider>
               </el-col>
             </el-row>
             <el-row class="block">
@@ -123,7 +118,7 @@
                 <span class="small-title">技巧運用</span>
               </el-col>
               <el-col :span="21">
-                <el-slider v-model="stud.skillValue" show-input :step="1" :max="5" show-stops class="correct-slider" :disabled="correctStatus"></el-slider>
+                <el-slider v-model="stud.skillValue.score" show-input :step="1" :max="5" show-stops class="correct-slider" :disabled="correctStatus"></el-slider>
               </el-col>
             </el-row>
             <el-row class="block">
@@ -131,7 +126,7 @@
                 <span class="small-title">程式完整性</span>
               </el-col>
               <el-col :span="21">
-                <el-slider v-model="stud.completeValue" show-input :step="1" :max="5" show-stops class="correct-slider" :disabled="correctStatus"></el-slider>
+                <el-slider v-model="stud.completeValue.score" show-input :step="1" :max="5" show-stops class="correct-slider" :disabled="correctStatus"></el-slider>
               </el-col>
             </el-row>
             <el-row class="block">
@@ -139,9 +134,9 @@
                 <span class="small-title">綜合評分</span>
               </el-col>
               <el-col :span="21">
-                <el-slider v-model="stud.wholeValue" show-input :step="1" :max="5" show-stops class="correct-slider" :disabled="correctStatus"></el-slider>
+                <el-slider v-model="stud.wholeValue.score" show-input :step="1" :max="5" show-stops class="correct-slider" :disabled="correctStatus"></el-slider>
               </el-col>
-            </el-row>
+            </el-row> -->
             <!-- 3. 送出評分 -->
             <el-row v-if="!correctStatus">
               <el-divider content-position="center" style="font-size: 16px; padding-top: 20px !important;">評分完所有學生後送出評分</el-divider>
@@ -162,7 +157,8 @@
         <span class="title">討論題 - 被批改的成績</span>
         <span v-if="correctedStudsDone==false">還未有批改的成績，再稍等一下</span>
         <el-row v-if="correctedStudsDone">
-          <el-col :span="11" v-for="stud in correctedList" :key="stud.studentAccount" style="margin: 10px;">
+          <discuss-corrected-card :data="correctedList"></discuss-corrected-card>
+          <!-- <el-col :span="11" v-for="stud in correctedList" :key="stud.studentAccount" style="margin: 10px;">
             <el-card class="box-card" style="margin-top: 15px; " shadow="hover">
               <div class="text item">
                 <el-row class="block">
@@ -233,7 +229,7 @@
                 </el-row>
               </div>
             </el-card>
-          </el-col>
+          </el-col> -->
         </el-row>
       </el-col>
     </el-row>
@@ -277,11 +273,14 @@ import GeneralUtil from '@/utils/GeneralUtil.js'
 import DateUtil from '@/utils/DateUtil.js'
 import KeyPatUtil from '@/utils/KeyPatUtil.js'
 import {toKeys} from '@/utils/KeywordTrans.js'
+import {setGradingObj} from '@/utils/DiscussProblemUtil.js'
 import vueCodeDiff from 'vue-code-diff'
 
 import NavHeaderStudent from '@/components/NavHeaderStudent'
 import NavFooter from '@/components/NavFooter'
 import ProblemInfoSection from '@/components/Student/ProblemInfoSection'
+import DiscussCorrectForm from '@/components/Student/DiscussCorrectForm'
+import DiscussCorrectedCard from '@/components/Student/DiscussCorrectedCard'
 import FabRank from '@/components/FabRank.vue'
 
 import '@/assets/css/student-coding.css'
@@ -314,6 +313,8 @@ export default {
   components: {
     NavHeaderStudent,
     ProblemInfoSection,
+    DiscussCorrectForm,
+    DiscussCorrectedCard,
     NavFooter,
     codemirror,
     vueCodeDiff,
@@ -392,7 +393,9 @@ public class Main {
       // FIXME: discuss corrected
       dicussCorrectedShowFlag: true,
       correctedStudsDone: false, // 是否已經被批改
-      correctedList: []
+      correctedList: [],
+      // tab
+      tabIndex: null
     }
   },
   created() {
@@ -459,7 +462,7 @@ public class Main {
       if(today.valueOf() > deadline.valueOf()) { // 過期
         return false
       } else { // 沒過期
-        if(this.problem.judged==false || this.problem.type=='練習題' || this.problem.type=='作業' || this.problem.type=='活動題') {
+        if(this.problem.judged==false || this.problem.type=='練習題' || this.problem.type=='作業') {
           return true
         }
       }
@@ -730,16 +733,6 @@ public class Main {
               // FIXME: 如果是討論題，顯示出批改學生的區域
               if (this.problem.type == '討論題') {
                 this.getCorrectStuds();
-
-                // this.dicussShowFlag = true;
-                // this.options.readOnly = true;
-                // this.$nextTick(() => {
-                //   this.$refs.discussCodeMirror0[0].value = this.correctList[0].code;
-                //   var self = this;
-                //   setTimeout(function() {
-                //     self.$refs.discussCodeMirror0[0].editor.refresh();
-                //   },1);
-                // });
               }
             } else {
               console.log('judgedErrorMsg:' + res.msg);
@@ -824,41 +817,39 @@ public class Main {
             this.dicussShowFlag = true;
             return;
           } else {
-            // TODO:
-            // console.log(res.result);
-            // console.log(this.correctList);
             this.correctStudsDone = true;
 
+            // TODO: 在correctList添加評分標準
+            this.correctList = setGradingObj(this.correctList);
+            console.log(this.correctList);
+
             this.dicussShowFlag = true;
-            this.options.readOnly = true;
-            this.$nextTick(() => {
-              this.$refs.discussCodeMirror0[0].value = this.correctList[0].code;
-              var self = this;
-              setTimeout(function() {
-                self.$refs.discussCodeMirror0[0].editor.refresh();
-              },1);
-            });
+            // this.options.readOnly = true;
+            // this.$nextTick(() => {
+            //   this.$refs.discussCodeMirror0[0].value = this.correctList[0].code;
+            //   var self = this;
+            //   setTimeout(function() {
+            //     self.$refs.discussCodeMirror0[0].editor.refresh();
+            //   },1);
+            // });
           }
         }
       });
       
-      this.correctList.forEach((ele)=> {
-        ele.score = 0; // 分數
-        ele.correctValue = 0; // 程式正確性
-        ele.readValue = 0; // 程式可讀性
-        ele.skillValue = 0; // 技巧運用
-        ele.completeValue = 0; // 程式完整性
-        ele.wholeValue = 0; // 綜合評分
-      });
+      
     },
-    clickCorrectTab(tab) {
-      this.$nextTick(() => {
-        tab.$children[0].value = this.correctList[tab.index].code;
-        var self = this;
-        setTimeout(function() {
-          tab.$children[0].editor.refresh();
-        },1);
-      });
+    clickCorrectTab(tab) { // FIXME:
+      this.tabIndex = tab.index;
+
+      // this.$nextTick(() => {
+      //   tab.$children[0].value = this.correctList[tab.index].code;
+      //   var self = this;
+
+      //   console.log(tab.$children[0]);
+      //   setTimeout(function() {
+      //     tab.$children[0].editor.refresh();
+      //   },1);
+      // });
     },
     submitCorrect() {
       this.$confirm('確定已經評分完所有同學，要送出評分結果嗎？', '提示', {
@@ -962,17 +953,42 @@ public class Main {
       })
     },
     getCorrectedInfo() { // 取得被別人批改的成績
-      axios.get('/api/team/correctedInfo', {
-        params: {
-          problemId: this.problem.id
-        }
-      }).then((response) => {
-        let res = response.data;
-        if (res.status == '200') {
-          this.correctedList = res.result;
-          console.log(this.correctedList);
-        }
-      });
+      // axios.get('/api/team/correctedInfo', {
+      //   params: {
+      //     problemId: this.problem.id
+      //   }
+      // }).then((response) => {
+      //   let res = response.data;
+      //   if (res.status == '200') {
+      //     this.correctedList = res.result;
+      //     console.log(this.correctedList);
+      //   }
+      // });
+
+      this.correctedList = [{
+        correctValue: {
+          score: 35,
+          comment: '挺好的，而且感覺寫得很簡短，然後不會拖泥帶水，跟我的評論差很多'
+        },
+        readValue: {
+          score: 48,
+          comment: '還可'
+        },
+        skillValue: {
+          score: 70,
+          comment: '不錯不錯不錯'
+        },
+        completeValue: {
+          score: 82,
+          comment: '嗯嗯還可以吧'
+        },
+        wholeValue: {
+          score: 12,
+          comment: '真的不怎樣'
+        },
+        comment: '爛就是爛..'
+      }]
+      console.log(this.correctedList);
 
     }
   }
@@ -1047,9 +1063,13 @@ public class Main {
 
   #discuss-correct-section .small-title {
     display: inline-block;
-    font-size: 16px;
+    font-size: 18px;
     text-align: center;
     margin-top: 7px;
+    color: #303133;
+  }
+
+  #discuss-correct-section .item-label {
     color: rgb(132, 146, 166);
   }
 
@@ -1059,6 +1079,15 @@ public class Main {
   }
 
   /* discuss corrected 被批改的資料 */
+
+  #discuss-corrected-section .block {
+    padding-bottom: 10px;
+    margin-bottom: 5px;
+  }
+
+  #discuss-corredted-section .border-dashed {
+    border-bottom: 1px dashed #EBEEF5;
+  }
 
   #discuss-corrected-section .title {
     display: block;

@@ -37,6 +37,11 @@
                 <span><el-button type="success" size="small" @click="discussScore2Csv(props.row.problemId, props.row.name)">匯出</el-button></span>
             </el-form-item>
             <!-- TODO: 討論題:匯出互評成績 -->
+            <!-- TODO: 討論題:老師評分學生 -->
+            <el-form-item label="教師評分" v-if="props.row.type=='討論題'">
+                <span><el-button type="warning" size="small" @click="">評分</el-button></span>
+            </el-form-item>
+            <!-- TODO: 討論題:老師評分學生 -->
             <el-form-item label="抄襲偵測" style="width: 100%;" id="detectCopyFormItem" v-loading="detectCopyLoading">
                 <span><el-button type="primary" size="small" @click="detectCopy(props.row.problemId)">偵測</el-button></span>
                 <div class="detectCopyTable">
