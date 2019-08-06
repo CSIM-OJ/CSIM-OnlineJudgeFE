@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import {apiLogin, apiCheckLogin} from '@/apis/base.js'
 
 import NavFooter from '@/components/NavFooter.vue'
 
@@ -135,14 +135,13 @@ export default {
       } else {
         this.loading = true;
         let self = this;
-        axios.post('/api/login', {
+
+        apiLogin({
           account: this.loginForm.account,
           password: this.loginForm.password
         }).then((response) => {
           let res = response.data;
-          // console.log(res);
           if (res.status == "200") {
-            // console.log(res.result);
             if (res.result == 'student') {
               this.$router.push("/student/courseList");
             } else if (res.result == 'teacher') {
@@ -159,7 +158,8 @@ export default {
         }).catch(function(error) {
           self.loading = false;
           self.$message.error('登入失敗');
-        });;
+          console.log(error);
+        });
       }
     },
     loginCancel() {
@@ -170,7 +170,7 @@ export default {
       }
     },
     checkLogin() {
-      axios.get('/api/checkLogin').then((response) => {
+      apiCheckLogin().then((response) => {
         let res = response.data;
         if (res.status == "200") {
           if (res.result.authority == 'student') {
@@ -179,6 +179,8 @@ export default {
             this.$router.push("/admin/index");
           } else if (res.result.authority == 'teacher') {
             this.$router.push("/teacher/courseList");
+          } else if (res.result.authority == 'assistant') {
+            this.$router.push("/assistant/courseList");
           }
         }
       });

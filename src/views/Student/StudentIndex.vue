@@ -97,6 +97,7 @@
 
 <script>
 import axios from 'axios'
+import {studentCheckLogin} from '@/apis/_checkLogin.js'
 import Countdown from 'vuejs-countdown'
 import DateUtil from '@/utils/DateUtil.js'
 import problemStateMixin from '@/mixins/problemState.mixin.js'
@@ -229,7 +230,8 @@ export default {
     }
   },
   mounted() {
-    this.checkLogin();
+    studentCheckLogin();
+    // this.checkLogin();
     this.initUndoProblems();
     this.initDoneProblems();
   },

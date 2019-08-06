@@ -38,9 +38,9 @@
             </el-form-item>
             <!-- TODO: 討論題:匯出互評成績 -->
             <!-- TODO: 討論題:老師評分學生 -->
-            <el-form-item label="教師評分" v-if="props.row.type=='討論題'">
-                <span><el-button type="warning" size="small" @click="">評分</el-button></span>
-            </el-form-item>
+            <!-- <el-form-item label="教師評分" v-if="props.row.type=='討論題'">
+                <span><el-button type="warning" size="small" @click="teacherDiscussDialogVisible=true">評分</el-button></span>
+            </el-form-item> -->
             <!-- TODO: 討論題:老師評分學生 -->
             <el-form-item label="抄襲偵測" style="width: 100%;" id="detectCopyFormItem" v-loading="detectCopyLoading">
                 <span><el-button type="primary" size="small" @click="detectCopy(props.row.problemId)">偵測</el-button></span>
@@ -87,6 +87,27 @@
   <div style="text-align:center; margin-top:30px;">
     <el-pagination background layout="prev, pager, next" :total="total" @current-change="currentChange"></el-pagination>
   </div>
+
+  <!-- FIXME: -->
+  <!-- <el-dialog :fullscreen="true" title="教師評分" :visible.sync="teacherDiscussDialogVisible">
+    <el-container>
+      <el-aside>
+        <el-menu @select="tdSelectStud">
+          <el-menu-item v-for="(stud,index) in tdStudsAllList" :index="stud.account" :key="index">
+            <i class="el-icon-user-solid"></i>
+            <span slot="title">{{ stud.name }}
+              <span style="color: #909399; font-size: 12px;">未完成</span>
+            </span>
+            <span style="float:right;">done</span>
+          </el-menu-item>
+        </el-menu>
+      </el-aside>
+      <el-main>
+        {{ codeSection }}
+      </el-main>
+    </el-container>
+  </el-dialog> -->
+
 </div>
 </template>
 
@@ -127,10 +148,34 @@ export default {
       pagesize: 10,
       currentPage: 1,
       // detectCopyLoading
-      detectCopyLoading: false
+      detectCopyLoading: false,
+      // FIXME: 老師評分
+      teacherDiscussDialogVisible: false,
+      codeSection: '',
+      tdStudsAllList: [{
+        name: '蘇靖軒',
+        account: '04156147'
+      }, {
+        name: '陳冠毅',
+        account: '04156211'
+      }],
+      tdCodeData: {
+        '04156147': {
+          code: 'zzzafadafwad'
+        },
+        '04156211': {
+          code: 'java import zz'
+        }
+      }
     }
   },
   methods: {
+    // FIXME:
+    tdSelectStud(account) {
+      console.log(account);
+      console.log(this.tdCodeData[account]);
+      this.codeSection = this.tdCodeData[account].code;
+    },
     // pagination
     currentChange(currentPage) {
       this.currentPage = currentPage;
@@ -189,6 +234,7 @@ export default {
       });
     },
     deleteProblem(problemId) {
+      console.log(problemId);
       this.$confirm('確認是否要刪除此題目？', '提示', {
         confirmButtonText: '確定',
         cancelButtonText: '取消',
@@ -252,8 +298,8 @@ export default {
           let result = res.result;
 
           let options = {
-            headers: ['account', 'name', 'studentClass', 'courseName', 'score', 'discussedScore.studentAccount', 'discussedScore.correctValue', 'discussedScore.readValue', 'discussedScore.skillValue', 'discussedScore.completeValue', 'discussedScore.wholeValue'],
-            rename: ['學號', '姓名', '班級', '課程', '系統批改的成績', '批改者學號', '程式正確性', '程式可讀性', '技巧運用', '程式完整性', '綜合評分']
+            headers: ['account', 'name', 'studentClass', 'courseName', 'score', 'discussedScore.studentAccount', 'discussedScore.correctValue.score', 'discussedScore.correctValue.comment', 'discussedScore.readValue.score', 'discussedScore.readValue.comment', 'discussedScore.skillValue.score', 'discussedScore.skillValue.comment', 'discussedScore.completeValue.score', 'discussedScore.completeValue.comment', 'discussedScore.wholeValue.score', 'discussedScore.wholeValue.comment', 'discussedScore.comment'],
+            rename: ['學號', '姓名', '班級', '課程', '系統批改的成績', '批改者學號', '程式正確性分數', '程式正確性評論', '程式可讀性分數', '程式可讀性評論', '技巧運用分數', '技巧運用評論', '程式完整性分數', '程式完整性評論', '綜合評分分數', '綜合評分評論', '總評論']
           }
           
           let csvName = problemName+'互評成績';

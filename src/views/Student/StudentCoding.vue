@@ -266,9 +266,7 @@
 
 <script>
 import axios from 'axios'
-import {
-  codemirror
-} from 'vue-codemirror-lite'
+import {codemirror} from 'vue-codemirror-lite'
 import GeneralUtil from '@/utils/GeneralUtil.js'
 import DateUtil from '@/utils/DateUtil.js'
 import KeyPatUtil from '@/utils/KeyPatUtil.js'
@@ -684,7 +682,7 @@ public class Main {
           // }
 
           // FIXME: pattern檢查
-          console.log(this.problem.pattern);
+          console.log('pattern:'+this.problem.pattern);
           if (KeyPatUtil.isInRule(this.problem.pattern, this.code) == false) {
             this.$message.error('程式碼內沒有包含pattern');
             return;
@@ -835,8 +833,6 @@ public class Main {
           }
         }
       });
-      
-      
     },
     clickCorrectTab(tab) { // FIXME:
       this.tabIndex = tab.index;
@@ -852,6 +848,7 @@ public class Main {
       // });
     },
     submitCorrect() {
+      console.log(this.correctList);
       this.$confirm('確定已經評分完所有同學，要送出評分結果嗎？', '提示', {
         confirmButtonText: '確定',
         cancelButtonText: '取消',
@@ -864,12 +861,12 @@ public class Main {
         this.correctList.forEach((ele) => {
           let obj = {
             correctedAccount: ele.studentAccount,
-            score: ele.score,
             correctValue: ele.correctValue,
             readValue: ele.readValue,
             skillValue: ele.skillValue,
             completeValue: ele.completeValue,
-            wholeValue: ele.wholeValue
+            wholeValue: ele.wholeValue,
+            comment: ele.comment
           }
           resultList.push(obj);
         });
@@ -953,43 +950,16 @@ public class Main {
       })
     },
     getCorrectedInfo() { // 取得被別人批改的成績
-      // axios.get('/api/team/correctedInfo', {
-      //   params: {
-      //     problemId: this.problem.id
-      //   }
-      // }).then((response) => {
-      //   let res = response.data;
-      //   if (res.status == '200') {
-      //     this.correctedList = res.result;
-      //     console.log(this.correctedList);
-      //   }
-      // });
-
-      this.correctedList = [{
-        correctValue: {
-          score: 35,
-          comment: '挺好的，而且感覺寫得很簡短，然後不會拖泥帶水，跟我的評論差很多'
-        },
-        readValue: {
-          score: 48,
-          comment: '還可'
-        },
-        skillValue: {
-          score: 70,
-          comment: '不錯不錯不錯'
-        },
-        completeValue: {
-          score: 82,
-          comment: '嗯嗯還可以吧'
-        },
-        wholeValue: {
-          score: 12,
-          comment: '真的不怎樣'
-        },
-        comment: '爛就是爛..'
-      }]
-      console.log(this.correctedList);
-
+      axios.get('/api/team/correctedInfo', {
+        params: {
+          problemId: this.problem.id
+        }
+      }).then((response) => {
+        let res = response.data;
+        if (res.status == '200') {
+          this.correctedList = res.result;
+        }
+      });
     }
   }
 }

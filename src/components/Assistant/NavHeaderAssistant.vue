@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import {apiLogout} from '@/apis/base.js'
 
 import '@/assets/css/navbar.css'
 
@@ -59,7 +59,7 @@ export default {
       }
     },
     logout() {
-      axios.post('/api/logout').then((response) => {
+      apiLogout().then((response) => {
         let res = response.data;
         if (res.status == '200') {
           this.$router.push('/login');

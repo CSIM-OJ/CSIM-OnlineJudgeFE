@@ -16,7 +16,7 @@
     <el-col :span="23" :offset="1" style="margin-top: 15px;">
       <el-col :span="2" class="item-label">評論</el-col>
       <el-col :span="22">
-        <el-input type="textarea" rows="2" resize="vertical" v-model="data.correctValue.comment"></el-input>
+        <el-input type="textarea" rows="2" resize="vertical" v-model="data.correctValue.comment" :disabled="disabled"></el-input>
       </el-col>
     </el-col>
   </el-row>
@@ -33,7 +33,7 @@
     <el-col :span="23" :offset="1" style="margin-top: 15px;">
       <el-col :span="2" class="item-label">評論</el-col>
       <el-col :span="22">
-        <el-input type="textarea" rows="2" resize="vertical" v-model="data.readValue.comment"></el-input>
+        <el-input type="textarea" rows="2" resize="vertical" v-model="data.readValue.comment" :disabled="disabled"></el-input>
       </el-col>
     </el-col>
   </el-row>
@@ -50,7 +50,7 @@
     <el-col :span="23" :offset="1" style="margin-top: 15px;">
       <el-col :span="2" class="item-label">評論</el-col>
       <el-col :span="22">
-        <el-input type="textarea" rows="2" resize="vertical" v-model="data.skillValue.comment"></el-input>
+        <el-input type="textarea" rows="2" resize="vertical" v-model="data.skillValue.comment" :disabled="disabled"></el-input>
       </el-col>
     </el-col>
   </el-row>
@@ -67,7 +67,7 @@
     <el-col :span="23" :offset="1" style="margin-top: 15px;">
       <el-col :span="2" class="item-label">評論</el-col>
       <el-col :span="22">
-        <el-input type="textarea" rows="2" resize="vertical" v-model="data.completeValue.comment"></el-input>
+        <el-input type="textarea" rows="2" resize="vertical" v-model="data.completeValue.comment" :disabled="disabled"></el-input>
       </el-col>
     </el-col>
   </el-row>
@@ -84,7 +84,7 @@
     <el-col :span="23" :offset="1" style="margin-top: 15px;">
       <el-col :span="2" class="item-label">評論</el-col>
       <el-col :span="22">
-        <el-input type="textarea" rows="2" resize="vertical" v-model="data.wholeValue.comment"></el-input>
+        <el-input type="textarea" rows="2" resize="vertical" v-model="data.wholeValue.comment" :disabled="disabled"></el-input>
       </el-col>
     </el-col>
   </el-row>
@@ -93,7 +93,7 @@
       <span class="small-title">總評論</span>
     </el-col>
     <el-col :span="23" :offset="1" style="margin-top: 15px;">
-      <el-input type="textarea" rows="2" resize="vertical" v-model="data.comment"></el-input>
+      <el-input type="textarea" rows="2" resize="vertical" v-model="data.comment" :disabled="disabled"></el-input>
     </el-col>
   </el-row>
 </div>
@@ -111,8 +111,7 @@ export default {
     return {
       mode: "text/x-java",
       theme: 'default',
-      fontSize: 16,
-      tabIndex: null
+      fontSize: 16
     }
   },
   mounted() {
