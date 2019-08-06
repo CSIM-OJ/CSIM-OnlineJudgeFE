@@ -107,6 +107,8 @@
 
 <script>
 import axios from 'axios'
+import {teacherCheckLogin} from '@/apis/_checkLogin.js'
+
 import Papa from 'papaparse'
 
 import NavHeaderTeacher from '@/components/Teacher/NavHeaderTeacher'
@@ -147,28 +149,10 @@ export default {
     }
   },
   mounted() {
-    this.checkLogin();
+    teacherCheckLogin();
     this.getStudentsData();
   },
   methods: {
-    checkLogin() {
-      axios.get('/api/checkLogin').then((response) => {
-        let res = response.data;
-        if (res.status == "200") {
-          if (res.result.authority == 'student') {
-            this.$router.push('/student/courseList')
-          } else if (res.result.authority == 'teacher') {
-            // pass
-          } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/courseList');
-          } else if (res.result.authority == 'admin') {
-            this.$router.push('/admin/index');
-          }  
-        } else {
-          this.$router.push('/login');
-        }
-      });
-    },
     getStudentsData() {
       this.dataLoading = true;
       axios.get('/api/course/getStudentsData', {

@@ -59,3 +59,23 @@ export const assistantCheckLogin = () => {
     }
   });
 }
+
+// quesbank
+export const quesbankCheckLogin = () => {
+  apiCheckLogin().then((response) => {
+    let res = response.data;
+    if (res.status == "200") {
+      if (res.result.authority == 'student') {
+        this.$router.push('/student/courseList')
+      } else if (res.result.authority == 'teacher') {
+        // pass
+      } else if (res.result.authority == 'assistant') {
+        // pass
+      } else if (res.result.authority == 'admin') {
+        this.$router.push('/admin/index');
+      }  
+    } else {
+      this.$router.push('/login');
+    }
+  });
+}

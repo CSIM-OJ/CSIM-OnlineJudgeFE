@@ -46,6 +46,7 @@
 
 <script>
 import axios from 'axios'
+import {assistantCheckLogin} from '@/apis/_checkLogin.js'
 
 import NavHeaderAssistant from '@/components/Assistant/NavHeaderAssistant'
 import SideNavCourseListAssistant from '@/components/Assistant/SideNavCourseListAssistant'
@@ -63,28 +64,10 @@ export default {
     }
   },
   mounted() {
-    this.checkLogin();
+    assistantCheckLogin();
     this.getCourses();
   },
   methods: {
-    checkLogin() {
-      axios.get('/api/checkLogin').then((response) => {
-        let res = response.data;
-        if (res.status == "200") {
-          if (res.result.authority == 'student') {
-            this.$router.push('/student/courseList')
-          } else if (res.result.authority == 'teacher') {
-            this.$router.push('/teacher/courseList');
-          } else if (res.result.authority == 'assistant') {
-            // pass
-          } else if (res.result.authority == 'admin') {
-            this.$router.push('/admin/index');
-          }  
-        } else {
-          this.$router.push('/login');
-        }
-      });
-    },
     getCourses() {
       axios.get("/api/assistant/courseList").then((response)=> {
         let res = response.data;

@@ -36,6 +36,7 @@
 
 <script>
 import axios from 'axios'
+import {studentCheckLogin} from '@/apis/_checkLogin.js'
 
 import NavHeader from '@/components/NavHeader.vue'
 import NavFooter from '@/components/NavFooter.vue'
@@ -51,28 +52,10 @@ export default {
     }
   },
   mounted() {
-    this.checkLogin();
+    studentCheckLogin();
     this.getCourses();
   },
   methods: {
-    checkLogin() {
-      axios.get('/api/checkLogin').then((response) => {
-        let res = response.data;
-        if (res.status == "200") {
-          if (res.result.authority == 'student') {
-            // pass
-          } else if (res.result.authority == 'teacher') {
-            this.$router.push('/teacher/courseList');
-          } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/courseList');
-          } else if (res.result.authority == 'admin') {
-            this.$router.push('/admin/index');
-          }  
-        } else {
-          this.$router.push('/login');
-        }
-      });
-    },
     getCourses() {
       axios.get("/api/student/courseList").then((response)=> {
         let res = response.data;

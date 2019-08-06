@@ -43,6 +43,7 @@
 
 <script>
 import axios from 'axios'
+import {teacherCheckLogin} from '@/apis/_checkLogin.js'
 
 import NavHeaderTeacher from '@/components/Teacher/NavHeaderTeacher'
 import SideNavCourseIndexTeacher from '@/components/Teacher/SideNavCourseIndexTeacher'
@@ -60,28 +61,10 @@ export default {
     }
   },
   mounted() {
-    this.checkLogin();
+    teacherCheckLogin();
     this.getStudentFeedback();
   },
   methods: {
-    checkLogin() {
-      axios.get('/api/checkLogin').then((response) => {
-        let res = response.data;
-        if (res.status == "200") {
-          if (res.result.authority == 'student') {
-            this.$router.push('/student/courseList')
-          } else if (res.result.authority == 'teacher') {
-            // pass
-          } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/courseList');
-          } else if (res.result.authority == 'admin') {
-            this.$router.push('/admin/index');
-          }  
-        } else {
-          this.$router.push('/login');
-        }
-      });
-    },
     getStudentFeedback() {
       axios.get('/api/feedback/getCourseFeedbacks', {
         params: {

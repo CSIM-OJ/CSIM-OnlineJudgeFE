@@ -234,7 +234,6 @@ export default {
       });
     },
     deleteProblem(problemId) {
-      console.log(problemId);
       this.$confirm('確認是否要刪除此題目？', '提示', {
         confirmButtonText: '確定',
         cancelButtonText: '取消',

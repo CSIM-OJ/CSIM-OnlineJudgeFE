@@ -231,29 +231,10 @@ export default {
   },
   mounted() {
     studentCheckLogin();
-    // this.checkLogin();
     this.initUndoProblems();
     this.initDoneProblems();
   },
   methods: {
-    checkLogin() {
-      axios.get('/api/checkLogin').then((response) => {
-        let res = response.data;
-        if (res.status == "200") {
-          if (res.result.authority == 'student') {
-            // pass
-          } else if (res.result.authority == 'teacher') {
-            this.$router.push('/teacher/courseList');
-          } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/courseList');
-          } else if (res.result.authority == 'admin') {
-            this.$router.push('/admin/index');
-          }  
-        } else {
-          this.$router.push('/login');
-        }
-      });
-    },
     initUndoProblems() {
       this.undoLoading = true;
 

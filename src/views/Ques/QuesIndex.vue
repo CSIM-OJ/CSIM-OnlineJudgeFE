@@ -210,6 +210,8 @@
 
 <script>
 import axios from 'axios'
+import {quesbankCheckLogin} from '@/apis/_checkLogin.js'
+
 import problemStateMixin from '@/mixins/problemState.mixin.js'
 
 import NavHeaderQues from '@/components/Ques/NavHeaderQues'
@@ -258,7 +260,7 @@ export default {
     }
   },
   mounted() {
-    this.checkLogin();
+    quesbankCheckLogin();
     this.getAllProblem();
     this.autoCompleteTags = this.problemTag;
   },
@@ -294,24 +296,6 @@ export default {
   methods: {
     currentChange(currentPage) {
       this.currentPage = currentPage;
-    },
-    checkLogin() {
-      axios.get('/api/checkLogin').then((response) => {
-        let res = response.data;
-        if (res.status == "200") {
-          if (res.result.authority == 'student') {
-            this.$router.push('/student/courseList')
-          } else if (res.result.authority == 'teacher') {
-            // pass
-          } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/courseList');
-          } else if (res.result.authority == 'admin') {
-            this.$router.push('/admin/index');
-          }  
-        } else {
-          this.$router.push('/login');
-        }
-      });
     },
     getAllProblem() {
       axios.get('/api/problemBank/getAllProblem').then((response) => {

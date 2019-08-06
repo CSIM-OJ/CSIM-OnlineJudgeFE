@@ -266,6 +266,8 @@
 
 <script>
 import axios from 'axios'
+import {studentCheckLogin} from '@/apis/_checkLogin.js'
+
 import {codemirror} from 'vue-codemirror-lite'
 import GeneralUtil from '@/utils/GeneralUtil.js'
 import DateUtil from '@/utils/DateUtil.js'
@@ -467,29 +469,11 @@ public class Main {
     }
   },
   mounted() {
-    this.checkLogin();
+    studentCheckLogin();
     this.getProblemData();
     this.getHistoryScore();
   },
   methods: {
-    checkLogin() {
-      axios.get('/api/checkLogin').then((response) => {
-        let res = response.data;
-        if (res.status == "200") {
-          if (res.result.authority == 'student') {
-            // pass
-          } else if (res.result.authority == 'teacher') {
-            this.$router.push('/teacher/courseList');
-          } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/courseList');
-          } else if (res.result.authority == 'admin') {
-            this.$router.push('/admin/index');
-          }  
-        } else {
-          this.$router.push('/login');
-        }
-      });
-    },
     checkJudged() {
       axios.get('/api/judge/checkJudged', {
         params: {

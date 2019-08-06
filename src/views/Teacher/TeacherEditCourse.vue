@@ -56,7 +56,7 @@
         </el-footer>
 
         <!-- TODO: edit course dialog start -->
-        <el-dialog title="編輯課程" :visible.sync="editCourseDialogVisible" id="editCourseDialog">
+        <el-dialog title="編輯課程" :visible.sync="editCourseDialogVisible" id="editCourseDialog" @close="cancelEdit">
           <el-form ref="form" :model="editCourseForm" label-width="80px" style="padding-bottom:25px;">
             <el-form-item label="課程名稱">
               <el-input v-model="editCourseForm.courseName" style="width: 90%;"></el-input>
@@ -89,6 +89,7 @@
 
 <script>
 import axios from 'axios'
+import {teacherCheckLogin} from '@/apis/_checkLogin.js'
 
 import NavHeaderTeacher from '@/components/Teacher/NavHeaderTeacher'
 import SideNavCourseListTeacher from '@/components/Teacher/SideNavCourseListTeacher'
@@ -115,28 +116,10 @@ export default {
     }
   },
   mounted() {
-    this.checkLogin();
+    teacherCheckLogin();
     this.getCourseList();
   },
   methods: {
-    checkLogin() {
-      axios.get('/api/checkLogin').then((response) => {
-        let res = response.data;
-        if (res.status == "200") {
-          if (res.result.authority == 'student') {
-            this.$router.push('/student/courseList')
-          } else if (res.result.authority == 'teacher') {
-            // pass
-          } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/courseList');
-          } else if (res.result.authority == 'admin') {
-            this.$router.push('/admin/index');
-          }  
-        } else {
-          this.$router.push('/login');
-        }
-      });
-    },
     getCourseList() {
       axios.get('/api/teacher/courseList').then((response) => {
         let res = response.data;
