@@ -47,6 +47,7 @@
 <script>
 import axios from 'axios'
 import {assistantCheckLogin} from '@/apis/_checkLogin.js'
+import {apiAsstCourseList} from '@/apis/assistant.js'
 
 import NavHeaderAssistant from '@/components/Assistant/NavHeaderAssistant'
 import SideNavCourseListAssistant from '@/components/Assistant/SideNavCourseListAssistant'
@@ -69,7 +70,7 @@ export default {
   },
   methods: {
     getCourses() {
-      axios.get("/api/assistant/courseList").then((response)=> {
+      apiAsstCourseList().then((response)=> {
         let res = response.data;
         if(res.status=="200") {
           this.courseList = res.result;

@@ -13,9 +13,7 @@
           <page-name-breadcrumb pageName="學生資訊"></page-name-breadcrumb>
           <div class="box-square">
             <el-input class='filterInput' v-model='filterQuery' placeholder='請輸入學號或姓名' clearable><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
-            <!-- <el-button plain size="mini" @click="changeTableWidth" class="ctbtn hidden-xs-only"><i class="fas fa-arrows-alt"></i></el-button> -->
             <el-table :data="tableFiltered.slice((currentPage-1)*pagesize, currentPage*pagesize)" border style="width: 100%" ref="studentsTable" v-loading="loading">
-              <!-- TODO: -->
               <el-table-column fixed prop="studentId" label="學號" width="120"></el-table-column>
               <el-table-column fixed label="姓名" width="120">
                 <template slot-scope="scope">
@@ -38,9 +36,6 @@
               </el-col>
             </el-row>
           </div>
-          <!-- <div style="text-align: center;margin-top: 30px;">
-            <el-pagination background layout="prev, pager, next" :total="total" @current-change="currentChange"></el-pagination>
-          </div> -->
         </el-main>
         <el-footer>
           <nav-footer-admin></nav-footer-admin>
@@ -48,6 +43,7 @@
       </el-container>
     </el-container>
   </el-container>
+
   <!-- 學生做題資訊 dialog start -->
   <el-dialog :visible.sync="dialogFormVisible" @close="clearFilter">
     <el-row id="student-dialog">
@@ -84,8 +80,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 import {assistantCheckLogin} from '@/apis/_checkLogin.js'
+import {apiGetStudentsData} from '@/apis/course.js'
 
 import NavHeaderAssistant from '@/components/Assistant/NavHeaderAssistant'
 import PageNameBreadcrumb from '@/components/MgmtContent/PageNameBreadcrumb'
@@ -94,9 +90,7 @@ import NavFooterAdmin from '@/components/NavFooterAdmin'
 
 import '@/assets/css/ta-studentsdata.css'
 
-import {
-  CsvExport
-} from '@/utils/CsvExport.js'
+import {CsvExport} from '@/utils/CsvExport.js'
 
 export default {
   components: {
@@ -207,14 +201,6 @@ export default {
   },
   methods: {
     countTableHeight() {
-      // let screenWidth = window.screen.width;
-      // let screenHeight = window.screen.height;
-      // console.log(window.screen.height);
-      // console.log(this.$refs.studentsTable);
-      // console.log(this.$refs.studentsTable.bodyHeight.height);
-      // this.tableHeight = parseInt(this.$refs.studentsTable.bodyHeight.height.replace('px', ''));
-      // this.pagesize = this.tableHeight/47;
-
       let screenHeight = window.screen.height;
       
       if (screenHeight>=800 && screenHeight<1200) this.pagesize=10;
@@ -226,17 +212,13 @@ export default {
     getStudentsData() {
       this.loading = true;
 
-      axios.get('/api/course/getStudentsData', {
-        params: {
-          courseId: this.$store.state.course.courseInfo.courseId
-        }
+      apiGetStudentsData({
+        courseId: this.$store.state.course.courseInfo.courseId
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
           this.tableData = res.result;
           this.loading = false;
-
-
           
           // formThead
           this.formThead = this.tableData[0].problems.map(v => {
@@ -278,21 +260,6 @@ export default {
       let filename = Today.getFullYear() + "-" + (Today.getMonth()+1) + "-" + Today.getDate();
       CsvExport(fields, data, filename);
     },
-    // changeTableWidth() {
-    //   this.tableFlag++;
-    //   var box = document.getElementsByClassName("box-square")[0];
-    //   var ctbtn = document.getElementsByClassName("ctbtn")[0];
-
-    //   if (this.tableFlag % 2 == 0) {
-    //     box.style.marginLeft = '0px';
-    //     box.style.width = '100%';
-    //     ctbtn.style.color = '#409EFF';
-    //   } else {
-    //     box.style.marginLeft = '8.33%';
-    //     box.style.width = '83%';
-    //     ctbtn.style.color = '#303133';
-    //   }
-    // },
     studentInfo(studentId, studentName) {
       this.dialogStudentId = studentId;
       this.dialogStudentName = studentName;

@@ -92,8 +92,9 @@
 </template>
 
 <script>
-import axios from 'axios'
 import {assistantCheckLogin} from '@/apis/_checkLogin.js'
+import {apiGetStudentsData} from '@/apis/course.js'
+import {apiAsstDeleteStudentList,apiAsstAddStudentList} from '@/apis/assistant.js'
 
 import Papa from 'papaparse'
 
@@ -143,10 +144,9 @@ export default {
   methods: {
     getStudentsData() {
       this.dataLoading = true;
-      axios.get('/api/course/getStudentsData', {
-        params: {
-          courseId: this.$store.state.course.courseInfo.courseId
-        }
+
+      apiGetStudentsData({
+        courseId: this.$store.state.course.courseInfo.courseId
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
@@ -166,7 +166,6 @@ export default {
     },
     handleSelectionChange(val) {
       this.deleteSelection = val;
-      // console.log(this.deleteSelection);
     },
     toggleSelection(rows) {
       if (rows) {
@@ -188,7 +187,7 @@ export default {
           delID.push(this.deleteSelection[i].studentId);
         }
 
-        axios.post('/api/assistant/deleteStudentList', {
+        apiAsstDeleteStudentList({
           courseId: this.$store.state.course.courseInfo.courseId,
           accountList: delID
         }).then((response)=> {
@@ -240,12 +239,11 @@ export default {
       this.confirmCsvDialogVisible = false;
       this.$refs.upload.clearFiles();
       this.csvFileData = [];
-      // console.log(this.csvFileData);
     },
     addNewOneStudent() {
       let tempList = [this.newOneStudentForm.account];
 
-      axios.post('/api/assistant/addStudentList', {
+      apiAsstAddStudentList({
         courseId: this.$store.state.course.courseInfo.courseId,
         accountList: tempList
       }).then((response) => {

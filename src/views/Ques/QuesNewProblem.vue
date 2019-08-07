@@ -197,8 +197,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 import {quesbankCheckLogin} from '@/apis/_checkLogin.js'
+import {apiAddProblem} from '@/apis/problemBank.js'
 
 import VueMarkdown from 'vue-markdown'
 import DateUtil from '@/utils/DateUtil.js'
@@ -279,7 +279,8 @@ export default {
         this.$message.error('請至少填寫兩組題目輸入範例！');
       } else {
         this.loading = true;
-        axios.post('/api/problemBank/addProblem', {
+        
+        apiAddProblem({
           name: this.problemData.name,
           category: this.problemData.category,
           tag: this.problemData.tag,
@@ -349,7 +350,6 @@ export default {
       };
     },
     handleSelect(item) {
-      // this.inputValue = item;
       let inputValue = this.inputValue;
       if (inputValue) {
         this.problemData.tag.push(inputValue);
@@ -363,7 +363,6 @@ export default {
         'outputSample': ''
       }
       this.problemData.testCases.push(obj);
-      // console.log(this.problemData.testCases);
     },
     delSample() {
       this.problemData.testCases.pop();
