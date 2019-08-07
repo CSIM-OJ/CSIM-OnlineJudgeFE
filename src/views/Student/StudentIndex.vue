@@ -96,8 +96,9 @@
 </template>
 
 <script>
-import axios from 'axios'
 import {studentCheckLogin} from '@/apis/_checkLogin.js'
+import {apiProblemInfo} from '@/apis/student.js'
+
 import Countdown from 'vuejs-countdown'
 import DateUtil from '@/utils/DateUtil.js'
 import problemStateMixin from '@/mixins/problemState.mixin.js'
@@ -238,12 +239,10 @@ export default {
     initUndoProblems() {
       this.undoLoading = true;
 
-      axios.get('/api/student/problemInfo', {
-        params: {
-          courseId: this.$store.state.course.courseInfo.courseId,
-          type: '全部',
-          isJudge: false
-        }
+      apiProblemInfo({
+        courseId: this.$store.state.course.courseInfo.courseId,
+        type: '全部',
+        isJudge: false
       }).then((response) => {
         let res = response.data;
         if (res.status=='200') {
@@ -255,12 +254,10 @@ export default {
     initDoneProblems() {
       this.doneLoading = true;
 
-      axios.get('/api/student/problemInfo', {
-        params: {
-          courseId: this.$store.state.course.courseInfo.courseId,
-          type: '全部',
-          isJudge: true
-        }
+      apiProblemInfo({
+        courseId: this.$store.state.course.courseInfo.courseId,
+        type: '全部',
+        isJudge: true
       }).then((response) => {
         let res = response.data;
         if (res.status=='200') {
@@ -276,12 +273,10 @@ export default {
       } else {
         this.undoLoading = true;
 
-        axios.get('/api/student/problemInfo', {
-          params: {
-            courseId: this.$store.state.course.courseInfo.courseId,
-            type: val,
-            isJudge: false
-          }
+        apiProblemInfo({
+          courseId: this.$store.state.course.courseInfo.courseId,
+          type: val,
+          isJudge: false
         }).then((response) => {
           let res = response.data;
           if (res.status=='200') {
@@ -296,13 +291,11 @@ export default {
         this.initDoneProblems();
       } else {
         this.doneLoading = true;
-        
-        axios.get('/api/student/problemInfo', {
-          params: {
-            courseId: this.$store.state.course.courseInfo.courseId,
-            type: val,
-            isJudge: true
-          }
+
+        apiProblemInfo({
+          courseId: this.$store.state.course.courseInfo.courseId,
+          type: val,
+          isJudge: true
         }).then((response) => {
           let res = response.data;
           if (res.status=='200') {

@@ -35,8 +35,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 import {studentCheckLogin} from '@/apis/_checkLogin.js'
+import {apiStudCourseList} from '@/apis/student.js'
 
 import NavHeader from '@/components/NavHeader.vue'
 import NavFooter from '@/components/NavFooter.vue'
@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     getCourses() {
-      axios.get("/api/student/courseList").then((response)=> {
+      apiStudCourseList().then((response)=> {
         let res = response.data;
         if(res.status=="200") {
           this.courseList = res.result;

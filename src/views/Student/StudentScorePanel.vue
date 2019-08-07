@@ -81,8 +81,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 import {studentCheckLogin} from '@/apis/_checkLogin.js'
+import {apiStudInfo, apiHistoryScore} from '@/apis/student.js'
 
 import NavHeaderStudent from '@/components/NavHeaderStudent.vue'
 import NavFooter from '@/components/NavFooter.vue'
@@ -162,10 +162,8 @@ export default {
   },
   methods: {
     getStudentInfo() {
-      axios.get('/api/student/info', {
-        params: {
-          courseId: this.$store.state.course.courseInfo.courseId
-        }
+      apiStudInfo({
+        courseId: this.$store.state.course.courseInfo.courseId
       }).then((response) => {
         let res = response.data;
         if(res.status=='200') {
@@ -181,10 +179,8 @@ export default {
       });
     },
     getHistoryScore() {
-      axios.get('/api/student/historyScore', {
-        params: {
-          courseId: this.$store.state.course.courseInfo.courseId
-        }
+      apiHistoryScore({
+        courseId: this.$store.state.course.courseInfo.courseId
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
