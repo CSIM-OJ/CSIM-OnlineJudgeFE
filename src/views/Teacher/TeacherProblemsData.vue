@@ -19,7 +19,7 @@
               </el-breadcrumb>
             </div>
           </el-row>
-          <!-- TODO: table problem data -->
+          <!-- table problem data -->
           <table-problem-data :problemData="tableData" :tableLoading='loading' @refreshProblemsData="refreshProblemsData" @showViewProblemDialog="showViewProblemDialog" @showEditProblemDialog="showEditProblemDialog" @showDoStatusDialog="showDoStatusDialog" ></table-problem-data>
         </el-main>
         <el-footer>
@@ -32,19 +32,20 @@
   <!-- view problem dialog -->
   <view-problem-dialog :viewProblemDialogVisible="viewProblemDialogVisible" :viewProblemLoading="viewProblemLoading" :problemData="problemData" @onChangeViewProblemDialogVisible="onChangeViewProblemDialogVisible"></view-problem-dialog>
 
-  <!-- TODO: edit problem dialog -->
+  <!-- edit problem dialog -->
   <edit-problem-dialog :editProblemDialogVisible="editProblemDialogVisible" :editProblemData="editProblemData" @onChangeEditProblemDialogVisible="onChangeEditProblemDialogVisible" @refreshProblemsData="refreshProblemsData">
   </edit-problem-dialog>
 
-  <!-- TODO: do status dialog -->
+  <!-- do status dialog -->
   <do-status-problem-dialog :doStatusDialogVisible="doStatusDialogVisible" :doInfoDialogStatus="doInfoDialogStatus" :doStatusData="doStatusData" @onChangeDoStatusDialogVisible="onChangeDoStatusDialogVisible" :doInfoDialogPName="doInfoDialogPName"></do-status-problem-dialog>
   
 </div>
 </template>
 
 <script>
-import axios from 'axios'
 import {teacherCheckLogin} from '@/apis/_checkLogin.js'
+import {apiGetProblems, apiGetInfo} from '@/apis/problem.js'
+import {apiGetStudentsData} from '@/apis/course.js'
 
 import DateUtil from '@/utils/DateUtil.js'
 import problemStateMixin from '@/mixins/problemState.mixin.js'
@@ -165,10 +166,9 @@ export default {
   methods: {
     getProblemsData() {
       this.loading = true;
-      axios.get('/api/problem/getProblems', {
-        params: {
-          courseId: this.$store.state.course.courseInfo.courseId
-        }
+
+      apiGetProblems({
+        courseId: this.$store.state.course.courseInfo.courseId
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
@@ -178,10 +178,8 @@ export default {
       });
     },
     getStudentsData() {
-      axios.get('/api/course/getStudentsData', {
-        params: {
-          courseId: this.$store.state.course.courseInfo.courseId
-        }
+      apiGetStudentsData({
+        courseId: this.$store.state.course.courseInfo.courseId
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
@@ -192,10 +190,8 @@ export default {
     // ProblemTableData component
     showViewProblemDialog(problemId) {
       this.viewProblemLoading = true;
-      axios.get('/api/problem/getInfo', {
-        params: {
-          problemId: problemId
-        }
+      apiGetInfo({
+        problemId: problemId
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
@@ -222,7 +218,7 @@ export default {
     refreshProblemsData() {
       this.getProblemsData();
     },
-    // TODO: EditTableData component
+    // EditTableData component
     showEditProblemDialog(editProblemData) {
       this.editProblemData = editProblemData;
       this.editProblemDialogVisible = true;

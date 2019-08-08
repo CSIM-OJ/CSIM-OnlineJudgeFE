@@ -45,8 +45,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 import {teacherCheckLogin} from '@/apis/_checkLogin.js'
+import {apiTrCourseList} from '@/apis/teacher.js'
 
 import NavHeaderTeacher from '@/components/Teacher/NavHeaderTeacher'
 import SideNavCourseListTeacher from '@/components/Teacher/SideNavCourseListTeacher'
@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     getCourses() {
-      axios.get("/api/teacher/courseList").then((response)=> {
+      apiTrCourseList().then((response)=> {
         let res = response.data;
         if(res.status=="200") {
           this.courseList = res.result;

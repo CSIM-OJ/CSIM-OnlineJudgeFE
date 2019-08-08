@@ -8,7 +8,7 @@
       <el-aside width="15vw">
         <side-nav-course-list-teacher></side-nav-course-list-teacher>
       </el-aside>
-      <!-- TODO: 編輯課程 -->
+      <!-- 編輯課程 -->
       <el-container>
         <el-main>
           <el-row class="admin-page">
@@ -55,7 +55,7 @@
           <nav-footer></nav-footer>
         </el-footer>
 
-        <!-- TODO: edit course dialog start -->
+        <!-- edit course dialog start -->
         <el-dialog title="編輯課程" :visible.sync="editCourseDialogVisible" id="editCourseDialog" @close="cancelEdit">
           <el-form ref="form" :model="editCourseForm" label-width="80px" style="padding-bottom:25px;">
             <el-form-item label="課程名稱">
@@ -88,8 +88,9 @@
 </template>
 
 <script>
-import axios from 'axios'
 import {teacherCheckLogin} from '@/apis/_checkLogin.js'
+import {apiTrCourseList, apiAssistantList} from '@/apis/teacher.js'
+import {apiEditCourse, apiDelCourse} from '@/apis/course.js'
 
 import NavHeaderTeacher from '@/components/Teacher/NavHeaderTeacher'
 import SideNavCourseListTeacher from '@/components/Teacher/SideNavCourseListTeacher'
@@ -121,7 +122,7 @@ export default {
   },
   methods: {
     getCourseList() {
-      axios.get('/api/teacher/courseList').then((response) => {
+      apiTrCourseList().then((response) => {
         let res = response.data;
         if (res.status == '200') {
           this.courseList = res.result;
@@ -130,7 +131,7 @@ export default {
       });
     },
     getAllTaList() { // 取得未被指派的助教名單
-      axios.get('/api/teacher/assistantList').then((response) => {
+    apiAssistantList().then((response) => {
         let res = response.data;
         if (res.status=='200') {
           res.result.forEach((ta) => {
@@ -140,12 +141,11 @@ export default {
             }
             this.allTaList.push(obj);
           });
-          
           console.log(this.allTaList);
         }
       });
     },
-    // TODO: editCourse
+    // editCourse
     editCourse(item) {
       this.getAllTaList();
 
@@ -164,7 +164,7 @@ export default {
       this.editCourseDialogVisible = true;
     },
     summitEdit() {
-      axios.post('/api/course/editCourse', {
+      apiEditCourse({
         courseId: this.editCourseForm.courseId,
         courseName: this.editCourseForm.courseName,
         semester: this.editCourseForm.semester,
@@ -195,14 +195,14 @@ export default {
       }
       this.allTaList = [];
     },
-    // TODO: delCourse
+    // delCourse
     delCourse(courseId) {
       this.$confirm('確認是否要刪除課程', '提示', {
         confirmButtonText: '確定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        axios.post('/api/course/delCourse', {
+        apiDelCourse({
           courseId: courseId
         }).then((response) => {
           let res = response.data;

@@ -74,7 +74,7 @@
                     </el-form-item>
                   </el-col>
                 </el-row>
-                <!-- TODO: pattern -->
+                <!-- pattern -->
                 <el-row>
                   <el-col :span="24" style="margin-bottom: 20px;">
                     <el-form-item label="指定程式片段 (Pattern)" style="margin-bottom: 5px;">
@@ -84,7 +84,7 @@
                     <el-button size="small" type="danger" plain @click="delPattern">- 移除pattern</el-button>
                   </el-col>
                 </el-row>
-                <!-- TODO: pattern -->
+                <!-- pattern -->
                 <el-form-item>
                   <label slot="label">
                     題目描述 (Description)
@@ -133,16 +133,10 @@
                 <el-button size="small" type="primary" plain @click="addSample">+ 新增範本</el-button>
                 <el-button size="small" type="danger" plain @click="delSample">- 移除範本</el-button>
                 <!-- 題目範本 -->
-                <!-- FIXME: 討論題：選取批改配對 start-->
+                <!-- 討論題：選取批改配對 start-->
                 <el-row v-if="problemData.type=='討論題'">
                   <el-col :span="24" style="margin-bottom: 15px;">
                     <el-divider content-position="center">討論題：選取批改配對</el-divider>
-                    <!-- NOTE: 190724 不需用 -->
-                    <!-- <p>指定一人須批改幾位同學：
-                      <el-input-number v-model="discussNum" controls-position="right" @change="discussNumChange" :min="1" :max="10" size="small" :disabled="discussIsLock"></el-input-number>
-                      <el-button size="mini" style="margin-left: 20px;" type="primary" @click="discussNumLock">確定</el-button>
-                      <el-button size="mini" type="danger" @click="discussNumUnlock">更改</el-button>
-                    </p> -->
                     <el-cascader-panel v-loading="discussLoading" v-model="discussValue" :options="discussOptions" :props="discussProps" style="height:500px;"></el-cascader-panel>
                   </el-col>
                 </el-row>
@@ -209,7 +203,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <!-- TODO: pattern -->
+      <!-- pattern -->
       <el-row>
         <el-col :span="20" :offset="2">
           <el-form-item label="指定程式片段 (Pattern)">
@@ -257,7 +251,7 @@
       </el-row>
       <el-row v-if="problemData.type=='討論題'">
         <el-col :span="20" :offset="2">
-          <!-- NOTE: Tree -->
+          <!-- Tree -->
           <p>討論題：選取批改配對</p>
           <el-tree class="discussTree" :data="previewDiscussTreeData"></el-tree>
         </el-col>
@@ -368,8 +362,11 @@
 </template>
 
 <script>
-import axios from 'axios'
 import {teacherCheckLogin} from '@/apis/_checkLogin.js'
+import {apiAllStud} from '@/apis/student.js'
+import {apiAddProblem} from '@/apis/problem.js'
+import {apiCreateTeam} from '@/apis/team.js'
+import {apiGetAllProblem, apiGetProblemInfo} from '@/apis/problemBank.js'
 
 import VueMarkdown from 'vue-markdown'
 import DateUtil from '@/utils/DateUtil.js'
@@ -400,7 +397,7 @@ export default {
       problemData: {
         'name': '',
         'type': '',
-        'category': '', // TODO: 輸入輸出、...
+        'category': '', // 輸入輸出、...
         'tag': [],
         'deadline': '',
         'description': '',
@@ -436,7 +433,7 @@ export default {
       currentPage: 1,
       // tag selector
       problemTagValue: [],
-      // FIXME: 討論題：指定批改者
+      // 討論題：指定批改者
       discussLoading: false,
       discussStudsList: [], // 學生學號名單
       discussNum: 0,
@@ -463,7 +460,6 @@ export default {
   },
   mounted() {
     teacherCheckLogin();
-    // this.getStudsList();
     
     this.autoCompleteTags = this.problemTag;
   },
@@ -499,19 +495,15 @@ export default {
   methods: {
     //markdown
     update: _.debounce(function(e) {
-      // console.log(e.target.value);
       this.problemData.description = e;
-      // this.problemData.description = e.target.value
     }, 300),
     selectDeadline() {
       this.previewDate = DateUtil.formatDate(this.problemData.deadline);
     },
-    // FIXME: 討論題
+    // 討論題
     getStudsList() {
-      axios.get('/api/student/allStud', {
-        params: {
-          courseId: this.$store.state.course.courseInfo.courseId
-        }
+      apiAllStud({
+        courseId: this.$store.state.course.courseInfo.courseId
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
@@ -525,17 +517,6 @@ export default {
         }, 1000);
       });
     },
-    // discussNumLock() {
-    //   this.discussIsLock = true;
-    // },
-    // discussNumUnlock() {
-    //   this.discussIsLock = false;
-    //   this.discussOptions.forEach((element) => {
-    //     element['disabled'] = false;
-    //   });
-    // },
-    // discussNumChange() {
-    // },
     changeProblemType() {
       // 如果是討論題，就載入學生學號，去做討論題的批改配對
       if (this.problemData.type == '討論題') {
@@ -580,7 +561,6 @@ export default {
         this.discussOptions = [];
       }
     },
-    // NOTE: preview
     previewProblem() {
       // discussValue轉成tree格式，供使用者預覽
       let treeData = [];
@@ -618,7 +598,7 @@ export default {
         this.$message.error('請選定題目作答類型！');
       } else if (this.problemData.tag.length == 0) {
         this.$message.error('請至少選擇一個標籤！');
-      } // TODO: 至少要有java, py的tag
+      } // 至少要有java, py的tag
         else if (!(this.problemData.tag.includes('Java')||this.problemData.tag.includes('Python'))) {
         this.$message.error('請選擇一種程式語言標籤！');
       } else if (this.problemData.deadline == '') {
@@ -646,7 +626,7 @@ export default {
           });
         }
         
-        axios.post('/api/problem/addProblem', {
+        apiAddProblem({
           courseId: this.$store.state.course.courseInfo.courseId,
           name: this.problemData.name,
           type: this.problemData.type,
@@ -657,8 +637,8 @@ export default {
           inputDesc: this.problemData.inputDesc,
           outputDesc: this.problemData.outputDesc,
           testCases: this.problemData.testCases,
-          keyword: [], // FIXME: 為了活動題
-          pattern: patternArray // FIXME: 為了活動題
+          keyword: [],
+          pattern: patternArray
         }).then((response) => {
           let res = response.data;
           if (res.status == '200') {
@@ -667,7 +647,7 @@ export default {
               message: '新增題目成功!'
             });
             
-            // FIXME: 討論題
+            // 討論題
             if (this.problemData.type == '討論題') {
               // [[correctAccount, correctedAccount]]轉成[{correctAccount, correctedAccount}]
               let discussValueObject = []; // [{correctAccount, correctedAccount}]
@@ -679,7 +659,7 @@ export default {
                 discussValueObject.push(object);
               });
 
-              axios.post('/api/team/createTeam', {
+              apiCreateTeam({
                 problemId: res.result.problemId,
                 pairs: discussValueObject
               }).then((response) => {
@@ -754,7 +734,6 @@ export default {
       };
     },
     handleSelect(item) {
-      // this.inputValue = item;
       let inputValue = this.inputValue;
       if (inputValue) {
         this.problemData.tag.push(inputValue);
@@ -775,7 +754,6 @@ export default {
         'outputSample': ''
       }
       this.problemData.testCases.push(obj);
-      // console.log(this.problemData.testCases);
     },
     delSample() {
       this.problemData.testCases.pop();
@@ -786,7 +764,8 @@ export default {
     },
     viewProblemBank() {
       this.problemBankDialogVisible = true;
-      axios.get('/api/problemBank/getAllProblem').then((response) => {
+
+      apiGetAllProblem().then((response) => {
         let res = response.data;
         if (res.status == '200') {
           this.quesList = res.result;
@@ -794,10 +773,8 @@ export default {
       });
     },
     viewProblem(data) {
-      axios.get('/api/problemBank/getProblemInfo', {
-        params: {
-          id: data.id
-        }
+      apiGetProblemInfo({
+        id: data.id
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
@@ -808,10 +785,8 @@ export default {
       this.viewProblemActive = true;
     },
     importProblem(data) {
-      axios.get('/api/problemBank/getProblemInfo', {
-        params: {
-          id: data.id
-        }
+      apiGetProblemInfo({
+        id: data.id
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {

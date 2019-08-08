@@ -42,8 +42,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 import {teacherCheckLogin} from '@/apis/_checkLogin.js'
+import {apiGetCourseFeedbacks} from '@/apis/feedback.js'
 
 import NavHeaderTeacher from '@/components/Teacher/NavHeaderTeacher'
 import SideNavCourseIndexTeacher from '@/components/Teacher/SideNavCourseIndexTeacher'
@@ -66,10 +66,8 @@ export default {
   },
   methods: {
     getStudentFeedback() {
-      axios.get('/api/feedback/getCourseFeedbacks', {
-        params: {
-          courseId: this.$store.state.course.courseInfo.courseId
-        }
+      apiGetCourseFeedbacks({
+        courseId: this.$store.state.course.courseInfo.courseId
       }).then((response)=> {
         let res = response.data;
         if(res.status=='200') {

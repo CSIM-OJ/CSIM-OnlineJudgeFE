@@ -69,12 +69,6 @@
           <el-form-item label="學生帳號 (學號)" style="margin-bottom: 5px;">
             <el-input v-model="newOneStudentForm.account"></el-input>
           </el-form-item>
-          <!-- <el-form-item label="學生姓名" style="margin-bottom: 5px;">
-            <el-input v-model="newOneStudentForm.name"></el-input>
-          </el-form-item>
-          <el-form-item label="學生系級" style="margin-bottom: 5px;">
-            <el-input v-model="newOneStudentForm.studentClass"></el-input>
-          </el-form-item> -->
           <div class="operating-btns" style="margin-bottom: 20px;">
             <el-button @click="newOneStudentDialogVisible=false">取消</el-button>
             <el-button type="primary" @click="addNewOneStudent">確定</el-button>
@@ -106,8 +100,9 @@
 </template>
 
 <script>
-import axios from 'axios'
 import {teacherCheckLogin} from '@/apis/_checkLogin.js'
+import {apiGetStudentsData} from '@/apis/course.js'
+import {apiTrDeleteStudentList, apiTrAddStudentList} from '@/apis/teacher.js'
 
 import Papa from 'papaparse'
 
@@ -155,10 +150,8 @@ export default {
   methods: {
     getStudentsData() {
       this.dataLoading = true;
-      axios.get('/api/course/getStudentsData', {
-        params: {
-          courseId: this.$store.state.course.courseInfo.courseId
-        }
+      apiGetStudentsData({
+        courseId: this.$store.state.course.courseInfo.courseId
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
@@ -178,7 +171,6 @@ export default {
     },
     handleSelectionChange(val) {
       this.deleteSelection = val;
-      // console.log(this.deleteSelection);
     },
     toggleSelection(rows) {
       if (rows) {
@@ -200,7 +192,7 @@ export default {
           delID.push(this.deleteSelection[i].studentId);
         }
 
-        axios.post('/api/teacher/deleteStudentList', {
+        apiTrDeleteStudentList({
           courseId: this.$store.state.course.courseInfo.courseId,
           accountList: delID
         }).then((response)=> {
@@ -252,12 +244,11 @@ export default {
       this.confirmCsvDialogVisible = false;
       this.$refs.upload.clearFiles();
       this.csvFileData = [];
-      // console.log(this.csvFileData);
     },
     addNewOneStudent() {
       let tempList = [this.newOneStudentForm.account];
 
-      axios.post('/api/teacher/addStudentList', {
+      apiTrAddStudentList({
         courseId: this.$store.state.course.courseInfo.courseId,
         accountList: tempList
       }).then((response) => {
