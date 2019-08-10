@@ -106,7 +106,14 @@ export default {
   components: {
     codemirror
   },
-  props: ['data', 'index', 'disabled', 'lang', 'tabIndex'],
+  props: {
+    data: Array,
+    index: 0,
+    disabled: false,
+    lang: String,
+    tabIndex: 0
+  },
+  // props: ['data', 'index', 'disabled', 'lang', 'tabIndex'],
   data() {
     return {
       mode: "text/x-java",

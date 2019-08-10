@@ -31,6 +31,7 @@
                 </div>
               </el-col>
               <el-col class="uploadCsvCol" :span="12">
+                <!-- FIXME: txt -->
                 <el-upload class="upload-demo" ref="upload" drag :action="action" accept=".csv" :on-success="handleSuccess" :file-list="fileList" :limit="limitFileNum" :on-exceed="onexceedFunction">
                   <i class="el-icon-upload"></i>
                   <div class="el-upload__text">將csv文件拖到此處，或<em>點擊上傳</em></div>
@@ -38,10 +39,15 @@
                     <a href="javascript:void(0);" @click="csvFormatAlert" style="color: #909399;"><i class="el-icon-info"></i></a>
                   </div>
                 </el-upload>
-                <!-- <div style="margin-top: 50px; margin-bottom: 30px;">
-                  <el-transfer style="display: flex; align-items: center; justify-content: center;" filterable :titles="['未加入班級', '已加入班級']" filter-placeholder="請輸入班級名稱" v-model="value" :data="data" @change="handleChange">
-                  </el-transfer>
-                </div> -->
+
+
+                <!-- <el-upload class="upload-demo" ref="upload" drag :action="action" accept=".csv" :on-success="handleSuccess" :file-list="fileList" :limit="limitFileNum" :on-exceed="onexceedFunction">
+                  <i class="el-icon-upload"></i>
+                  <div class="el-upload__text">將csv文件拖到此處，或<em>點擊上傳</em></div>
+                  <div class="el-upload__tip" slot="tip">只能上傳csv文件，且不超過500kb
+                    <a href="javascript:void(0);" @click="csvFormatAlert" style="color: #909399;"><i class="el-icon-info"></i></a>
+                  </div>
+                </el-upload> -->
               </el-col>
             </el-row>
           </div>
@@ -209,7 +215,7 @@ export default {
         });
       });
     },
-    // upload csv then parse
+    // FIXME: upload csv then parse
     handleSuccess(res, file, fileList) {
       let self = this;
       // parse local csv file
@@ -218,7 +224,7 @@ export default {
         complete(results) {
           // 檢測csv是否符合格式
           let keys = Object.keys(results.data[0]);
-          if (keys.sort().toString() == ["account", "name", "studentClass"].sort().toString()) {
+          if (keys.sort().toString() == ["account"].sort().toString()) {
             self.csvFileData = results.data;
             self.confirmCsvDialogVisible = true;
           } else {
@@ -266,7 +272,7 @@ export default {
     addCsvStudent() {
       // TODO: api
       // append csvFileData
-      // console.log(this.csvFileData);
+      console.log(this.csvFileData);
     },
     csvFormatAlert() {
       this.$alert('account, name, studentClass', 'Csv欄位格式', {

@@ -38,9 +38,9 @@
             </el-form-item>
             <!-- TODO: 討論題:匯出互評成績 -->
             <!-- TODO: 討論題:老師評分學生 -->
-            <!-- <el-form-item label="教師評分" v-if="props.row.type=='討論題'">
-                <span><el-button type="warning" size="small" @click="teacherDiscussDialogVisible=true">評分</el-button></span>
-            </el-form-item> -->
+            <el-form-item label="教師評分" v-if="props.row.type=='討論題'">
+                <span><el-button type="warning" size="small" @click="onTeacherDiscuss(props.row.name)">評分</el-button></span>
+            </el-form-item>
             <!-- TODO: 討論題:老師評分學生 -->
             <el-form-item label="抄襲偵測" style="width: 100%;" id="detectCopyFormItem" v-loading="detectCopyLoading">
                 <span><el-button type="primary" size="small" @click="detectCopy(props.row.problemId)">偵測</el-button></span>
@@ -89,24 +89,34 @@
   </div>
 
   <!-- FIXME: -->
-  <!-- <el-dialog :fullscreen="true" title="教師評分" :visible.sync="teacherDiscussDialogVisible">
+  <el-dialog id="teacherDiscussDialog" :fullscreen="true" :title="'教師評分 - '+trDiscussProblemName" :visible.sync="teacherDiscussDialogVisible" @open="setDefaultSelectStud" @close="closeTrDiscussDialog">
     <el-container>
       <el-aside>
-        <el-menu @select="tdSelectStud">
+        <el-menu @select="tdSelectStud" :default-active="selectedAccount">
           <el-menu-item v-for="(stud,index) in tdStudsAllList" :index="stud.account" :key="index">
             <i class="el-icon-user-solid"></i>
             <span slot="title">{{ stud.name }}
-              <span style="color: #909399; font-size: 12px;">未完成</span>
+              <!-- 學生是否完成做題 -->
+              <span v-if="stud.isJudged" style="color: #E6A23C; font-size: 12px;">已做題</span>
+              <span v-else style="color: #909399; font-size: 12px;">未做題</span>
             </span>
-            <span style="float:right;">done</span>
+            <!-- 老師是否完成批改 -->
+            <span style="float:right; color:#67C23A;" v-if="stud.isTrJudged">
+              <i class="el-icon-check" style="color:#67C23A;"></i>批改完成
+            </span>
+            <span style="float:right; color:#F56C6C;" v-else>
+              <i class="el-icon-close" style="color:#F56C6C;"></i>尚未批改
+            </span>
           </el-menu-item>
         </el-menu>
       </el-aside>
       <el-main>
-        {{ codeSection }}
+        <discuss-correct-form :data="tdCodeData[selectedAccount]" :lang="nowLang"></discuss-correct-form>
+        <el-button type="primary" style="float: right; margin-top: 25px;">送出</el-button>
       </el-main>
     </el-container>
-  </el-dialog> -->
+  </el-dialog>
+  <!-- FIXME: -->
 
 </div>
 </template>
@@ -115,8 +125,12 @@
 import axios from 'axios'
 import { json2csv } from '@/utils/json2csv.js'
 
+import DiscussCorrectForm from '@/components/Student/DiscussCorrectForm'
+
 export default {
-  components: {},
+  components: {
+    DiscussCorrectForm
+  },
   props: ['problemData', 'tableLoading'],
   computed: {
     tableFiltered() {
@@ -137,6 +151,9 @@ export default {
       }
     }
   },
+  mounted() {
+    this.setLanguage(this.problemData.tag);
+  },
   data() {
     return {
       // loading
@@ -151,30 +168,113 @@ export default {
       detectCopyLoading: false,
       // FIXME: 老師評分
       teacherDiscussDialogVisible: false,
+      trDiscussProblemName: '',
       codeSection: '',
+      selectedAccount: '', // 當前選擇的account
+      nowLang: '', // 此題目的程式語言
       tdStudsAllList: [{
         name: '蘇靖軒',
-        account: '04156147'
+        account: '04156147',
+        isJudged: false,
+        isTrJudged: false
       }, {
         name: '陳冠毅',
-        account: '04156211'
+        account: '04156211',
+        isJudged: true,
+        isTrJudged: true
       }],
       tdCodeData: {
         '04156147': {
-          code: 'zzzafadafwad'
+          code: 'zzzafadafwad',
+          correctValue: {
+            score: 0,
+            comment: ''
+          },
+          readValue: {
+            score: 0,
+            comment: ''
+          },
+          skillValue: {
+            score: 0,
+            comment: ''
+          },
+          completeValue: {
+            score: 0,
+            comment: ''
+          },
+          wholeValue: {
+            score: 0,
+            comment: ''
+          },
+          comment: ''
         },
         '04156211': {
-          code: 'java import zz'
+          code: 'java import zz',
+          correctValue: {
+            score: 0,
+            comment: ''
+          },
+          readValue: {
+            score: 0,
+            comment: ''
+          },
+          skillValue: {
+            score: 0,
+            comment: ''
+          },
+          completeValue: {
+            score: 0,
+            comment: ''
+          },
+          wholeValue: {
+            score: 0,
+            comment: ''
+          },
+          comment: ''
         }
       }
     }
   },
   methods: {
     // FIXME:
+    onTeacherDiscuss(problemName) {
+      this.trDiscussProblemName = problemName;
+      this.teacherDiscussDialogVisible = true;
+    },
+    // @open
+    setDefaultSelectStud() {
+      this.tdSelectStud(this.tdStudsAllList[0].account);
+
+      // 老師批改區塊scroll回到最頂
+      let element = document.getElementById('teacherDiscussDialog').getElementsByClassName('el-main')[0];
+      element.scrollTo(0,0);
+    },
+    // @close
+    closeTrDiscussDialog() {
+      // 老師批改區塊scroll回到最頂
+      let element = document.getElementById('teacherDiscussDialog').getElementsByClassName('el-main')[0];
+      element.scrollTo(0,0);
+
+      this.teacherDiscussDialogVisible = false;
+    },
     tdSelectStud(account) {
       console.log(account);
       console.log(this.tdCodeData[account]);
-      this.codeSection = this.tdCodeData[account].code;
+      // this.codeSection = this.tdCodeData[account].code;
+      this.selectedAccount = account;
+      
+      // 老師批改區塊scroll回到最頂
+      let element = document.getElementById('teacherDiscussDialog').getElementsByClassName('el-main')[0];
+      element.scrollTo(0,0);
+    },
+    setLanguage(tags) {
+      tags.forEach((tag) => {
+        if (tag ==' Java') {
+          this.nowLang = 'Java';
+        } else if (tag == 'Python') {
+          this.nowLang = 'Python';
+        }
+      });
     },
     // pagination
     currentChange(currentPage) {
@@ -313,5 +413,23 @@ export default {
 <style>
 #detectCopyFormItem .el-form-item__content {
   width: 80%;
+}
+
+/* teacher discuss dialog */
+#teacherDiscussDialog .el-dialog__wrapper {
+  overflow: initial;
+}
+
+#teacherDiscussDialog .el-dialog.is-fullscreen {
+  overflow: initial;
+  border-radius: 0px;
+}
+
+#teacherDiscussDialog .el-container {
+  height: calc(100vh - 84px);
+}
+
+#teacherDiscussDialog .block.el-row {
+  margin-top: 25px;
 }
 </style>
