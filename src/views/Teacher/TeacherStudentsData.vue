@@ -10,15 +10,7 @@
       </el-aside>
       <el-container>
         <el-main>
-          <el-row class="admin-page">
-            <span class="title">學生資訊</span>
-            <div class="breadcrumb">
-              <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/teacher/'+ this.$store.state.course.courseInfo.courseName +'/index' }">{{this.$store.state.course.courseInfo.courseName}}</el-breadcrumb-item>
-                <el-breadcrumb-item>學生資訊</el-breadcrumb-item>
-              </el-breadcrumb>
-            </div>
-          </el-row>
+          <page-name-breadcrumb pageName="學生資訊"></page-name-breadcrumb>
           <div class="box-square">
             <el-input class='filterInput' v-model='filterQuery' placeholder='請輸入學號或姓名' clearable><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
             <el-table :data="tableFiltered.slice((currentPage-1)*pagesize, currentPage*pagesize)" border style="width: 100%" ref="studentsTable" v-loading="loading">
@@ -92,6 +84,7 @@ import {apiGetStudentsData} from '@/apis/course.js'
 
 import NavHeaderTeacher from '@/components/Teacher/NavHeaderTeacher'
 import SideNavCourseIndexTeacher from '@/components/Teacher/SideNavCourseIndexTeacher'
+import PageNameBreadcrumb from '@/components/MgmtContent/PageNameBreadcrumb'
 import NavFooterAdmin from '@/components/NavFooterAdmin'
 
 import '@/assets/css/ta-studentsdata.css'
@@ -104,6 +97,7 @@ export default {
   components: {
     NavHeaderTeacher,
     SideNavCourseIndexTeacher,
+    PageNameBreadcrumb,
     NavFooterAdmin
   },
   data() {

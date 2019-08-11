@@ -10,15 +10,7 @@
       </el-aside>
       <el-container>
         <el-main>
-          <el-row class="admin-page">
-            <span class="title">題目列表</span>
-            <div class="breadcrumb">
-              <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/teacher/'+ this.$store.state.course.courseInfo.courseName +'/index' }">{{ this.$store.state.course.courseInfo.courseName }}</el-breadcrumb-item>
-                <el-breadcrumb-item>題目列表</el-breadcrumb-item>
-              </el-breadcrumb>
-            </div>
-          </el-row>
+          <page-name-breadcrumb pageName="學生資訊"></page-name-breadcrumb>
           <!-- table problem data -->
           <table-problem-data :problemData="tableData" :tableLoading='loading' @refreshProblemsData="refreshProblemsData" @showViewProblemDialog="showViewProblemDialog" @showEditProblemDialog="showEditProblemDialog" @showDoStatusDialog="showDoStatusDialog" ></table-problem-data>
         </el-main>
@@ -52,6 +44,7 @@ import problemStateMixin from '@/mixins/problemState.mixin.js'
 
 import NavHeaderTeacher from '@/components/Teacher/NavHeaderTeacher'
 import SideNavCourseIndexTeacher from '@/components/Teacher/SideNavCourseIndexTeacher'
+import PageNameBreadcrumb from '@/components/MgmtContent/PageNameBreadcrumb'
 import NavFooterAdmin from '@/components/NavFooterAdmin'
 import TableProblemData from '@/components/MgmtProblem/TableProblemData'
 import ViewProblemDialog from '@/components/MgmtProblem/ViewProblemDialog'
@@ -64,6 +57,7 @@ export default {
   components: {
     NavHeaderTeacher,
     SideNavCourseIndexTeacher,
+    PageNameBreadcrumb,
     NavFooterAdmin,
     TableProblemData,
     ViewProblemDialog,

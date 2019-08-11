@@ -10,15 +10,7 @@
       </el-aside>
       <el-container>
         <el-main>
-          <el-row class="admin-page">
-            <span class="title">學生管理</span>
-            <div class="breadcrumb">
-              <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/teacher/'+ this.$store.state.course.courseInfo.courseName +'/index' }">{{this.$store.state.course.courseInfo.courseName}}</el-breadcrumb-item>
-                <el-breadcrumb-item>學生管理</el-breadcrumb-item>
-              </el-breadcrumb>
-            </div>
-          </el-row>
+          <page-name-breadcrumb pageName="學生管理"></page-name-breadcrumb>
           <div class="box-square">
             <el-row :gutter="20">
               <el-col :span="12" style="border-right: 1px #E4E7ED dashed;">
@@ -108,12 +100,14 @@ import Papa from 'papaparse'
 
 import NavHeaderTeacher from '@/components/Teacher/NavHeaderTeacher'
 import SideNavCourseIndexTeacher from '@/components/Teacher/SideNavCourseIndexTeacher'
+import PageNameBreadcrumb from '@/components/MgmtContent/PageNameBreadcrumb'
 import NavFooterAdmin from '@/components/NavFooterAdmin'
 
 export default {
   components: {
     NavHeaderTeacher,
     SideNavCourseIndexTeacher,
+    PageNameBreadcrumb,
     NavFooterAdmin
   },
   data() {
