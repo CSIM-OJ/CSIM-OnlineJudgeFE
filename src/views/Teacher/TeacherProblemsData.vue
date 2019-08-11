@@ -22,14 +22,14 @@
   </el-container>
   
   <!-- view problem dialog -->
-  <view-problem-dialog :viewProblemDialogVisible="viewProblemDialogVisible" :viewProblemLoading="viewProblemLoading" :problemData="problemData" @onChangeViewProblemDialogVisible="onChangeViewProblemDialogVisible"></view-problem-dialog>
+  <view-problem-dialog :visible="viewProblemDialogVisible" :loading="viewProblemLoading" :data="problemData" @onChangeVisible="onChangeViewProblemDialogVisible"></view-problem-dialog>
 
   <!-- edit problem dialog -->
-  <edit-problem-dialog :editProblemDialogVisible="editProblemDialogVisible" :editProblemData="editProblemData" @onChangeEditProblemDialogVisible="onChangeEditProblemDialogVisible" @refreshProblemsData="refreshProblemsData">
+  <edit-problem-dialog :visible="editProblemDialogVisible" :data="editProblemData" @onChangeVisible="onChangeEditProblemDialogVisible" @refreshData="refreshProblemsData">
   </edit-problem-dialog>
 
   <!-- do status dialog -->
-  <do-status-problem-dialog :doStatusDialogVisible="doStatusDialogVisible" :doInfoDialogStatus="doInfoDialogStatus" :doStatusData="doStatusData" @onChangeDoStatusDialogVisible="onChangeDoStatusDialogVisible" :doInfoDialogPName="doInfoDialogPName"></do-status-problem-dialog>
+  <do-status-problem-dialog :visible="doStatusDialogVisible" :status="doInfoDialogStatus" :data="doStatusData" @onChangeVisible="onChangeDoStatusDialogVisible" :problemName="doInfoDialogPName"></do-status-problem-dialog>
   
 </div>
 </template>

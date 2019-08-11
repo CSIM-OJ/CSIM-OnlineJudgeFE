@@ -1,11 +1,11 @@
 <template>
 <div>
-  <el-dialog id="editProblemDialog" :visible.sync="myEditProblemDialogVisible" v-loading="editProblemLoading" @close="closeEditProblemDialog">
+  <el-dialog id="editProblemDialog" :visible.sync="myVisible" v-loading="loading" @close="closeDialog">
     <el-form>
       <el-row>
         <el-col :span="20" :offset="2">
           <el-form-item label="題目作答類型">
-            <el-radio-group v-model="editProblemData.category">
+            <el-radio-group v-model="data.category">
               <el-radio label="輸入輸出" border>輸入輸出</el-radio>
               <el-radio label="輸入寫檔" border>輸入寫檔</el-radio>
               <el-radio label="讀檔輸出" border>讀檔輸出</el-radio>
@@ -18,7 +18,7 @@
         <el-col :span="20" :offset="2">
           <!-- TAGs -->
           <el-form-item label="題目標籤">
-            <el-tag :key="tag" v-for="tag in editProblemData.tag" closable :disable-transitions="false" @close="handleClose(tag)">
+            <el-tag :key="tag" v-for="tag in data.tag" closable :disable-transitions="false" @close="handleClose(tag)">
               {{tag}}
             </el-tag>
             <el-autocomplete class="input-new-tag" v-if="inputVisible" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" v-model="inputValue" popper-class="my-autocomplete" :fetch-suggestions="querySearch" @select="handleSelect">
@@ -34,19 +34,19 @@
       <el-row>
         <el-col :span="6" :offset="2">
           <el-form-item label="題目名稱">
-            <el-input v-model="editProblemData.name"></el-input>
+            <el-input v-model="data.name"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6" :offset="1">
           <el-form-item label="題目類型">
-            <el-select v-model="editProblemData.type" @change="changeProblemType" placeholder="請選擇類型" style="width: 100%;">
+            <el-select v-model="data.type" @change="changeProblemType" placeholder="請選擇類型" style="width: 100%;">
               <el-option  v-for="item in problemType" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6" :offset="1">
           <el-form-item label="題目期限">
-            <el-date-picker type="date" placeholder="選擇繳交期限" v-model="editProblemData.deadline" style="width: 100%;"></el-date-picker>
+            <el-date-picker type="date" placeholder="選擇繳交期限" v-model="data.deadline" style="width: 100%;"></el-date-picker>
           </el-form-item>
         </el-col>
       </el-row>
@@ -54,7 +54,7 @@
       <el-row>
         <el-col :span="20" :offset="2" style="margin-bottom: 20px;">
           <el-form-item label="指定程式片段 (Pattern)" style="margin-bottom: 5px;">
-            <el-input v-model="pattern.pat" maxlength="15" placeholder="請輸入一段指定的程式碼" style="width: 100%; margin-bottom: 10px;" v-for="(pattern, index) in editProblemData.pattern" :key="index"></el-input>
+            <el-input v-model="pattern.pat" maxlength="15" placeholder="請輸入一段指定的程式碼" style="width: 100%; margin-bottom: 10px;" v-for="(pattern, index) in data.pattern" :key="index"></el-input>
           </el-form-item>
           <el-button size="small" type="primary" plain @click="addPattern">+ 新增pattern</el-button>
           <el-button size="small" type="danger" plain @click="delPattern">- 移除pattern</el-button>
@@ -64,23 +64,23 @@
       <el-row>
         <el-col :span="20" :offset="2">
           <el-form-item label="題目說明">
-            <el-input type="textarea" rows="5" resize="vertical" v-model="editProblemData.description"></el-input>
+            <el-input type="textarea" rows="5" resize="vertical" v-model="data.description"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="9" :offset="2">
           <el-form-item label="輸入說明">
-            <el-input type="textarea" rows="5" resize="vertical" v-model="editProblemData.inputDesc"></el-input>
+            <el-input type="textarea" rows="5" resize="vertical" v-model="data.inputDesc"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="10" :offset="1">
           <el-form-item label="輸出說明">
-            <el-input type="textarea" rows="5" resize="vertical" v-model="editProblemData.outputDesc"></el-input>
+            <el-input type="textarea" rows="5" resize="vertical" v-model="data.outputDesc"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row v-for="(sample, index) in editProblemData.testCases" :key="index">
+      <el-row v-for="(sample, index) in data.testCases" :key="index">
         <el-col :span="9" :offset="2">
           <el-form-item>
             <span slot="label">輸入範例{{index+1}} (Input Sample{{index+1}})</span>
@@ -106,7 +106,7 @@
         </el-col>
       </el-row>
       <!-- FIXME: 討論題：選取批改配對 start-->
-      <el-row v-if="editProblemData.type=='討論題'">
+      <el-row v-if="data.type=='討論題'">
         <el-col :span="20" :offset="2" style="margin-bottom: 15px;">
           <el-divider content-position="center">討論題：選取批改配對</el-divider>
           <!-- NOTE: 190724 不需用 -->
@@ -121,7 +121,7 @@
       <!-- 討論題：選取批改配對 end -->
     </el-form>
     <div slot="footer" class="dialog-footer">
-      <el-button @click="closeEditProblemDialog">取 消</el-button>
+      <el-button @click="closeDialog">取 消</el-button>
       <el-button type="primary" @click="editProblem">確 定</el-button>
     </div>
   </el-dialog>
@@ -137,17 +137,17 @@ import problemStateMixin from '@/mixins/problemState.mixin.js'
 
 export default {
   components: {},
-  props: ['editProblemDialogVisible', 'editProblemData'],
+  props: ['visible', 'data'],
   mixins: [problemStateMixin],
   data() {
     return {
-      editProblemLoading: false,
-      myEditProblemDialogVisible: this.editProblemDialogVisible,
+      loading: false,
+      myVisible: this.visible,
       // tags
       inputVisible: false,
       inputValue: '',
       autoCompleteTags: [],
-      // FIXME: 討論題：指定批改者
+      // 討論題：指定批改者
       discussLoading: false,
       discussStudsList: [], // 學生學號名單
       discussNum: 0,
@@ -162,88 +162,87 @@ export default {
     }
   },
   watch: {
-    editProblemDialogVisible(val) {
-      this.myEditProblemDialogVisible = val;
+    visible(val) {
+      this.myVisible = val;
     },
-    myEditProblemDialogVisible(val) {
-      this.$emit('onChangeEditProblemDialogVisible', val)
+    myVisible(val) {
+      this.$emit('onChangeVisible', val)
     }
   },
   mounted() {
     this.autoCompleteTags = this.problemTag; // tags
   },
   methods: {
-    closeEditProblemDialog() {
-      this.myEditProblemDialogVisible = false;
-      this.discussOptions = []; // FIXME: 討論題
+    closeDialog() {
+      this.myVisible = false;
+      this.discussOptions = []; // 討論題
     },
     addSample() {
       let obj = {
         'inputSample': '',
         'outputSample': ''
       }
-      this.editProblemData.testCases.push(obj);
-      // console.log(this.problemData.testCases);
+      this.data.testCases.push(obj);
     },
     delSample() {
-      this.editProblemData.testCases.pop();
+      this.data.testCases.pop();
     },
     addPattern() {
       let obj = { 'pat': '' };
-      this.editProblemData.pattern.push(obj);
+      this.data.pattern.push(obj);
     },
     delPattern() {
-      this.editProblemData.pattern.pop();
+      this.data.pattern.pop();
     },
     editProblem() {
-      if (this.editProblemData.name == '') {
+      if (this.data.name == '') {
         this.$message.error('請填寫題目名稱！');
-      } else if (this.editProblemData.type == '') {
+      } else if (this.data.type == '') {
         this.$message.error('請選擇題目類型！');
-      } else if (this.editProblemData.category == '') {
+      } else if (this.data.category == '') {
         this.$message.error('請選定題目作答類型！');
-      } else if (this.editProblemData.tag.length == 0) {
+      } else if (this.data.tag.length == 0) {
         this.$message.error('請至少選擇一個標籤！');
       } // 至少要有java, py的tag
-        else if (!(this.editProblemData.tag.includes('Java')||this.editProblemData.tag.includes('Python'))) {
+        else if (!(this.data.tag.includes('Java')||this.data.tag.includes('Python'))) {
         this.$message.error('請選擇一種程式語言標籤！');
-      } else if (this.editProblemData.deadline == '') {
+      } else if (this.data.deadline == '') {
         this.$message.error('請選定截止日期！');
-      } else if (this.editProblemData.description == '') {
+      } else if (this.data.description == '') {
         this.$message.error('請填寫題目說明！');
-      } else if (this.editProblemData.inputDesc == '') {
+      } else if (this.data.inputDesc == '') {
         this.$message.error('請填寫題目輸入說明！');
-      } else if (this.editProblemData.outputDesc == '') {
+      } else if (this.data.outputDesc == '') {
         this.$message.error('請填寫題目輸出說明！');
-      } else if (this.editProblemData.testCases.length == 0) {
+      } else if (this.data.testCases.length == 0) {
         this.$message.error('請填寫題目輸入範例！');
-      } else if (this.editProblemData.testCases.length == 1) {
+      } else if (this.data.testCases.length == 1) {
         this.$message.error('請至少填寫兩組題目輸入範例！');
       } else {
-        this.editProblemLoading = true;
+        this.loading = true;
 
         // 取出pattern
         let patternArray = [];
-        if (this.editProblemData.pattern.length==1 && this.editProblemData.pattern[0].pat=='') {
+        if (this.data.pattern.length==1 && this.data.pattern[0].pat=='') {
           patternArray = [];
         } else {
-          this.editProblemData.pattern.forEach((element) => {
+          this.data.pattern.forEach((element) => {
             patternArray.push(element.pat);
           });
         }
 
         axios.post('/api/problem/editProblem', {
-          problemId: this.editProblemData.id,
-          name: this.editProblemData.name,
-          type: this.editProblemData.type,
-          category: this.editProblemData.category,
-          tag: this.editProblemData.tag,
-          deadline: DateUtil.formatDate(this.editProblemData.deadline),
-          description: this.editProblemData.description,
-          inputDesc: this.editProblemData.inputDesc,
-          outputDesc: this.editProblemData.outputDesc,
-          testCases: this.editProblemData.testCases,
-          keyword: this.editProblemData.keyword,
+          problemId: this.data.id,
+          name: this.data.name,
+          type: this.data.type,
+          category: this.data.category,
+          tag: this.data.tag,
+          deadline: DateUtil.formatDate(this.data.deadline),
+          description: this.data.description,
+          inputDesc: this.data.inputDesc,
+          outputDesc: this.data.outputDesc,
+          testCases: this.data.testCases,
+          keyword: this.data.keyword,
           pattern: patternArray
         }).then((response) => {
           let res = response.data;
@@ -253,8 +252,8 @@ export default {
               message: '編輯題目成功!'
             });
 
-            // FIXME: 討論題
-            if (this.editProblemData.type == '討論題') {
+            // 討論題
+            if (this.data.type == '討論題') {
               // [[correctAccount, correctedAccount]]轉成[{correctAccount, correctedAccount}]
               let discussValueObject = []; // [{correctAccount, correctedAccount}]
               this.discussValue.forEach((element) => {
@@ -277,11 +276,11 @@ export default {
               });
             }
 
-            this.myEditProblemDialogVisible = false;
-            this.editProblemLoading = false;
-            this.$emit('refreshProblemsData');
+            this.myVisible = false;
+            this.loading = false;
+            this.$emit('refreshData');
           } else {
-            this.editProblemLoading = false;
+            this.loading = false;
             this.$message.error(res.msg);
           }
         }).catch(function (error) {
@@ -291,7 +290,7 @@ export default {
     },
     // tags control methods
     handleClose(tag) {
-      this.editProblemData.tag.splice(this.editProblemData.tag.indexOf(tag), 1);
+      this.data.tag.splice(this.data.tag.indexOf(tag), 1);
     },
     showInput() {
       this.inputVisible = true;
@@ -302,7 +301,7 @@ export default {
     handleInputConfirm() {
       let inputValue = this.inputValue;
       if (inputValue) {
-        this.editProblemData.tag.push(inputValue);
+        this.data.tag.push(inputValue);
       }
       this.inputVisible = false;
       this.inputValue = '';
@@ -322,12 +321,12 @@ export default {
     handleSelect(item) {
       let inputValue = this.inputValue;
       if (inputValue) {
-        this.editProblemData.tag.push(inputValue);
+        this.data.tag.push(inputValue);
       }
       this.inputVisible = false;
       this.inputValue = '';
     },
-    // FIXME: 討論題
+    // 討論題
     getStudsList() {
       axios.get('/api/student/allStud', {
         params: {
@@ -348,7 +347,7 @@ export default {
     },
     changeProblemType() {
       // 如果是討論題，就載入學生學號，去做討論題的批改配對
-      if (this.editProblemData.type == '討論題') {
+      if (this.data.type == '討論題') {
         this.discussLoading = true;
         this.getStudsList().then((value) => {
           if(value == true) {

@@ -1,35 +1,35 @@
 <template>
 <div>
-  <el-dialog id="viewProblemDialog" :visible.sync="myViewProblemDialogVisible" v-loading="viewProblemLoading">
+  <el-dialog id="viewProblemDialog" :visible.sync="myVisible" v-loading="loading">
     <section id="problem-section">
       <el-row>
         <el-col :span="20" :offset="2">
           <div class="problem-name">
-            <span v-text="problemData.name"></span>
-            <span v-text="problemData.id" style="font-size: 16px; color: #909399; font-weight: 500;"></span>
-            <span class="tags" v-for="tag in problemData.tag">
+            <span v-text="data.name"></span>
+            <span v-text="data.id" style="font-size: 16px; color: #909399; font-weight: 500;"></span>
+            <span class="tags" v-for="tag in data.tag">
               <el-tag size="small">{{ tag }}</el-tag>
             </span>
-            <span class="type" v-text="problemData.type"></span>
-            <span class="deadline" v-text="problemData.deadline"></span>
+            <span class="type" v-text="data.type"></span>
+            <span class="deadline" v-text="data.deadline"></span>
           </div>
           <hr>
           <div class="problem-info">
             <div class="title">Description</div>
             <div id="markdown-editor">
-              <vue-markdown class="content" :source="problemData.description"></vue-markdown>
+              <vue-markdown class="content" :source="data.description"></vue-markdown>
             </div>
           </div>
           <div class="problem-info">
             <div class="title">Input</div>
-            <div class="content change-line" v-text="problemData.inputDesc"></div>
+            <div class="content change-line" v-text="data.inputDesc"></div>
           </div>
           <div class="problem-info">
             <div class="title">Output</div>
-            <div class="content change-line" v-text="problemData.outputDesc"></div>
+            <div class="content change-line" v-text="data.outputDesc"></div>
           </div>
 
-          <el-row v-for="(sample, index) in problemData.testCases" :key="index">
+          <el-row v-for="(sample, index) in data.testCases" :key="index">
             <el-col :xs="24" :sm="12">
               <div class="problem-info">
                 <div class="title">Sample Input {{index+1}}</div>
@@ -53,7 +53,7 @@
       </el-row>
     </section>
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="myViewProblemDialogVisible=false">確 定</el-button>
+      <el-button type="primary" @click="myVisible=false">確 定</el-button>
     </div>
   </el-dialog>
 </div>
@@ -66,18 +66,18 @@ export default {
   components: {
     VueMarkdown
   },
-  props: ['viewProblemDialogVisible', 'viewProblemLoading', 'problemData'],
+  props: ['visible', 'loading', 'data'],
   data() {
     return {
-      myViewProblemDialogVisible: this.viewProblemDialogVisible
+      myVisible: this.visible
     }
   },
   watch: {
-    viewProblemDialogVisible(val) {
-      this.myViewProblemDialogVisible = val;
+    visible(val) {
+      this.myVisible = val;
     },
-    myViewProblemDialogVisible(val) {
-      this.$emit('onChangeViewProblemDialogVisible', val)
+    myVisible(val) {
+      this.$emit('onChangeVisible', val)
     }
   }
 }

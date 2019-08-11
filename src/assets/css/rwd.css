@@ -5,7 +5,7 @@
   }
 
   /* login */
-  .el-dialog {
+  #login-card .el-dialog {
     width: 90% !important;
   }
 

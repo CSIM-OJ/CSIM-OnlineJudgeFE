@@ -1,18 +1,18 @@
 <template>
 <div>
   <!-- 用於ProblemsData, 查看已做題及未做題的資訊 -->
-  <el-dialog :visible.sync="myDoStatusDialogVisible" @close="doInfoDialogActiveStudentCode=false;">
+  <el-dialog :visible.sync="myVisible" @close="doInfoDialogActiveStudentCode=false;">
     <el-row v-if="doInfoDialogActiveStudentCode==false">
       <el-col :span="20" :offset="2">
         <div class="items-nav">
-          <div class="item">{{ doInfoDialogPName }}</div>
+          <div class="item">{{ problemName }}</div>
         </div>
-        <el-table max-height="336" :data="doStatusData" style="width: 100%; margin-bottom: 60px;">
+        <el-table max-height="336" :data="data" style="width: 100%; margin-bottom: 60px;">
           <el-table-column prop="studentId" label="學生學號">
           </el-table-column>
           <el-table-column prop="studentName" label="學生姓名"></el-table-column>
           <el-table-column prop="score" label="成績"></el-table-column>
-          <el-table-column v-if="doInfoDialogStatus=='done'" label="程式碼">
+          <el-table-column v-if="status=='done'" label="程式碼">
             <template slot-scope="scope">
               <span><a @click="seeStudentCode(scope.row)" href="javascript:void(0)" style="color: #409EFF; text-decoration: none;"><i class="fas fa-code"></i> 檢視</a></span>
             </template>
@@ -25,7 +25,7 @@
         <div class="code">
           <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item>
-              <a href="javascript:void(0)" @click="doInfoDialogActiveStudentCode=false" style="text-decoration: none; ">{{doInfoDialogPName}}</a>
+              <a href="javascript:void(0)" @click="doInfoDialogActiveStudentCode=false" style="text-decoration: none; ">{{problemName}}</a>
             </el-breadcrumb-item>
             <el-breadcrumb-item>{{doInfoDianlogNowStudentId}} {{doInfoDianlogNowStudentName}}</el-breadcrumb-item>
           </el-breadcrumb>
@@ -46,10 +46,10 @@ export default {
   components: {
     codemirror
   },
-  props: ['doStatusDialogVisible', 'doStatusData', 'doInfoDialogStatus', 'doInfoDialogPName'],
+  props: ['visible', 'data', 'status', 'problemName'],
   data() {
     return {
-      myDoStatusDialogVisible: this.doStatusDialogVisible,
+      myVisible: this.visible,
       doInfoDialogActiveStudentCode: false, // 是否正在檢視學生的code
       doInfoDianlogNowStudentId: '', // 當下檢視的學生的學號
       doInfoDianlogNowStudentName: '', // 當下檢視的學生的姓名
@@ -79,11 +79,11 @@ export default {
     }
   },
   watch: {
-    doStatusDialogVisible(val) {
-      this.myDoStatusDialogVisible = val;
+    visible(val) {
+      this.myVisible = val;
     },
-    myDoStatusDialogVisible(val) {
-      this.$emit('onChangeDoStatusDialogVisible', val)
+    myVisible(val) {
+      this.$emit('onChangeVisible', val)
     }
   },
   methods: {
