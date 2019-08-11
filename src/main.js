@@ -11,6 +11,7 @@ import VueProgressBar from 'vue-progressbar'
 import Chat from 'vue-beautiful-chat'
 import Vuex from 'vuex'
 import VuexPersistence from "vuex-persist";
+
 import course from './store/course'
 import user from './store/user'
 
@@ -19,7 +20,7 @@ import user from './store/user'
 Vue.use(Vuex)
 
 const vuexLocal = new VuexPersistence({
-  storage: window.sessionStorage
+  storage: window.localStorage
 });
 
 const store = new Vuex.Store({
