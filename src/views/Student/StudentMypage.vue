@@ -90,7 +90,7 @@
 import {studentCheckLogin} from '@/apis/_checkLogin.js'
 import {apiStudInfo, apiChangePassword} from '@/apis/student.js'
 
-import NavHeaderStudent from '@/components/NavHeaderStudent.vue'
+import NavHeaderStudent from '@/components/student/NavHeaderStudent.vue'
 import NavFooter from '@/components/NavFooter.vue'
 import FabRank from '@/components/FabRank.vue'
 

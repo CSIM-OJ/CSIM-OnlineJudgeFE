@@ -159,7 +159,7 @@ import {toKeys} from '@/utils/KeywordTrans.js'
 import {setGradingObj} from '@/utils/DiscussProblemUtil.js'
 import vueCodeDiff from 'vue-code-diff'
 
-import NavHeaderStudent from '@/components/NavHeaderStudent'
+import NavHeaderStudent from '@/components/student/NavHeaderStudent'
 import NavFooter from '@/components/NavFooter'
 import ProblemInfoSection from '@/components/Student/ProblemInfoSection'
 import DiscussCorrectForm from '@/components/Student/DiscussCorrectForm'

@@ -103,7 +103,7 @@ import Countdown from 'vuejs-countdown'
 import DateUtil from '@/utils/DateUtil.js'
 import problemStateMixin from '@/mixins/problemState.mixin.js'
 
-import NavHeaderStudent from '@/components/NavHeaderStudent.vue'
+import NavHeaderStudent from '@/components/student/NavHeaderStudent.vue'
 import NavFooter from '@/components/NavFooter.vue'
 import FabRank from '@/components/FabRank.vue'
 

@@ -12,6 +12,7 @@ import Chat from 'vue-beautiful-chat'
 import Vuex from 'vuex'
 import VuexPersistence from "vuex-persist";
 import course from './store/course'
+import user from './store/user'
 
 
 // Vuex
@@ -23,7 +24,8 @@ const vuexLocal = new VuexPersistence({
 
 const store = new Vuex.Store({
   modules: {
-    course
+    course,
+    user
   },
   plugins: [vuexLocal.plugin]
 });

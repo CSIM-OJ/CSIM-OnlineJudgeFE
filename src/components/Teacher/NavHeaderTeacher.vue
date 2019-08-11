@@ -63,6 +63,7 @@ export default {
         let res = response.data;
         if (res.status == '200') {
           this.$router.push('/login');
+          this.$store.commit('cleanUserInfo'); // 清空vuex userInfo
         }
       });
     },

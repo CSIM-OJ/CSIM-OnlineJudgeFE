@@ -5,7 +5,7 @@
       <router-link :to="courseIndex"><img src="/static/logo/main.png" alt=""></router-link>
     </div>
     <el-menu :default-active="$route.path" class="oj-menu" mode="horizontal" @select="handleSelect" :style="{'background-color': navbarBGC}" router>
-      <el-menu-item index="/student/courseList">課程列表</el-menu-item>
+      <el-menu-item index="/student/courseList" @click="cleanCourseInfo">課程列表</el-menu-item>
       <el-menu-item :index="scorePanelIndex">成績面板</el-menu-item>
       <el-menu-item :index="myPageIndex">個人中心</el-menu-item>
       <el-button @click="logout" type="primary" round size="small" class="hidden-xs-only">Logout</el-button>
@@ -79,8 +79,12 @@ export default {
         let res = response.data;
         if (res.status == '200') {
           this.$router.push('/login');
+          this.$store.commit('cleanUserInfo'); // 清空vuex userInfo
         }
       });
+    },
+    cleanCourseInfo() {
+      this.$store.commit('cleanCouseInfo');
     }
   }
 }
