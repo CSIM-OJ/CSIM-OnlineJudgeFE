@@ -15,8 +15,8 @@
         <el-col :span="24">
           <div class="left-action-bar" style="display:inline-block;">
             <el-select v-model="modeValue" @change="changeMode">
-              <el-option label="可作答" value="cando"></el-option>
-              <el-option label="未作答" value="undo"></el-option>
+              <el-option label="可作答" value="undo"></el-option>
+              <el-option label="已完成" value="done"></el-option>
             </el-select>
             <el-input v-model="nameFilterValue" class="filterInput" placeholder='請輸入題目名稱' clearable style=""><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
           </div>
@@ -95,6 +95,7 @@
 </template>
 
 <script>
+import {studentCheckLogin} from '@/apis/_checkLogin.js'
 import {apiProblemInfo} from '@/apis/student.js'
 
 import Countdown from 'vuejs-countdown'
@@ -114,12 +115,13 @@ export default {
   },
   mixins: [problemStateMixin],
   mounted() {
+    studentCheckLogin();
     this.getProblemData();
   },
   data() {
     return {
       // 可作答&已作答 selector
-      modeValue: 'cando',
+      modeValue: 'undo',
       nameFilterValue: '', // 題目id或題目名稱搜索
       // filter-section(filter題目的區塊)
       isFilterShow: false,
@@ -199,9 +201,9 @@ export default {
   methods: {
     getProblemData() {
       let isJudge = false;
-      if (this.modeValue == 'cando') {
+      if (this.modeValue == 'undo') {
         isJudge = false;
-      } else if (this.modeValue == 'undo') {
+      } else if (this.modeValue == 'done') {
         isJudge = true;
       }
 

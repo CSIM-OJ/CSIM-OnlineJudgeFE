@@ -8,7 +8,7 @@ import StudentMypage from '@/views/Student/StudentMypage'
 import StudentCoding from '@/views/Student/StudentCoding'
 
 // student new design
-import StundetNewCardIndex from '@/views/StudentNew/studentIndex'
+import StundetNewMypage from '@/views/StudentNew/StudentMypage'
 
 // import StudentRepository from '@/views/StudentRepository'
 // import StudentRepositoryProject from '@/views/StudentRepositoryProject'
@@ -209,8 +209,8 @@ export default new Router({
     },
     // TODO: student new design
     {
-      path: '/student/new/:courseName/cardIndex',
-      component: StundetNewCardIndex
+      path: '/student/new/:courseName/mypage',
+      component: StundetNewMypage
     },
   ]
 })

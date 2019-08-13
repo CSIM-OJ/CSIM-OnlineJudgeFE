@@ -47,6 +47,12 @@ hr {
   padding: 6%;
 }
 
+.center {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
 #title {
   text-align: center;
   font-size: 30px;
@@ -116,10 +122,19 @@ hr {
 
 .items-nav .item {
   display: inline-block;
-
   margin-right: 20px;
   font-size: 24px;
   border-bottom: 2px solid #67C23A;
+}
+
+.items-nav .item-span {
+  font-size:20px;
+  margin-left:15px;
+}
+
+.items-nav .item-float-right {
+  float: right;
+
 }
 
 .id-hyperlink {

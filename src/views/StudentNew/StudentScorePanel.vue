@@ -10,13 +10,14 @@
       <side-nav-student></side-nav-student>
     </el-aside>
 
-    <el-container style="height: calc(100vh - 60px); overflow: initial;" id="studentIndex-scorePanel">
-      <el-main>
-        <el-row :gutter="20" class="scoreData-section">
+    <el-container style="height: calc(100vh - 60px); overflow: initial;">
+      <el-main style="">
+        <el-row gutter="20">
           <el-col :xs="24" :sm="12">
             <el-card shadow="hover">
-              <div class="items-nav">
+              <div class="items-nav" style="width: 95%; backgroud-color: white; border-bottom:none;">
                 <span class="item-span">正確率</span>
+                <!-- <div class="item">正確率</div> -->
               </div>
               <ve-pie :data="pieData" :colors="pieColors" :settings="pieSettings">
                 <div class="data-empty" v-if="hasRecordFlag">沒有數據 &#x1F61D;</div>
@@ -25,7 +26,7 @@
           </el-col>
           <el-col :xs="24" :sm="12">
             <el-card shadow="hover">
-              <div class="items-nav">
+              <div class="items-nav" style="width: 95%; backgroud-color: white; border-bottom:none;">
                 <span class="item-span">成績圖表</span>
               </div>
               <ve-line :data="lineData" :settings="lineSettings">
@@ -35,10 +36,10 @@
           </el-col>
         </el-row>
 
-      <el-row style="margin-top:30px;" class="historyScore-section">
+      <el-row style="margin-top:30px;">
         <el-col :span="24">
           <el-card shadow="hover" style="padding: 20px;">
-            <div class="items-nav">
+            <div class="items-nav" style="width: 95%; backgroud-color: white; border-bottom:none;">
               <span class="item-span">歷史成績</span>
             </div>
             <el-table :data="tableData" style="width: 100%">
@@ -221,13 +222,7 @@ export default {
 </script>
 
 <style>
-#studentIndex-scorePanel .items-nav {
-  width: 95%;
-  backgroud-color: white;
-  border-bottom: none;
-}
-
-#studentIndex-scorePanel .scoreData-section .data-empty {
+.data-empty {
   position: absolute;
   left: 0;
   right: 0;
@@ -241,7 +236,7 @@ export default {
   font-size: 14px;
 }
 
-#studentIndex-scorePanel .historyScore-section .bestCode {
+.bestCode {
   color: #E6A23C;
 }
 </style>
