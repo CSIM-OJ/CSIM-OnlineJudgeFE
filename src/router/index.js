@@ -8,8 +8,7 @@ import StudentMypage from '@/views/Student/StudentMypage'
 import StudentCoding from '@/views/Student/StudentCoding'
 
 // student new design
-import StudentNewIndex from '@/views/StudentNew/index'
-import StundetNewCardIndex from '@/views/StudentNew/cardIndex'
+import StundetNewCardIndex from '@/views/StudentNew/studentIndex'
 
 // import StudentRepository from '@/views/StudentRepository'
 // import StudentRepositoryProject from '@/views/StudentRepositoryProject'
@@ -209,10 +208,6 @@ export default new Router({
       component: ErrorPage404
     },
     // TODO: student new design
-    {
-      path: '/student/new/:courseName/index',
-      component: StudentNewIndex
-    },
     {
       path: '/student/new/:courseName/cardIndex',
       component: StundetNewCardIndex

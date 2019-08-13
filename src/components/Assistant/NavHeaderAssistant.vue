@@ -68,7 +68,7 @@ export default {
       });
     },
     cleanCourseInfo() {
-      this.$store.commit('cleanCouseInfo');
+      this.$store.commit('cleanCourseInfo');
     }
   }
 }

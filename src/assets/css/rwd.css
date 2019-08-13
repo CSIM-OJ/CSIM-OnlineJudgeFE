@@ -111,13 +111,9 @@
 /* xl */
 @media screen and (min-width: 1920px) {
   /* studnet index */
-  #mainProblems-section .el-card {
-    height: 10vw !important;
+  #studentIndex-section .problem-card-section .el-card {
+    height: 8vw !important;
     zoom: 125%;
-  }
-
-  #mainProblems-section .el-card .el-tooltip {
-    zoom: 100% !important;
   }
 
   /* admin logo */

@@ -13,7 +13,7 @@ const course = {
     initCourseInfo(state, courseInfo) {
       state.courseInfo = courseInfo;
     },
-    cleanCouseInfo(state) {
+    cleanCourseInfo(state) {
       state.courseInfo = {
         courseId: '',
         courseName: '',
