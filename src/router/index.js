@@ -40,16 +40,12 @@ import QuesNewProblem from '@/views/Ques/QuesNewProblem'
 import ErrorPage404 from '@/components/ErrorPage404.vue'
 // import Forum from '@/views/Forum'
 // import VueChatTest from '@/views/VueChatTest'
-import test from '@/views/test.vue'
 
 Vue.use(Router)
 
 export default new Router({
   mode: 'history',
   routes: [{
-      path: '/test',
-      component: test
-    }, {
       path: '/',
       name: 'Root',
       component: Login
