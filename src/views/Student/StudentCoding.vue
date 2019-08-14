@@ -1,125 +1,133 @@
 <template>
 <div>
-  <nav-header-student></nav-header-student>
-  <problem-info-section :data="problem"></problem-info-section>
-
-  <section id="judged-section" v-if="problem.judged==true" class="animated fadeInUp">
-    <el-row>
-      <el-col :span="20" :offset="2" class="box">
-        <div class="chart hidden-xs-only" v-if="problem.judged">
-          <ve-pie :data="chartData" :colors="chartColors" :settings="chartSettings"></ve-pie>
-        </div>
+  <el-container>
+    <el-header>
+      <nav-header-student-plain></nav-header-student-plain>
+    </el-header>
+    <el-main>
+      <problem-info-section :data="problem"></problem-info-section>
+      <section id="judged-section" v-if="problem.judged==true" class="animated fadeInUp">
         <el-row>
-          <el-col :span="20" :offset="2">
-            <div class="handDate">
-              <div style="padding-bottom: 10px;">批改日期：</div>
-              <div>{{ judgedResultForm.handDate }}</div>
+          <el-col :span="22" :offset="1" class="box">
+            <div class="chart hidden-xs-only" v-if="problem.judged">
+              <ve-pie :data="chartData" :colors="chartColors" :settings="chartSettings"></ve-pie>
             </div>
-            <el-form :model="judgedResultForm" label-width="100px" label-position="top">
-              <el-row>
-                <el-col :xs="10" :sm="6">
-                  <el-form-item label="分數">
-                    <el-input readonly v-model="judgedResultForm.score" style="width: 100%;"></el-input>
+            <el-row>
+              <el-col :span="22" :offset="1">
+                <div class="handDate">
+                  <div style="padding-bottom: 10px;">批改日期：</div>
+                  <div>{{ judgedResultForm.handDate }}</div>
+                </div>
+                <el-form :model="judgedResultForm" label-width="100px" label-position="top">
+                  <el-row>
+                    <el-col :xs="10" :sm="6">
+                      <el-form-item label="分數">
+                        <el-input readonly v-model="judgedResultForm.score" style="width: 100%;"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :xs="10" :sm="6" :offset="2">
+                      <el-form-item label="運行時間">
+                        <el-input readonly v-model="judgedResultForm.runtime" style="width: 100%;"></el-input>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                  <el-form-item>
+                    <label prop="label" style="margin-right: 10px;">程式碼</label>
+                    <span><a class="commit-hyperlink" href="javascript:void(0);" @click="commitDialogVisible=true"><i class="el-icon-time"></i> {{commitTableData.length}} commits</a></span>
+                    <el-input readonly :class="isBestCode" type="textarea" v-model="judgedResultForm.code" autosize resize="none"></el-input>
                   </el-form-item>
-                </el-col>
-                <el-col :xs="10" :sm="6" :offset="2">
-                  <el-form-item label="運行時間">
-                    <el-input readonly v-model="judgedResultForm.runtime" style="width: 100%;"></el-input>
+                  <el-form-item label="錯誤訊息" v-if="judgedResultForm.score!='100.0'">
+                    <el-collapse>
+                      <el-collapse-item v-for="(info, index) in judgedResultForm.errorInfo" :key="index">
+                        <template slot="title" :name="index">
+                          樣本{{index+1}}
+                        </template>
+                        <div style="margin-bottom: 10px;">編譯結果：<el-tag type="warning" size="small">{{ judgedResultForm.symbol[index] }}</el-tag></div>
+                        <!-- 如果有info顯示info, 無則顯示output -->
+                        <el-input readonly type="textarea" autosize resize="none" :value="info" v-if="info"></el-input>
+                        <el-input readonly type="textarea" autosize resize="none" :value="judgedResultForm.output[index]" v-else></el-input>
+                      </el-collapse-item>
+                    </el-collapse>
                   </el-form-item>
-                </el-col>
-              </el-row>
-              <el-form-item>
-                <label prop="label" style="margin-right: 10px;">程式碼</label>
-                <span><a class="commit-hyperlink" href="javascript:void(0);" @click="commitDialogVisible=true"><i class="el-icon-time"></i> {{commitTableData.length}} commits</a></span>
-                <el-input readonly :class="isBestCode" type="textarea" v-model="judgedResultForm.code" autosize resize="none"></el-input>
-              </el-form-item>
-              <el-form-item label="錯誤訊息" v-if="judgedResultForm.score!='100.0'">
-                <el-collapse>
-                  <el-collapse-item v-for="(info, index) in judgedResultForm.errorInfo" :key="index">
-                    <template slot="title" :name="index">
-                      樣本{{index+1}}
-                    </template>
-                    <div style="margin-bottom: 10px;">編譯結果：<el-tag type="warning" size="small">{{ judgedResultForm.symbol[index] }}</el-tag></div>
-                    <!-- 如果有info顯示info, 無則顯示output -->
-                    <el-input readonly type="textarea" autosize resize="none" :value="info" v-if="info"></el-input>
-                    <el-input readonly type="textarea" autosize resize="none" :value="judgedResultForm.output[index]" v-else></el-input>
-                  </el-collapse-item>
-                </el-collapse>
-              </el-form-item>
-            </el-form>
+                </el-form>
+              </el-col>
+            </el-row>
           </el-col>
         </el-row>
-      </el-col>
-    </el-row>
-  </section>
-  <section id="codemirror-section" v-if="isCanDoRepeat">
-    <el-row>
-      <el-col :span="20" :offset="2" class="box" v-loading="judging" element-loading-text="批改中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
-        <div class="coding-block">
-          <div class="setting">
-            <span>Language:</span>
-            <el-select disabled v-model="nowLang" style="width: 100px;"></el-select>
-            <span style="margin-left: 10px;">Theme:</span>
-            <el-select v-model="nowTheme" @change="changeNowTheme" style="width: 130px;">
-              <el-option v-for="item in themes" :key="item" :label="item" :value="item">
-              </el-option>
-            </el-select>
-            <span style="margin-left: 10px;">FontSize:</span>
-            <el-select v-model="fontSize" style="width: 80px;">
-              <el-option v-for="item in fontSizeList" :key="item" :label="item" :value="item">
-              </el-option>
-            </el-select>
-            <el-button plain size="mini" @click="changeCodemirrorHeight" class="chbtn hidden-xs-only"><i class="fas fa-arrows-alt"></i></el-button>
-            <el-button plain size="mini" @click="copy(code)" class="chbtn hidden-xs-only"><i class="fas fa-copy"></i></el-button>
-          </div>
-          <codemirror v-model="code" :options="options" ref="myEditor" :style="{'font-size': fontSize+'px'}"></codemirror>
-          <el-button type="primary" @click="submitCode">submit</el-button>
-        </div>
-      </el-col>
-    </el-row>
-  </section>
-
-  <!-- dicuss correct start -->
-  <section id="discuss-correct-section" v-if="dicussShowFlag">
-    <el-row>
-      <el-col :span="20" :offset="2" class="box">
-        <span class="title">討論題 - 程式互評</span>
-        <span v-if="correctStudsDone==false">學生還沒做完程式，再稍等一下！</span>
-        <el-tabs type="card" @tab-click="clickCorrectTab" v-if="correctStudsDone">
-          <el-tab-pane v-for="(stud, index) in correctList" :key="stud.studentAccount" :label="stud.studentAccount" >
-            <!-- code & 評分表 -->
-            <discuss-correct-form :tabIndex="tabIndex" :data="stud" :index="index" :disabled="correctStatus" :lang="nowLang"></discuss-correct-form>
-            <!-- 送出評分 -->
-            <el-row v-if="!correctStatus">
-              <el-divider content-position="center" style="font-size: 16px; padding-top: 20px !important;">評分完所有學生後送出評分</el-divider>
-              <el-button type="primary" style="float: right;" @click="submitCorrect">送出評分</el-button>
-            </el-row>
-          </el-tab-pane>
-        </el-tabs>
-      </el-col>
-    </el-row>
-  </section>
-  <!-- dicuss correct end -->
-
-
-  <!-- dicuss corrected start 被批改的成績 -->
-  <section id="discuss-corrected-section" v-if="problem.type=='討論題'&&problem.judged==true&&dicussCorrectedShowFlag">
-    <el-row>
-      <el-col :span="20" :offset="2" class="box">
-        <span class="title">討論題 - 被批改的成績</span>
-        <span v-if="correctedStudsDone==false">還未有批改的成績，再稍等一下</span>
-        <el-row v-if="correctedStudsDone">
-          <discuss-corrected-card :data="correctedList"></discuss-corrected-card>
+      </section>
+      <section id="codemirror-section" v-if="isCanDoRepeat">
+        <el-row>
+          <el-col :span="22" :offset="1" class="box" v-loading="judging" element-loading-text="批改中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
+            <div class="coding-block">
+              <div class="setting">
+                <span>Language:</span>
+                <el-select disabled v-model="nowLang" style="width: 100px;"></el-select>
+                <span style="margin-left: 10px;">Theme:</span>
+                <el-select v-model="nowTheme" @change="changeNowTheme" style="width: 130px;">
+                  <el-option v-for="item in themes" :key="item" :label="item" :value="item">
+                  </el-option>
+                </el-select>
+                <span style="margin-left: 10px;">FontSize:</span>
+                <el-select v-model="fontSize" style="width: 80px;">
+                  <el-option v-for="item in fontSizeList" :key="item" :label="item" :value="item">
+                  </el-option>
+                </el-select>
+                <el-button plain size="mini" @click="changeCodemirrorHeight" class="chbtn hidden-xs-only"><i class="fas fa-arrows-alt"></i></el-button>
+                <el-button plain size="mini" @click="copy(code)" class="chbtn hidden-xs-only"><i class="fas fa-copy"></i></el-button>
+              </div>
+              <codemirror v-model="code" :options="options" ref="myEditor" :style="{'font-size': fontSize+'px'}"></codemirror>
+              <el-button type="primary" @click="submitCode">submit</el-button>
+            </div>
+          </el-col>
         </el-row>
-      </el-col>
-    </el-row>
-  </section>
-  <!-- dicuss corrected end 被批改的成績 -->
+      </section>
 
+      <!-- dicuss correct start -->
+      <section id="discuss-correct-section" v-if="dicussShowFlag">
+        <el-row>
+          <el-col :span="22" :offset="1" class="box">
+            <span class="title">討論題 - 程式互評</span>
+            <span v-if="correctStudsDone==false">學生還沒做完程式，再稍等一下！</span>
+            <el-tabs type="card" @tab-click="clickCorrectTab" v-if="correctStudsDone">
+              <el-tab-pane v-for="(stud, index) in correctList" :key="stud.studentAccount" :label="stud.studentAccount" >
+                <!-- code & 評分表 -->
+                <discuss-correct-form :tabIndex="tabIndex" :data="stud" :index="index" :disabled="correctStatus" :lang="nowLang"></discuss-correct-form>
+                <!-- 送出評分 -->
+                <el-row v-if="!correctStatus">
+                  <el-divider content-position="center" style="font-size: 16px; padding-top: 20px !important;">評分完所有學生後送出評分</el-divider>
+                  <el-button type="primary" style="float: right;" @click="submitCorrect">送出評分</el-button>
+                </el-row>
+              </el-tab-pane>
+            </el-tabs>
+          </el-col>
+        </el-row>
+      </section>
+      <!-- dicuss correct end -->
+
+      <!-- dicuss corrected start 被批改的成績 -->
+      <section id="discuss-corrected-section" v-if="problem.type=='討論題'&&problem.judged==true&&dicussCorrectedShowFlag">
+        <el-row>
+          <el-col :span="22" :offset="1" class="box">
+            <span class="title">討論題 - 被批改的成績</span>
+            <span v-if="correctedStudsDone==false">還未有批改的成績，再稍等一下</span>
+            <el-row v-if="correctedStudsDone">
+              <discuss-corrected-card :data="correctedList"></discuss-corrected-card>
+            </el-row>
+          </el-col>
+        </el-row>
+      </section>
+      <!-- dicuss corrected end 被批改的成績 -->
+    </el-main>
+
+    <el-footer style="height:50px;">
+      <nav-footer-student></nav-footer-student>
+    </el-footer>
+  </el-container>
+  
   <!-- commitDialog start -->
   <el-dialog id="commitDialog" :title="problem.name+' commits 紀錄'" :visible.sync="commitDialogVisible" @close="commitDialogActive=false">
     <el-row class="commit-table" v-if="commitDialogActive==false">
-      <el-col :span="20" :offset="2">
+      <el-col :span="22" :offset="1">
         <el-table :data="commitTableData">
           <el-table-column property="handDate" label="提交日期"></el-table-column>
           <el-table-column property="name" label="提交人"></el-table-column>
@@ -139,8 +147,6 @@
   </el-dialog>
   <!-- commitDialog end -->
   
-  <fab-rank></fab-rank>
-  <nav-footer></nav-footer>
 </div>
 </template>
 
@@ -159,12 +165,11 @@ import {toKeys} from '@/utils/KeywordTrans.js'
 import {setGradingObj} from '@/utils/DiscussProblemUtil.js'
 import vueCodeDiff from 'vue-code-diff'
 
-import NavHeaderStudent from '@/components/student/NavHeaderStudent'
-import NavFooter from '@/components/NavFooter'
+import NavHeaderStudentPlain from '@/components/Student/NavHeaderStudentPlain'
+import NavFooterStudent from '@/components/Student/NavFooterStudent'
 import ProblemInfoSection from '@/components/Student/ProblemInfoSection'
 import DiscussCorrectForm from '@/components/Student/DiscussCorrectForm'
 import DiscussCorrectedCard from '@/components/Student/DiscussCorrectedCard'
-import FabRank from '@/components/FabRank.vue'
 
 import '@/assets/css/student-coding.css'
 import '@/assets/css/code-mirror.css'
@@ -189,14 +194,13 @@ import "@/assets/animated/animate.css"
 
 export default {
   components: {
-    NavHeaderStudent,
+    NavHeaderStudentPlain,
     ProblemInfoSection,
     DiscussCorrectForm,
     DiscussCorrectedCard,
-    NavFooter,
+    NavFooterStudent,
     codemirror,
     vueCodeDiff,
-    FabRank
   },
   data() {
     return {

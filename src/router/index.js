@@ -7,9 +7,6 @@ import StudentScorePanel from '@/views/Student/StudentScorePanel'
 import StudentMypage from '@/views/Student/StudentMypage'
 import StudentCoding from '@/views/Student/StudentCoding'
 
-// student new design
-import StundetNewMypage from '@/views/StudentNew/StudentMypage'
-
 // import StudentRepository from '@/views/StudentRepository'
 // import StudentRepositoryProject from '@/views/StudentRepositoryProject'
 
@@ -206,11 +203,6 @@ export default new Router({
     {
       path: '*',
       component: ErrorPage404
-    },
-    // TODO: student new design
-    {
-      path: '/student/new/:courseName/mypage',
-      component: StundetNewMypage
     },
   ]
 })

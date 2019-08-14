@@ -1,7 +1,7 @@
 <template>
 <div>
   <el-row>
-    <el-col :span="20" :offset="2">
+    <el-col :span="22" :offset="1">
       <el-alert style="margin-bottom: 15px;" effect="dark" v-if="data.type=='討論題'"
         title="討論題 - 學生互評"
         type="success"
@@ -16,7 +16,7 @@
   </el-row>
   <section id="problem-section">
     <el-row>
-      <el-col :span="20" :offset="2" class="box">
+      <el-col :span="22" :offset="1" class="box">
         <div class="problem-name">
           <span v-text="data.name"></span>
           <el-rate allow-half v-model="data.rate" @change="changeRate" :disabled="data.judged!=true"></el-rate>

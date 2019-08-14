@@ -1,7 +1,7 @@
 <template>
 <div>
   <footer id="footer">
-    <p>東吳資管系 &copy; {{ new Date().getFullYear() }}</p>
+    <p>penguin coco &copy; {{ new Date().getFullYear() }}</p>
   </footer>
 </div>
 </template>

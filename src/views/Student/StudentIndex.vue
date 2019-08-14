@@ -86,7 +86,10 @@
           </el-col>
         </el-row>
       </el-main>
-      <el-footer><p style="text-align:center; background-color:#f5f5f5; color:rgba(0, 0, 0, 0.87);">penguin coco @ 2019</p></el-footer>
+
+      <el-footer style="height:50px;">
+        <nav-footer-student></nav-footer-student>
+      </el-footer>
     </el-container>
     
   </el-container>
@@ -102,15 +105,15 @@ import Countdown from 'vuejs-countdown'
 import DateUtil from '@/utils/DateUtil.js'
 import problemStateMixin from '@/mixins/problemState.mixin.js'
 
-import NavHeaderStudent from '@/components/student/NavHeaderStudent.vue'
-import SideNavStudent from '@/components/student/SideNavStudent.vue'
-import NavFooter from '@/components/NavFooter.vue'
+import NavHeaderStudent from '@/components/Student/NavHeaderStudent.vue'
+import SideNavStudent from '@/components/Student/SideNavStudent.vue'
+import NavFooterStudent from '@/components/Student/NavFooterStudent.vue'
 
 export default {
   components: {
     NavHeaderStudent,
     SideNavStudent,
-    NavFooter,
+    NavFooterStudent,
     Countdown
   },
   mixins: [problemStateMixin],
@@ -237,6 +240,10 @@ export default {
     },
     deadlineParse(deadline) { // 把deadline+1天
       return DateUtil.nextDayDate(deadline)
+    },
+    // go to problem
+    doProblem(problemId) {
+      this.$router.push('/student/'+ this.$store.state.course.courseInfo.courseName +'/coding?problemId=' + problemId);
     },
   }
 }

@@ -89,9 +89,11 @@
           </el-card>
         </el-col>
       </el-row>
-        
       </el-main>
-      <el-footer><p style="text-align:center; background-color:#f5f5f5; color:rgba(0, 0, 0, 0.87);">penguin coco @ 2019</p></el-footer>
+
+      <el-footer style="height:50px;">
+        <nav-footer-student></nav-footer-student>
+      </el-footer>
     </el-container>
     
   </el-container>
@@ -103,13 +105,15 @@
 import {studentCheckLogin} from '@/apis/_checkLogin.js'
 import {apiStudInfo, apiHistoryScore} from '@/apis/student.js'
 
-import NavHeaderStudent from '@/components/student/NavHeaderStudent.vue'
-import SideNavStudent from '@/components/student/SideNavStudent.vue'
+import NavHeaderStudent from '@/components/Student/NavHeaderStudent.vue'
+import SideNavStudent from '@/components/Student/SideNavStudent.vue'
+import NavFooterStudent from '@/components/Student/NavFooterStudent.vue'
 
 export default {
   components: {
     NavHeaderStudent,
-    SideNavStudent
+    SideNavStudent,
+    NavFooterStudent
   },
   created() {
     // chart

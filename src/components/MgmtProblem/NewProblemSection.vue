@@ -91,7 +91,7 @@
         </el-row>
         <!-- 題目範本 -->
         <transition-group name="slide-fade">
-          <el-row v-for="(sample, index) in problemData.testCases" :key="index">
+          <el-row v-for="(sample, index) in problemData.testCases" :key="index+1">
             <el-col :span="12">
               <el-form-item>
                 <span slot="label">輸入範例{{index+1}} (Input Sample{{index+1}})</span>
