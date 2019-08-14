@@ -5,7 +5,7 @@
   }
 
   /* login */
-  .el-dialog {
+  #login-card .el-dialog {
     width: 90% !important;
   }
 
@@ -21,7 +21,7 @@
 
   /* student index */
 
-  .el-card {
+  #mainProblems-section .el-card {
     height: 130px !important;
   }
 
@@ -111,12 +111,12 @@
 /* xl */
 @media screen and (min-width: 1920px) {
   /* studnet index */
-  .el-card {
+  #mainProblems-section .el-card {
     height: 10vw !important;
     zoom: 125%;
   }
 
-  .el-card .el-tooltip {
+  #mainProblems-section .el-card .el-tooltip {
     zoom: 100% !important;
   }
 

@@ -10,19 +10,10 @@
       </el-aside>
       <el-container>
         <el-main>
-          <el-row class="admin-page">
-            <span class="title">學生資訊</span>
-            <div class="breadcrumb">
-              <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/teacher/'+ courseInfo.courseName +'/index' }">{{courseInfo.courseName}}</el-breadcrumb-item>
-                <el-breadcrumb-item>學生資訊</el-breadcrumb-item>
-              </el-breadcrumb>
-            </div>
-          </el-row>
+          <page-name-breadcrumb pageName="學生資訊"></page-name-breadcrumb>
           <div class="box-square">
             <el-input class='filterInput' v-model='filterQuery' placeholder='請輸入學號或姓名' clearable><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
-            <!-- <el-button plain size="mini" @click="changeTableWidth" class="ctbtn hidden-xs-only"><i class="fas fa-arrows-alt"></i></el-button> -->
-            <el-table :data="tableFiltered.slice((currentPage-1)*pagesize, currentPage*pagesize)" border style="width: 100%" ref="studentsTable" v-loading="loading" height="80vh">
+            <el-table :data="tableFiltered.slice((currentPage-1)*pagesize, currentPage*pagesize)" border style="width: 100%" ref="studentsTable" v-loading="loading">
               <el-table-column fixed prop="studentId" label="學號" width="120"></el-table-column>
               <el-table-column fixed label="姓名" width="120">
                 <template slot-scope="scope">
@@ -45,9 +36,6 @@
               </el-col>
             </el-row>
           </div>
-          <!-- <div style="text-align: center;margin-top: 30px;">
-            <el-pagination background layout="prev, pager, next" :total="total" @current-change="currentChange"></el-pagination>
-          </div> -->
         </el-main>
         <el-footer>
           <nav-footer-admin></nav-footer-admin>
@@ -91,10 +79,12 @@
 </template>
 
 <script>
-import axios from 'axios'
+import {teacherCheckLogin} from '@/apis/_checkLogin.js'
+import {apiGetStudentsData} from '@/apis/course.js'
 
 import NavHeaderTeacher from '@/components/Teacher/NavHeaderTeacher'
 import SideNavCourseIndexTeacher from '@/components/Teacher/SideNavCourseIndexTeacher'
+import PageNameBreadcrumb from '@/components/MgmtContent/PageNameBreadcrumb'
 import NavFooterAdmin from '@/components/NavFooterAdmin'
 
 import '@/assets/css/ta-studentsdata.css'
@@ -107,15 +97,11 @@ export default {
   components: {
     NavHeaderTeacher,
     SideNavCourseIndexTeacher,
+    PageNameBreadcrumb,
     NavFooterAdmin
   },
   data() {
     return {
-      courseInfo: {
-        'courseId': '',
-        'courseName': '',
-        'semester': ''
-      },
       // formThead
       formThead: '',
       // pagination
@@ -123,8 +109,6 @@ export default {
       tableHeight: null,
       pagesize: 10,
       currentPage:1,
-      // manageClassGroup
-      manageClassGroup: '106資一A',
       // table
       loading: false,
       tableData: [],
@@ -141,9 +125,9 @@ export default {
     }
   },
   mounted() {
-    this.checkLogin();
-    this.getCourses();
-    // this.getStudentsData();
+    teacherCheckLogin();
+    this.getStudentsData();
+    this.countTableHeight();
   },
   computed: {
     tableFiltered() {
@@ -185,7 +169,6 @@ export default {
                 incorrect++;
               }
             }
-            
           }
           this.dialogStudentCorrectRate = ((correct / (correct + incorrect)) * 100).toFixed(1);
 
@@ -218,61 +201,25 @@ export default {
   },
   methods: {
     countTableHeight() {
-      this.tableHeight = parseInt(this.$refs.studentsTable.bodyHeight.height.replace('px', ''));
-      this.pagesize = this.tableHeight/47;
+      let screenHeight = window.screen.height;
+      
+      if (screenHeight>=800 && screenHeight<1200) this.pagesize=10;
+      else if (screenHeight>=1200 && screenHeight<1600) this.pagesize=15;
     },
     currentChange(currentPage) {
       this.currentPage = currentPage;
     },
-    checkLogin() {
-      axios.get('/api/checkLogin').then((response) => {
-        let res = response.data;
-        if (res.status == "200") {
-          if (res.result.authority == 'student') {
-            this.$router.push('/student/courseList')
-          } else if (res.result.authority == 'teacher') {
-            // pass
-          } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/index');
-          } else if (res.result.authority == 'admin') {
-            this.$router.push('/admin/index');
-          }  
-        } else {
-          this.$router.push('/login');
-        }
-      });
-    },
-    getCourses() {
-      axios.get("/api/teacher/courseList").then((response)=> {
-        let res = response.data;
-        if(res.status=="200") {
-          res.result.forEach((element) => {
-            if(element.courseName == this.$route.params.courseName) {
-              this.courseInfo = element;
-            }
-          });
-          this.getStudentsData();
-          this.countTableHeight();
-        }
-      });
-    },
-    // TODO:
-    getManageClassGroup() {
-      // this.manageClassGroup =
-    },
     getStudentsData() {
       this.loading = true;
 
-      axios.get('/api/course/getStudentsData', {
-        params: {
-          courseId: this.courseInfo.courseId
-        }
+      apiGetStudentsData({
+        courseId: this.$store.state.course.courseInfo.courseId
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
           this.tableData = res.result;
           this.loading = false;
-          
+
           // formThead
           this.formThead = this.tableData[0].problems.map(v => {
             return v.name
@@ -312,21 +259,6 @@ export default {
       let Today = new Date();
       let filename = Today.getFullYear() + "-" + (Today.getMonth()+1) + "-" + Today.getDate();
       CsvExport(fields, data, filename);
-    },
-    changeTableWidth() {
-      this.tableFlag++;
-      var box = document.getElementsByClassName("box-square")[0];
-      var ctbtn = document.getElementsByClassName("ctbtn")[0];
-
-      if (this.tableFlag % 2 == 0) {
-        box.style.marginLeft = '0px';
-        box.style.width = '100%';
-        ctbtn.style.color = '#409EFF';
-      } else {
-        box.style.marginLeft = '8.33%';
-        box.style.width = '83%';
-        ctbtn.style.color = '#303133';
-      }
     },
     studentInfo(studentId, studentName) {
       this.dialogStudentId = studentId;

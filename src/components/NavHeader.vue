@@ -17,7 +17,7 @@
 </template>
 
 <script>
-  import axios from 'axios'
+  import {apiLogout} from '@/apis/base.js'
   
   export default {
     components: {},
@@ -31,10 +31,12 @@
     },
     methods: {
       logout() {
-          axios.post('/api/logout').then((response) => {
+          apiLogout().then((response) => {
             let res = response.data;
-            if(res.status=='200') {
+            if (res.status == '200') {
               this.$router.push('/login');
+
+              this.$store.commit('cleanUserInfo'); // 清空vuex userInfo
             }
           });
         }

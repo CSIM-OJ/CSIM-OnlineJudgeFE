@@ -24,6 +24,14 @@ import TeacherStudentManage from '@/views/Teacher/TeacherStudentManage'
 import TeacherStudentsData from '@/views/Teacher/TeacherStudentsData'
 import TeacherFeedback from '@/views/Teacher/TeacherFeedback'
 
+import AssistantCourseList from '@/views/Assistant/AssistantCourseList'
+import AssistantCourseIndex from '@/views/Assistant/AssistantCourseIndex'
+import AssistantProblemsData from '@/views/Assistant/AssistantProblemsData'
+import AssistantNewProblem from '@/views/Assistant/AssistantNewProblem'
+import AssistantStudentManage from '@/views/Assistant/AssistantStudentManage'
+import AssistantStudentsData from '@/views/Assistant/AssistantStudentsData'
+import AssistantFeedback from '@/views/Assistant/AssistantFeedback'
+
 import QuesIndex from '@/views/Ques/QuesIndex'
 import QuesNewProblem from '@/views/Ques/QuesNewProblem'
 
@@ -135,6 +143,35 @@ export default new Router({
     {
       path: '/teacher/:courseName/feedback',
       component: TeacherFeedback
+    },
+    {
+      path: '/assistant/courseList',
+      name: 'AssistantCourseList',
+      component: AssistantCourseList
+    },
+    {
+      path: '/assistant/:courseName/index',
+      component: AssistantCourseIndex
+    },
+    {
+      path: '/assistant/:courseName/problemsData',
+      component: AssistantProblemsData
+    },
+    {
+      path: '/assistant/:courseName/newProblem',
+      component: AssistantNewProblem
+    },
+    {
+      path: '/assistant/:courseName/studentManage',
+      component: AssistantStudentManage
+    },
+    {
+      path: '/assistant/:courseName/studentsData',
+      component: AssistantStudentsData
+    },
+    {
+      path: '/assistant/:courseName/feedback',
+      component: AssistantFeedback
     },
     {
       path: '/ques/index',

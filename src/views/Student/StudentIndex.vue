@@ -3,8 +3,8 @@
   <nav-header-student></nav-header-student>
   <el-row>
     <el-col :span="20" :offset="2" class="box">
-      <h1 class="course-title">{{ this.courseInfo.courseName }}
-        <span class="course-semester">{{ this.courseInfo.semester }}</span>
+      <h1 class="course-title">{{ this.$store.state.course.courseInfo.courseName }}
+        <span class="course-semester">{{ this.$store.state.course.courseInfo.semester }}</span>
       </h1>
       <section id="mainProblems-section">
         <div class="undo-problems">
@@ -12,7 +12,7 @@
             <div class="item">可作答</div>
             <i class="fas fa-pencil-alt"></i> {{ undoNum }}
             <el-select class="select-custom" v-model="undoSelectValue" placeholder="選擇類型" @change="undoChange">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              <el-option v-for="item in studIndexProblemType" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
             <el-select class="select-custom" v-model="undoSortValue" placeholder="排序方式" @change="undoSortChange" clearable @clear="undoSortClear" style="margin-right: 10px;">
               <el-option label="難易度" value="rate"></el-option>
@@ -21,25 +21,29 @@
           </div>
           <el-row>
             <el-col class="undoCol" :span="24" v-loading="undoLoading">
-              <transition-group name="slide-fade">
-                <el-col v-for="problem in undoProblemsFiltered" :xs="24" :sm="12" :md="8" :lg="6" :key="problem.problemId" style="padding-right: 23px;">
-                  <a href="javascript:void(0);" @click="doProblem(problem.problemId)">
-                    <el-card :body-style="{ padding: '5px' }" shadow="hover">
-                      <div style="padding: 14px;">
-                        <span class="title ellipsis">{{ problem.name }}
-                          <el-tooltip class="item" effect="dark" :content="'繳交期限: '+problem.deadline" placement="top"><i class="el-icon-time time"></i></el-tooltip>
-                        </span>
-                        <div class="bottom clearfix">
-                          <el-rate disabled v-model="problem.rate"></el-rate>
-                          <Countdown v-if="dateDiff(todayDate, problem.deadline)<1" :deadline="deadlineParse(problem.deadline)"></Countdown>
-                          <el-button v-if="dateDiff(todayDate, problem.deadline)>=1" type="text" class="button"><a href="javascript:void(0);" @click="doProblem(problem.problemId)">來去做題</a></el-button>
-                        </div>
-                        <div class="type">{{ problem.type }}</div>
-                      </div>
-                    </el-card>
-                  </a>
-                </el-col>
-              </transition-group>
+              <el-carousel :autoplay="false" :loop="false" :height="undoCarHeight" ref="undoCarousel" @change="undoCarChange">
+                <el-carousel-item v-for="index in undoCarItemNum" :key="index" :name="'car'+index">
+                  <transition-group name="slide-fade">
+                    <el-col v-for="problem in undoProblemsFiltered.slice((index-1)*20, (index-1)*20+20)" :xs="24" :sm="12" :md="8" :lg="6" :key="problem.problemId" style="padding-right: 23px;">
+                      <a href="javascript:void(0);" @click="doProblem(problem.problemId)">
+                        <el-card :body-style="{ padding: '5px' }" shadow="hover">
+                          <div style="padding: 14px;">
+                            <span class="title ellipsis">{{ problem.name }}
+                              <el-tooltip class="item" effect="dark" :content="'繳交期限: '+problem.deadline" placement="top"><i class="el-icon-time time"></i></el-tooltip>
+                            </span>
+                            <div class="bottom clearfix">
+                              <el-rate disabled :value="parseInt(problem.rate)"></el-rate>
+                              <Countdown v-if="dateDiff(todayDate, problem.deadline)<1" :deadline="deadlineParse(problem.deadline)"></Countdown>
+                              <el-button v-if="dateDiff(todayDate, problem.deadline)>=1" type="text" class="button"><a href="javascript:void(0);" @click="doProblem(problem.problemId)">來去做題</a></el-button>
+                            </div>
+                            <div class="type">{{ problem.type }}</div>
+                          </div>
+                        </el-card>
+                      </a>
+                    </el-col>
+                  </transition-group>
+                </el-carousel-item>
+              </el-carousel>
             </el-col>
           </el-row>
         </div>
@@ -48,7 +52,7 @@
             <div class="item">已作答</div>
             <i class="fas fa-paperclip"></i> {{ doneNum }}
             <el-select class="select-custom" v-model="doneSelectValue" placeholder="選擇類型" @change="doneChange">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              <el-option v-for="item in studIndexProblemType" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
             <el-select class="select-custom" v-model="doneSortValue" placeholder="排序方式" @change="doneSortChange" clearable @clear="doneSortClear" style="margin-right: 10px;">
               <el-option label="難易度" value="rate"></el-option>
@@ -57,24 +61,29 @@
           </div>
           <el-row>
             <el-col class="doneCol" :span="24" v-loading="doneLoading">
-              <transition-group name="slide-fade">
-                <el-col v-for="problem in doneProblemsFiltered" :xs="24" :sm="12" :md="8" :lg="6" :key="problem.problemId" style="padding-right: 23px;">
-                  <a href="javascript:void(0);" @click="doProblem(problem.problemId)">
-                    <el-card :body-style="{ padding: '5px' }" shadow="hover">
-                      <div style="padding: 14px;">
-                        <span class="title ellipsis">{{ problem.name }}
-                          <el-tooltip class="item" effect="dark" :content="'繳交日期: '+problem.deadline" placement="top"><i class="el-icon-time time"></i></el-tooltip>
-                        </span>
-                        <div class="bottom clearfix">
-                          <el-rate disabled v-model="problem.rate"></el-rate>
-                          <el-button type="text" class="button" @click="doProblem(problem.problemId)">回顧題目</el-button>
-                        </div>
-                        <div class="type">{{ problem.type }}</div>
-                      </div>
-                    </el-card>
-                  </a>
-                </el-col>
-              </transition-group>
+              <el-carousel :autoplay="false" :loop="false" :height="doneCarHeight" ref="doneCarousel" @change="doneCarChange">
+                <el-carousel-item v-for="index in doneCarItemNum" :key="index" :name="'car'+index">
+                  <transition-group name="slide-fade">
+                    <el-col v-for="problem in doneProblemsFiltered.slice((index-1)*20, (index-1)*20+20)" :xs="24" :sm="12" :md="8" :lg="6" :key="problem.problemId" style="padding-right: 23px;">
+                      <a href="javascript:void(0);" @click="doProblem(problem.problemId)">
+                        <el-card :body-style="{ padding: '5px' }" shadow="hover">
+                          <div style="padding: 14px;">
+                            <span class="title ellipsis">{{ problem.name }}
+                              <el-tooltip class="item" effect="dark" :content="'繳交期限: '+problem.deadline" placement="top"><i class="el-icon-time time"></i></el-tooltip>
+                            </span>
+                            <div class="bottom clearfix">
+                              <el-rate disabled :value="parseInt(problem.rate)"></el-rate>
+                              <Countdown v-if="dateDiff(todayDate, problem.deadline)<1" :deadline="deadlineParse(problem.deadline)"></Countdown>
+                              <el-button v-if="dateDiff(todayDate, problem.deadline)>=1" type="text" class="button"><a href="javascript:void(0);" @click="doProblem(problem.problemId)">來去做題</a></el-button>
+                            </div>
+                            <div class="type">{{ problem.type }}</div>
+                          </div>
+                        </el-card>
+                      </a>
+                    </el-col>
+                  </transition-group>
+                </el-carousel-item>
+              </el-carousel>
             </el-col>
           </el-row>
         </div>
@@ -87,11 +96,14 @@
 </template>
 
 <script>
-import axios from 'axios'
+import {studentCheckLogin} from '@/apis/_checkLogin.js'
+import {apiProblemInfo} from '@/apis/student.js'
+
 import Countdown from 'vuejs-countdown'
 import DateUtil from '@/utils/DateUtil.js'
+import problemStateMixin from '@/mixins/problemState.mixin.js'
 
-import NavHeaderStudent from '@/components/NavHeaderStudent.vue'
+import NavHeaderStudent from '@/components/student/NavHeaderStudent.vue'
 import NavFooter from '@/components/NavFooter.vue'
 import FabRank from '@/components/FabRank.vue'
 
@@ -105,26 +117,12 @@ export default {
     Countdown,
     FabRank
   },
+  mixins: [problemStateMixin],
   data() {
     return {
-      courseInfo: {
-        'courseId': '',
-        'courseName': '',
-        'semester': ''
-      },
       // select
       undoSelectValue: '',
       doneSelectValue: '',
-      options: [{
-        'value': 'all',
-        'label': '全部'
-      }, {
-        'value': 'homework',
-        'label': '作業'
-      }, {
-        'value': 'practice',
-        'label': '練習題'
-      }],
       // sort
       undoProblemsStarFilter: false,
       undoProblemshandDateFilter: false,
@@ -137,7 +135,10 @@ export default {
       doneProblems: [],
       // loading
       undoLoading: false,
-      doneLoading: false
+      doneLoading: false,
+      // carousel
+      undoCarShowIndex: 0,
+      doneCarShowIndex: 0
     }
   },
   computed: {
@@ -193,55 +194,55 @@ export default {
     },
     todayDate() {
       return DateUtil.getTodayDate()
+    },
+    // carousel
+    undoCarItemNum() {
+      return Math.ceil(this.undoProblems.length/20);
+    },
+    undoCarHeight() {
+      let page = this.undoCarShowIndex+1;
+      let carItemNum = Math.ceil(this.undoProblems.length/20);
+      let vh = window.screen.width*12/100; // 每個格子的高度
+
+      if (page<carItemNum) {
+        return 5*(vh+28)+'px';
+      } else {
+        let last = this.undoProblems.length%20;
+        let h = Math.ceil(last/4);
+        return h*(vh+28)+'px';
+      }
+    },
+    doneCarItemNum() {
+      return Math.ceil(this.doneProblems.length/20);
+    },
+    doneCarHeight() {
+      let page = this.doneCarShowIndex+1;
+      let carItemNum = Math.ceil(this.doneProblems.length/20);
+      let vh = window.screen.width*12/100; // 每個格子的高度
+
+      if (page<carItemNum) {
+        console.log(5*(vh+28)+'px');
+        return 5*(vh+28)+'px';
+      } else {
+        let last = this.doneProblems.length%20;
+        let h = Math.ceil(last/4);
+        return h*(vh+28)+'px';
+      }
     }
   },
   mounted() {
-    this.checkLogin();
-    this.getCourses();
+    studentCheckLogin();
+    this.initUndoProblems();
+    this.initDoneProblems();
   },
   methods: {
-    checkLogin() {
-      axios.get('/api/checkLogin').then((response) => {
-        let res = response.data;
-        if (res.status == "200") {
-          if (res.result.authority == 'student') {
-            // pass
-          } else if (res.result.authority == 'teacher') {
-            this.$router.push('/teacher/courseList');
-          } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/index');
-          } else if (res.result.authority == 'admin') {
-            this.$router.push('/admin/index');
-          }  
-        } else {
-          this.$router.push('/login');
-        }
-      });
-    },
-    getCourses() {
-      axios.get("/api/student/courseList").then((response)=> {
-        let res = response.data;
-        if(res.status=="200") {
-          res.result.forEach((element) => {
-            if(element.courseName == this.$route.params.courseName) {
-              this.courseInfo = element;
-
-              this.initUndoProblems();
-              this.initDoneProblems();
-            }
-          });
-        }
-      });
-    },
     initUndoProblems() {
       this.undoLoading = true;
 
-      axios.get('/api/student/problemInfo', {
-        params: {
-          courseId: this.courseInfo.courseId,
-          type: '全部',
-          isJudge: false
-        }
+      apiProblemInfo({
+        courseId: this.$store.state.course.courseInfo.courseId,
+        type: '全部',
+        isJudge: false
       }).then((response) => {
         let res = response.data;
         if (res.status=='200') {
@@ -253,12 +254,10 @@ export default {
     initDoneProblems() {
       this.doneLoading = true;
 
-      axios.get('/api/student/problemInfo', {
-        params: {
-          courseId: this.courseInfo.courseId,
-          type: '全部',
-          isJudge: true
-        }
+      apiProblemInfo({
+        courseId: this.$store.state.course.courseInfo.courseId,
+        type: '全部',
+        isJudge: true
       }).then((response) => {
         let res = response.data;
         if (res.status=='200') {
@@ -269,33 +268,15 @@ export default {
     },
     // select
     undoChange(val) {
-      if (val == 'all') {
+      if (val == '全部') {
         this.initUndoProblems();
-      } else if (val == 'homework') {
+      } else {
         this.undoLoading = true;
 
-        axios.get('/api/student/problemInfo', {
-          params: {
-            courseId: this.courseInfo.courseId,
-            type: '作業',
-            isJudge: false
-          }
-        }).then((response) => {
-          let res = response.data;
-          if (res.status=='200') {
-            this.undoLoading = false;
-            this.undoProblems = res.result;
-          }
-        });
-      } else if (val == 'practice') {
-        this.undoLoading = true;
-        
-        axios.get('/api/student/problemInfo', {
-          params: {
-            courseId: this.courseInfo.courseId,
-            type: '練習題',
-            isJudge: false
-          }
+        apiProblemInfo({
+          courseId: this.$store.state.course.courseInfo.courseId,
+          type: val,
+          isJudge: false
         }).then((response) => {
           let res = response.data;
           if (res.status=='200') {
@@ -306,33 +287,15 @@ export default {
       }
     },
     doneChange(val) {
-      if (val == 'all') {
+      if (val == '全部') {
         this.initDoneProblems();
-      } else if (val == 'homework') {
+      } else {
         this.doneLoading = true;
-        
-        axios.get('/api/student/problemInfo', {
-          params: {
-            courseId: this.courseInfo.courseId,
-            type: '作業',
-            isJudge: true
-          }
-        }).then((response) => {
-          let res = response.data;
-          if (res.status=='200') {
-            this.doneLoading = false;
-            this.doneProblems = res.result;
-          }
-        });
-      } else if (val == 'practice') {
-        this.doneLoading = true;
-        
-        axios.get('/api/student/problemInfo', {
-          params: {
-            courseId: this.courseInfo.courseId,
-            type: '練習題',
-            isJudge: true
-          }
+
+        apiProblemInfo({
+          courseId: this.$store.state.course.courseInfo.courseId,
+          type: val,
+          isJudge: true
         }).then((response) => {
           let res = response.data;
           if (res.status=='200') {
@@ -358,10 +321,10 @@ export default {
       this.undoProblemsStarFilter = false;
       this.undoProblemshandDateFilter = false;
 
-      if (this.undoSelectValue == 'all') {
-        this.undoChange('all');
-      } else if (this.undoSelectValue == 'homework') {
-        this.undoChange('homework');
+      if (this.undoSelectValue == '') {
+        this.undoChange('全部');
+      } else if (this.undoSelectValue == '作業') {
+        this.undoChange('作業');
       } else if (this.undoSelectValue == 'practice') {
         this.undoChange('practice');
       } else {
@@ -395,7 +358,7 @@ export default {
     },
     // go to problem
     doProblem(problemId) {
-      this.$router.push('/student/'+ this.courseInfo.courseName +'/coding?problemId=' + problemId);
+      this.$router.push('/student/'+ this.$store.state.course.courseInfo.courseName +'/coding?problemId=' + problemId);
     },
     // 兩日期天數差
     dateDiff(sDate1, sDate2) {
@@ -404,6 +367,13 @@ export default {
     // 把deadline+1天
     deadlineParse(deadline) {
       return DateUtil.nextDayDate(deadline)
+    },
+    // carousel
+    undoCarChange(index) {
+      this.undoCarShowIndex = index;
+    },
+    doneCarChange(index) {
+      this.doneCarShowIndex = index;
     }
   }
 }

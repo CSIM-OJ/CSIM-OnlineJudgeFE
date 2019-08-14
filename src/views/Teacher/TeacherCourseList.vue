@@ -14,25 +14,7 @@
             <span class="title">課程列表</span>
           </el-row>
           <el-row class="box-square">
-            <!-- 列出課程 start -->
-            <el-col :span="20" :offset="2" v-for="course in courseList" :key="course.id" style="padding-bottom: 30px;">
-              <a href="javascript:void(0);" @click="goCourse(course.courseName)" style="text-decoration: none;">
-                <el-card shadow="hover">
-                  <div slot="header" class="clearfix">
-                    <span style="font-size: 20px;"> {{course.courseName}} </span>
-                  </div>
-                  <div style="padding: 5px;">
-                    <div class="bottom clearfix">
-                      <time class="time"> {{course.semester}} </time>
-                      <el-button type="text" class="button">
-                        前往課程<i class="el-icon-caret-right"></i>
-                      </el-button>
-                    </div>
-                  </div>
-                </el-card>
-              </a> 
-            </el-col>
-            <!-- 列出課程 end -->
+            <course-list :data="courseList"></course-list>
           </el-row>
         </el-main>
         <el-footer>
@@ -45,17 +27,20 @@
 </template>
 
 <script>
-import axios from 'axios'
+import {teacherCheckLogin} from '@/apis/_checkLogin.js'
+import {apiTrCourseList} from '@/apis/teacher.js'
 
 import NavHeaderTeacher from '@/components/Teacher/NavHeaderTeacher'
 import SideNavCourseListTeacher from '@/components/Teacher/SideNavCourseListTeacher'
 import NavFooter from '@/components/NavFooter'
+import CourseList from '@/components/MgmtContent/CourseList.vue'
 
 export default {
   components: {
     NavHeaderTeacher,
     SideNavCourseListTeacher,
-    NavFooter
+    NavFooter,
+    CourseList
   },
   data() {
     return {
@@ -63,43 +48,18 @@ export default {
     }
   },
   mounted() {
-    this.checkLogin();
+    teacherCheckLogin();
     this.getCourses();
   },
   methods: {
-    checkLogin() {
-      axios.get('/api/checkLogin').then((response) => {
-        let res = response.data;
-        if (res.status == "200") {
-          if (res.result.authority == 'student') {
-            this.$router.push('/student/courseList')
-          } else if (res.result.authority == 'teacher') {
-            // pass
-          } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/index');
-          } else if (res.result.authority == 'admin') {
-            this.$router.push('/admin/index');
-          }  
-        } else {
-          this.$router.push('/login');
-        }
-      });
-    },
     getCourses() {
-      axios.get("/api/teacher/courseList").then((response)=> {
+      apiTrCourseList().then((response)=> {
         let res = response.data;
         if(res.status=="200") {
           this.courseList = res.result;
         }
       });
-    },
-    goCourse(courseName) {
-      this.$router.push('/teacher/'+ courseName +'/index');
     }
   }
 }
 </script>
-
-<style>
-
-</style>

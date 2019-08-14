@@ -9,6 +9,28 @@ import locale from 'element-ui/lib/locale/lang/zh-TW'
 import VCharts from 'v-charts'
 import VueProgressBar from 'vue-progressbar'
 import Chat from 'vue-beautiful-chat'
+import Vuex from 'vuex'
+import VuexPersistence from "vuex-persist";
+
+import course from './store/course'
+import user from './store/user'
+
+
+// Vuex
+Vue.use(Vuex)
+
+const vuexLocal = new VuexPersistence({
+  storage: window.localStorage
+});
+
+const store = new Vuex.Store({
+  modules: {
+    course,
+    user
+  },
+  plugins: [vuexLocal.plugin]
+});
+
 
 Vue.use(Chat)
 
@@ -31,6 +53,7 @@ Vue.config.productionTip = false
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  store,
   router,
   components: {
     App

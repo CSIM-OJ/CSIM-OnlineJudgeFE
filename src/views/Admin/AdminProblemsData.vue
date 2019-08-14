@@ -20,9 +20,6 @@
             </div>
           </el-row>
           <div class="box-square">
-            <!-- <div class="manageClassGroup">
-              <el-tag>{{ manageClassGroup }}</el-tag>
-            </div> -->
             <el-input class='filterInput' v-model='filterQuery' placeholder='請輸入題目ID或名稱' clearable><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
             <el-table :data="tableFiltered.slice((currentPage-1)*pagesize,currentPage*pagesize)" style="width: 100%" v-loading="loading">
               <el-table-column type="expand">
@@ -325,7 +322,7 @@ import NavHeaderAdmin from '@/components/NavHeaderAdmin'
 import SideNavAdmin from '@/components/SideNavAdmin'
 import NavFooterAdmin from '@/components/NavFooterAdmin'
 
-import '@/assets/css/ta-index.css'
+import '@/assets/css/table.css'
 
 export default {
   components: {
@@ -341,8 +338,6 @@ export default {
       total: 0,
       pagesize:10,
       currentPage:1,
-      // manageClassGroup
-      manageClassGroup: '106資一A',
       // table
       detectCopyLoading: false,
       tableData: [],
@@ -595,7 +590,7 @@ export default {
     },
     detectCopy(problemID) {
       this.detectCopyLoading = true;
-      axios.post('/api/ta/judgeCopy', {
+      axios.post('/api/judge/judgeCopy', {
         problemID: problemID
       }).then((response) => {
         let res = response.data;
@@ -732,6 +727,10 @@ export default {
 </script>
 
 <style>
+#detectCopyFormItem .el-form-item__content {
+  width: 80%;
+}
+
 .overview {
   transition: all .3s ease;
 }

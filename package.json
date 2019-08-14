@@ -12,8 +12,9 @@
   "dependencies": {
     "axios": "^0.18.0",
     "echarts": "^4.0.4",
-    "element-ui": "^2.3.1",
+    "element-ui": "^2.10.1",
     "json2csv": "^4.0.2",
+    "jsonexport": "^2.4.1",
     "papaparse": "^4.5.0",
     "v-charts": "^1.16.8",
     "vue": "^2.5.2",
@@ -24,7 +25,9 @@
     "vue-markdown": "^2.2.4",
     "vue-progressbar": "^0.7.5",
     "vue-router": "^3.0.1",
-    "vuejs-countdown": "^0.2.1"
+    "vuejs-countdown": "^0.2.1",
+    "vuex": "^3.1.1",
+    "vuex-persist": "^2.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.2.6",

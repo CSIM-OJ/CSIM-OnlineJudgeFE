@@ -10,15 +10,7 @@
       </el-aside>
       <el-container>
         <el-main>
-          <el-row class="admin-page">
-            <span class="title">學生管理</span>
-            <div class="breadcrumb">
-              <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/teacher/'+ courseInfo.courseName +'/index' }">{{courseInfo.courseName}}</el-breadcrumb-item>
-                <el-breadcrumb-item>學生管理</el-breadcrumb-item>
-              </el-breadcrumb>
-            </div>
-          </el-row>
+          <page-name-breadcrumb pageName="學生管理"></page-name-breadcrumb>
           <div class="box-square">
             <el-row :gutter="20">
               <el-col :span="12" style="border-right: 1px #E4E7ED dashed;">
@@ -69,12 +61,6 @@
           <el-form-item label="學生帳號 (學號)" style="margin-bottom: 5px;">
             <el-input v-model="newOneStudentForm.account"></el-input>
           </el-form-item>
-          <!-- <el-form-item label="學生姓名" style="margin-bottom: 5px;">
-            <el-input v-model="newOneStudentForm.name"></el-input>
-          </el-form-item>
-          <el-form-item label="學生系級" style="margin-bottom: 5px;">
-            <el-input v-model="newOneStudentForm.studentClass"></el-input>
-          </el-form-item> -->
           <div class="operating-btns" style="margin-bottom: 20px;">
             <el-button @click="newOneStudentDialogVisible=false">取消</el-button>
             <el-button type="primary" @click="addNewOneStudent">確定</el-button>
@@ -106,26 +92,26 @@
 </template>
 
 <script>
-import axios from 'axios'
+import {teacherCheckLogin} from '@/apis/_checkLogin.js'
+import {apiGetStudentsData} from '@/apis/course.js'
+import {apiTrDeleteStudentList, apiTrAddStudentList} from '@/apis/teacher.js'
+
 import Papa from 'papaparse'
 
 import NavHeaderTeacher from '@/components/Teacher/NavHeaderTeacher'
 import SideNavCourseIndexTeacher from '@/components/Teacher/SideNavCourseIndexTeacher'
+import PageNameBreadcrumb from '@/components/MgmtContent/PageNameBreadcrumb'
 import NavFooterAdmin from '@/components/NavFooterAdmin'
 
 export default {
   components: {
     NavHeaderTeacher,
     SideNavCourseIndexTeacher,
+    PageNameBreadcrumb,
     NavFooterAdmin
   },
   data() {
     return {
-      courseInfo: {
-        'courseId': '',
-        'courseName': '',
-        'semester': ''
-      },
       studentData: [],
       dataLoading: false,
       deleteSelection: [],
@@ -152,67 +138,33 @@ export default {
     }
   },
   mounted() {
-    this.checkLogin();
-    this.getCourses();
-    // this.getStudentsData();
+    teacherCheckLogin();
+    this.getStudentsData();
   },
   methods: {
-    checkLogin() {
-      axios.get('/api/checkLogin').then((response) => {
-        let res = response.data;
-        if (res.status == "200") {
-          if (res.result.authority == 'student') {
-            this.$router.push('/student/courseList')
-          } else if (res.result.authority == 'teacher') {
-            // pass
-          } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/index');
-          } else if (res.result.authority == 'admin') {
-            this.$router.push('/admin/index');
-          }  
-        } else {
-          this.$router.push('/login');
-        }
-      });
-    },
-    getCourses() {
-      axios.get("/api/teacher/courseList").then((response)=> {
-        let res = response.data;
-        if(res.status=="200") {
-          res.result.forEach((element) => {
-            if(element.courseName == this.$route.params.courseName) {
-              this.courseInfo = element;
-            }
-          });
-
-          this.getStudentsData();
-        }
-      });
-    },
     getStudentsData() {
       this.dataLoading = true;
-      axios.get('/api/course/getStudentsData', {
-        params: {
-          courseId: this.courseInfo.courseId
-        }
+      apiGetStudentsData({
+        courseId: this.$store.state.course.courseInfo.courseId
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
+          let temp = [];
           for (let i = 0; i < res.result.length; i++) {
             let obj = {
               studentId: res.result[i].studentId,
               name: res.result[i].studentName,
               class: res.result[i].studentClass
             }
-            this.studentData.push(obj);
+            temp.push(obj);
           }
+           this.studentData = temp;
         }
         this.dataLoading = false;
       });
     },
     handleSelectionChange(val) {
       this.deleteSelection = val;
-      // console.log(this.deleteSelection);
     },
     toggleSelection(rows) {
       if (rows) {
@@ -234,8 +186,8 @@ export default {
           delID.push(this.deleteSelection[i].studentId);
         }
 
-        axios.post('/api/teacher/deleteStudentList', {
-          courseId: this.courseInfo.courseId,
+        apiTrDeleteStudentList({
+          courseId: this.$store.state.course.courseInfo.courseId,
           accountList: delID
         }).then((response)=> {
           let res = response.data;
@@ -244,6 +196,7 @@ export default {
               type: 'success',
               message: '刪除成功!'
             });
+            this.getStudentsData();
           } else {
             this.$message.error('刪除失敗！');
           }
@@ -285,13 +238,12 @@ export default {
       this.confirmCsvDialogVisible = false;
       this.$refs.upload.clearFiles();
       this.csvFileData = [];
-      // console.log(this.csvFileData);
     },
     addNewOneStudent() {
       let tempList = [this.newOneStudentForm.account];
 
-      axios.post('/api/teacher/addStudentList', {
-        courseId: this.courseInfo.courseId,
+      apiTrAddStudentList({
+        courseId: this.$store.state.course.courseInfo.courseId,
         accountList: tempList
       }).then((response) => {
         let res = response.data;

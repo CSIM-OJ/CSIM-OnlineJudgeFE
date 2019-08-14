@@ -49,4 +49,19 @@ export default class GeneralUtil {
     clip_area.remove();
   }
 
+  /**
+   * @desc 移除array中指定元素
+   * @param {array} arr
+   * @param {string} item
+   * @return {array} 
+   */
+  static removeInArray(arr, item) {
+    let [...temp] = arr;
+    for(var i = temp.length; i--;) {
+      if(temp[i] === item.value) {
+        temp.splice(i, 1);
+      }
+    }
+    return temp
+  }
 }

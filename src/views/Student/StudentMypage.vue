@@ -87,9 +87,10 @@
 </template>
 
 <script>
-import axios from 'axios'
+import {studentCheckLogin} from '@/apis/_checkLogin.js'
+import {apiStudInfo, apiChangePassword} from '@/apis/student.js'
 
-import NavHeaderStudent from '@/components/NavHeaderStudent.vue'
+import NavHeaderStudent from '@/components/student/NavHeaderStudent.vue'
 import NavFooter from '@/components/NavFooter.vue'
 import FabRank from '@/components/FabRank.vue'
 
@@ -101,11 +102,6 @@ export default {
   },
   data() {
     return {
-      courseInfo: {
-        'courseId': '',
-        'courseName': '',
-        'semester': ''
-      },
       user: {
         name: '',
         studentId: '',
@@ -124,47 +120,13 @@ export default {
     }
   },
   mounted() {
-    this.checkLogin();
-    this.getCourses();
-    
+    studentCheckLogin();
+    this.getStudentInfo();
   },
   methods: {
-    checkLogin() {
-      axios.get('/api/checkLogin').then((response) => {
-        let res = response.data;
-        if (res.status == "200") {
-          if (res.result.authority == 'student') {
-            // pass
-          } else if (res.result.authority == 'teacher') {
-            this.$router.push('/teacher/courseList');
-          } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/index');
-          } else if (res.result.authority == 'admin') {
-            this.$router.push('/admin/index');
-          }  
-        } else {
-          this.$router.push('/login');
-        }
-      });
-    },
-    getCourses() {
-      axios.get("/api/student/courseList").then((response)=> {
-        let res = response.data;
-        if(res.status=="200") {
-          res.result.forEach((element) => {
-            if(element.courseName == this.$route.params.courseName) {
-              this.courseInfo = element;
-            }
-          });
-          this.getStudentInfo();
-        }
-      });
-    },
     getStudentInfo() {
-      axios.get('/api/student/info', {
-        params: {
-          courseId: this.courseInfo.courseId
-        }
+      apiStudInfo({
+        courseId: this.$store.state.course.courseInfo.courseId
       }).then((response) => {
         let res = response.data;
         if(res.status=='200') {
@@ -187,7 +149,7 @@ export default {
       } else if (this.changePasswordForm.newPassword == '') {
         this.$message.error('請輸入新密碼！');
       } else {
-        axios.post('/api/student/changePassword', {
+        apiChangePassword({
           account: this.changePasswordForm.account,
           oriPassword: this.changePasswordForm.oriPassword,
           newPassword: this.changePasswordForm.newPassword

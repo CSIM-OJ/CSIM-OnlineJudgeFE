@@ -45,7 +45,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+import {teacherCheckLogin} from '@/apis/_checkLogin.js'
+import {apiCreateCourse} from '@/apis/teacher.js'
 
 import NavHeaderTeacher from '@/components/Teacher/NavHeaderTeacher'
 import SideNavCourseListTeacher from '@/components/Teacher/SideNavCourseListTeacher'
@@ -75,28 +76,9 @@ export default {
     }
   },
   mounted() {
-    this.checkLogin();
-    
+    teacherCheckLogin();
   },
   methods: {
-    checkLogin() {
-      axios.get('/api/checkLogin').then((response) => {
-        let res = response.data;
-        if (res.status == "200") {
-          if (res.result.authority == 'student') {
-            this.$router.push('/student/courseList')
-          } else if (res.result.authority == 'teacher') {
-            // pass
-          } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/index');
-          } else if (res.result.authority == 'admin') {
-            this.$router.push('/admin/index');
-          }  
-        } else {
-          this.$router.push('/login');
-        }
-      });
-    },
     // step1 to step2
     getNext1To2(data, step) {
       this.courseData.courseName = data.courseName;
@@ -118,7 +100,8 @@ export default {
     },
     submit(data) {
       this.courseData.taList = data;
-      axios.post('/api/teacher/createCourse', {
+
+      apiCreateCourse({
         courseName: this.courseData.courseName,
         semester: this.courseData.semester,
         studentClass: this.courseData.studentClass,
@@ -139,7 +122,6 @@ export default {
           taList: [] 
         }
       });
-      
     }
   }
 }

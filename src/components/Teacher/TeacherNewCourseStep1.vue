@@ -31,7 +31,13 @@ export default {
   },
   methods: {
     nextStep() {
-      this.$emit('goNext1To2', this.courseData, this.step);
+      if (this.courseData.courseName == '') {
+        this.$message.error('請輸入課程名稱！');
+      } else if (this.courseData.semester == '') {
+        this.$message.error('請輸入課程學期！');
+      } else {
+        this.$emit('goNext1To2', this.courseData, this.step);
+      }
     }
   }
 }

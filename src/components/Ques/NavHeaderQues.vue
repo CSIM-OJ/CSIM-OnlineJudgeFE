@@ -18,8 +18,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 import '@/assets/css/navbar.css'
 
 export default {
@@ -34,14 +32,7 @@ export default {
   mounted() {
   },
   methods: {
-    // logout() {
-    //   axios.post('/api/logout').then((response) => {
-    //     let res = response.data;
-    //     if (res.status == '200') {
-    //       this.$router.push('/login');
-    //     }
-    //   });
-    // }
+    
   }
 }
 </script>

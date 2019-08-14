@@ -209,7 +209,9 @@
 </template>
 
 <script>
-import axios from 'axios'
+import {quesbankCheckLogin} from '@/apis/_checkLogin.js'
+import {apiGetAllProblem, apiGetProblemInfo, apiDeleteProblem, apiEditProblem} from '@/apis/problemBank.js'
+
 import problemStateMixin from '@/mixins/problemState.mixin.js'
 
 import NavHeaderQues from '@/components/Ques/NavHeaderQues'
@@ -258,7 +260,7 @@ export default {
     }
   },
   mounted() {
-    this.checkLogin();
+    quesbankCheckLogin();
     this.getAllProblem();
     this.autoCompleteTags = this.problemTag;
   },
@@ -295,26 +297,8 @@ export default {
     currentChange(currentPage) {
       this.currentPage = currentPage;
     },
-    checkLogin() {
-      axios.get('/api/checkLogin').then((response) => {
-        let res = response.data;
-        if (res.status == "200") {
-          if (res.result.authority == 'student') {
-            this.$router.push('/student/courseList')
-          } else if (res.result.authority == 'teacher') {
-            // pass
-          } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/index');
-          } else if (res.result.authority == 'admin') {
-            this.$router.push('/admin/index');
-          }  
-        } else {
-          this.$router.push('/login');
-        }
-      });
-    },
     getAllProblem() {
-      axios.get('/api/problemBank/getAllProblem').then((response) => {
+      apiGetAllProblem().then((response) => {
         let res = response.data;
         if (res.status == '200') {
           this.quesList = res.result;
@@ -322,10 +306,8 @@ export default {
       });
     },
     getProblemInfo(data) {
-      axios.get('/api/problemBank/getProblemInfo', {
-        params: {
-          id: data.id
-        }
+      apiGetProblemInfo({
+        id: data.id
       }).then((response) => {
         let res = response.data;
         if (res.status == '200') {
@@ -342,10 +324,8 @@ export default {
         type: 'info',
         center: true
       }).then(() => {
-        axios.get('/api/problemBank/getProblemInfo', {
-          params: {
-            id: data.id
-          }
+        apiGetProblemInfo({
+          id: data.id
         }).then((response) => {
           let res = response.data;
           if (res.status == '200') {
@@ -369,7 +349,8 @@ export default {
         center: true
       }).then(() => {
         this.tableLoading = true;
-        axios.post('/api/problemBank/deleteProblem', {
+
+        apiDeleteProblem({
           id: data.id
         }).then((response) => {
           let res = response.data;
@@ -420,7 +401,7 @@ export default {
         this.$message.error('請至少填寫兩組題目輸入範例！');
       } else {
         this.editProblemLoading = true;
-        axios.post('/api/problemBank/editProblem', {
+        apiEditProblem({
           id: this.editProblemData.id,
           name: this.editProblemData.name,
           category: this.editProblemData.category,

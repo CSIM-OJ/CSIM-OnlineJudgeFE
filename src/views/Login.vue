@@ -26,7 +26,7 @@
                   <el-input v-model="loginForm.account"></el-input>
                 </el-form-item>
                 <el-form-item label="密碼" prop="password">
-                  <el-input type="password" v-model="loginForm.password" auto-complete="off"></el-input>
+                  <el-input type="password" v-model="loginForm.password" auto-complete="off" show-password></el-input>
                 </el-form-item>
                 <el-row style="padding-bottom: 30px;">
                   <el-col :span="24">
@@ -52,31 +52,11 @@
   <div class="programmer">
     <i class="fas fa-code"></i>&nbsp; 陳冠億、蘇靖軒
   </div>
-  <!-- <el-dialog :visible.sync="dialogFormVisible" @close="loginCancel">
-    <el-form :model="loginForm" status-icon label-width="40px" class="loginForm" v-loading="loading" element-loading-text="登入中">
-      <div id="title">登入</div>
-      <el-row>
-        <el-col :span="14" :offset="5">
-          <el-form-item label="帳號" prop="account" style="margin-bottom: 0px !important;">
-            <el-input v-model="loginForm.account"></el-input>
-          </el-form-item>
-          <el-form-item label="密碼" prop="password">
-            <el-input type="password" v-model="loginForm.password" auto-complete="off"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row style="padding-bottom: 30px;">
-        <el-col :xs="5" :sm="14" :offset="5">
-          <el-button type="primary" @click="login" style="float: right;">ＧＯ</el-button>
-        </el-col>
-      </el-row>
-    </el-form>
-  </el-dialog> -->
 </div>
 </template>
 
 <script>
-import axios from 'axios'
+import {apiLogin, apiCheckLogin} from '@/apis/base.js'
 
 import NavFooter from '@/components/NavFooter.vue'
 
@@ -135,20 +115,25 @@ export default {
       } else {
         this.loading = true;
         let self = this;
-        axios.post('/api/login', {
+
+        apiLogin({
           account: this.loginForm.account,
           password: this.loginForm.password
         }).then((response) => {
           let res = response.data;
-          // console.log(res);
           if (res.status == "200") {
-            // console.log(res.result);
+            // 記錄到state.user
+            this.$store.commit('initUserInfo', {
+              account: this.loginForm.account,
+              auth: res.result
+            });
+
             if (res.result == 'student') {
               this.$router.push("/student/courseList");
             } else if (res.result == 'teacher') {
               this.$router.push("/teacher/courseList");
             } else if (res.result == 'assistant') {
-              this.$router.push("/assistant/index");
+              this.$router.push("/assistant/courseList");
             } else if (res.result == 'admin') {
               this.$router.push("/admin/index");
             } 
@@ -159,7 +144,8 @@ export default {
         }).catch(function(error) {
           self.loading = false;
           self.$message.error('登入失敗');
-        });;
+          console.log(error);
+        });
       }
     },
     loginCancel() {
@@ -170,7 +156,7 @@ export default {
       }
     },
     checkLogin() {
-      axios.get('/api/checkLogin').then((response) => {
+      apiCheckLogin().then((response) => {
         let res = response.data;
         if (res.status == "200") {
           if (res.result.authority == 'student') {
@@ -179,6 +165,8 @@ export default {
             this.$router.push("/admin/index");
           } else if (res.result.authority == 'teacher') {
             this.$router.push("/teacher/courseList");
+          } else if (res.result.authority == 'assistant') {
+            this.$router.push("/assistant/courseList");
           }
         }
       });

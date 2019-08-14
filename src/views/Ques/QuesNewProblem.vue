@@ -58,7 +58,7 @@
                     <img src="/static/katex-icon.png" alt="md-icon" style="width: 40px; margin-left: 3px;">
                   </label>
                   <div id="markdown-editor">
-                    <el-input type="textarea" rows="5" resize="vertical" placeholder="請輸入題目的描述內容" :value="problemData.description" style="width: 100%;" @input="update"></el-input>
+                    <el-input type="textarea" rows="5" resize="vertical" placeholder="請輸入題目的描述內容" v-model="problemData.description" style="width: 100%;" @input="update"></el-input>
                     <vue-markdown class="md-preview" :source="problemData.description"></vue-markdown>
                   </div>
                 </el-form-item>
@@ -197,7 +197,9 @@
 </template>
 
 <script>
-import axios from 'axios'
+import {quesbankCheckLogin} from '@/apis/_checkLogin.js'
+import {apiAddProblem} from '@/apis/problemBank.js'
+
 import VueMarkdown from 'vue-markdown'
 import DateUtil from '@/utils/DateUtil.js'
 import problemStateMixin from '@/mixins/problemState.mixin.js'
@@ -231,6 +233,9 @@ export default {
         'testCases': [{
           'inputSample': '',
           'outputSample': ''
+        }, {
+          'inputSample': '',
+          'outputSample': ''
         }]
       },
       // tags
@@ -242,7 +247,7 @@ export default {
     }
   },
   mounted() {
-    this.checkLogin();
+    quesbankCheckLogin();
     this.autoCompleteTags = this.problemTag;
   },
   methods: {
@@ -252,24 +257,6 @@ export default {
       this.problemData.description = e;
       // this.problemData.description = e.target.value
     }, 300),
-    checkLogin() {
-      axios.get('/api/checkLogin').then((response) => {
-        let res = response.data;
-        if (res.status == "200") {
-          if (res.result.authority == 'student') {
-            this.$router.push('/student/courseList')
-          } else if (res.result.authority == 'teacher') {
-            // pass
-          } else if (res.result.authority == 'assistant') {
-            this.$router.push('/assistant/index');
-          } else if (res.result.authority == 'admin') {
-            this.$router.push('/admin/index');
-          }  
-        } else {
-          this.$router.push('/login');
-        }
-      });
-    },
     newProblem() {
       if (this.problemData.name == '') {
         this.$message.error('請填寫題目名稱！');
@@ -292,7 +279,8 @@ export default {
         this.$message.error('請至少填寫兩組題目輸入範例！');
       } else {
         this.loading = true;
-        axios.post('/api/problemBank/addProblem', {
+        
+        apiAddProblem({
           name: this.problemData.name,
           category: this.problemData.category,
           tag: this.problemData.tag,
@@ -315,6 +303,9 @@ export default {
               'inputDesc': '',
               'outputDesc': '',
               'testCases': [{
+                'inputSample': '',
+                'outputSample': ''
+              }, {
                 'inputSample': '',
                 'outputSample': ''
               }]
@@ -359,7 +350,6 @@ export default {
       };
     },
     handleSelect(item) {
-      // this.inputValue = item;
       let inputValue = this.inputValue;
       if (inputValue) {
         this.problemData.tag.push(inputValue);
@@ -373,7 +363,6 @@ export default {
         'outputSample': ''
       }
       this.problemData.testCases.push(obj);
-      // console.log(this.problemData.testCases);
     },
     delSample() {
       this.problemData.testCases.pop();

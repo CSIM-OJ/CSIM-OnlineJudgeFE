@@ -42,17 +42,12 @@ export default {
         if(res.status == "200") {
           console.log(res.result);
           res.result.forEach((item) => {
-
-            // console.log(assistantId);
-            // console.log(assistantName);
             self.data.push({
               label: item.assistantName,
               key: item.assistantId
             });
           });
         }
-
-        // this.value.push("108資一A");
       });
     },
     handleChange() {
