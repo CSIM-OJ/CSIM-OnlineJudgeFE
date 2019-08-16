@@ -26,9 +26,10 @@
 
           <transition name="el-zoom-in-top" @leave="leaveTransition">
             <el-row class="filter-section" v-if="isFilterShow">
+              <!-- TODO: tag filter func -->
               <el-col :span="8" class="item">
                 <span class="item-title">題目標籤</span>
-                <el-select v-model="problemTagValue" multiple filterable allow-create default-first-option style="width:80%;">
+                <el-select v-model="problemTagValue" multiple filterable allow-create default-first-option style="width:80%;" disabled placeholder="功能尚未開放">
                   <el-option-group
                     v-for="group in quesTagOptions"
                     :key="group.label"
