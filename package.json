@@ -15,7 +15,7 @@
     "element-ui": "^2.10.1",
     "json2csv": "^4.0.2",
     "jsonexport": "^2.4.1",
-    "papaparse": "^4.5.0",
+    "papaparse": "^5.2.0",
     "v-charts": "^1.16.8",
     "vue": "^2.5.2",
     "vue-beautiful-chat": "^1.0.0",
